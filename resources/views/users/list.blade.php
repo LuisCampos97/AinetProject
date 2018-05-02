@@ -1,0 +1,20 @@
+@extends('master')
+@section('content')
+
+@if(count($users))
+<table class="table table-stripe">
+<thead> <tr> <th>Name</th> <th>Email</th> <th>Created</th> <th>Type</th> </tr> </thead>
+<tbody>
+@foreach ($users as $user)
+	<tr>
+		<td>{{ $user->name }} </td>
+		<td>{{ $user->email }} </td>
+		<td>{{ $user->created_at }} </td>
+		<td>{{ $user->type }} </td>
+		
+	</tr>
+@endforeach
+</tbody>
+</table>
+@endif
+@endsection('content')
