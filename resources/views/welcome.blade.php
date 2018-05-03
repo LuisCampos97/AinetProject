@@ -81,6 +81,9 @@
                 <div class="title m-b-md">
                     Projeto AINet 2017/2018
                 </div>
+                <div class="menu">
+                    <a href="{{ action('UserController@index') }}"> Lista de Utilizadores</a>
+                </div>
             </div>
         </div>
     </body>
