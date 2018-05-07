@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'admin', 'blocked'
+        'name', 'email', 'password', 'admin', 'blocked',
     ];
 
     /**
@@ -29,8 +29,7 @@ class User extends Authenticatable
 
     public function typeToString()
     {
-        switch ($this->admin)
-        {
+        switch ($this->admin) {
             case 0:
                 return 'Normal';
                 break;
@@ -41,8 +40,7 @@ class User extends Authenticatable
 
     public function blockedToString()
     {
-        switch ($this->blocked)
-        {
+        switch ($this->blocked) {
             case 0:
                 return 'Unblocked';
                 break;

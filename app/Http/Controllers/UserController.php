@@ -18,7 +18,16 @@ class UserController extends Controller
     public function home()
     {
         $users = User::all();
+        $pagetitle = 'Personal Finance Assistant';
 
-        return view('welcome', compact('users', 'Badjoras'));
+        return view('welcome', compact('users', 'pagetitle'));
+    }
+
+    public function block($user) {
+        if($user->blocked) 
+        {
+            return;
+        }
+        $user->blocked = true;
     }
 }
