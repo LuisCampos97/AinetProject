@@ -81,9 +81,6 @@
                 <div class="title m-b-md">
                 Personal Finances Assistant
                 </div>
-                <div class="menu">
-                    <a href="{{ action('UserController@index') }}"> Lista de Utilizadores</a>
-                </div>
             </div>
         </div>
     </body>
