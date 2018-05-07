@@ -59,6 +59,10 @@
                 text-transform: uppercase;
             }
 
+            .numberOfUsers{
+                font-size:45px;
+            }
+
             .m-b-md {
                 margin-bottom: 30px;
             }
@@ -81,7 +85,7 @@
                 <div class="title m-b-md">
                 Personal Finances Assistant
                 </div>
-                <div>
+                <div class="numberOfUsers">
                 Number of Users: <strong>{{ count($users)}}</strong>
                 </div>
             </div>
