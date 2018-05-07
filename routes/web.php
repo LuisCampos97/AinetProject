@@ -15,7 +15,7 @@
     return view('welcome');
 });*/
 
-Route::get('/', 'UserController@home');
+Route::get('/', 'WelcomeController@home');
 
 Route::get('/users', 'UserController@index');
 Auth::routes();
