@@ -87,7 +87,6 @@
                 </div>
                 <div class="numberOfUsers">
                 Number of Users: <strong>{{ count($users)}}</strong>
-                O LUIS É GAY
                 </div>
             </div>
         </div>
