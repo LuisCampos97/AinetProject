@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'admin',
+        'name', 'email', 'password', 'admin', 'blocked'
     ];
 
     /**
@@ -36,6 +36,18 @@ class User extends Authenticatable
                 break;
             case 1:
                 return 'Admin';
+        }
+    }
+
+    public function blockedToString()
+    {
+        switch ($this->blocked)
+        {
+            case 0:
+                return 'Unblocked';
+                break;
+            case 1:
+                return 'Blocked';
         }
     }
 }
