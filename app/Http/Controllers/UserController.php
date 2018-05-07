@@ -14,4 +14,11 @@ class UserController extends Controller
         
         return view('users.list', compact('users', 'pagetitle'));
     }
+
+    public function home()
+    {
+        $users = User::all();
+
+        return view('welcome', compact('users', 'Badjoras'));
+    }
 }
