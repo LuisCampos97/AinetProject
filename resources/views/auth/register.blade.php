@@ -73,7 +73,7 @@
                             <label for="profile_photo" class="col-md-4 col-form-label text-md-right">{{ __('Profile Photo') }}</label>
 
                             <div class="col-md-6">
-                                <input id="profile_photo" type="file" class="form-control" name="profile_photo" required>
+                                <input id="profile_photo" type="file" class="form-control" name="profile_photo" accept="image/*" optional>
                             </div>
                         </div>
 
