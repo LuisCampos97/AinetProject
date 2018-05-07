@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\User;
 
 class UserController extends Controller
@@ -11,7 +10,7 @@ class UserController extends Controller
     {
         $users = User::all();
         $pagetitle = 'List of users';
-        
+
         return view('users.list', compact('users', 'pagetitle'));
     }
 
@@ -22,4 +21,6 @@ class UserController extends Controller
         }
         $user->blocked = true;
     }
+
+    
 }
