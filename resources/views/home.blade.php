@@ -25,14 +25,6 @@
                     <!-- asdasd -->
                 </div>
             </div>
-
-            <div class="card">
-                <div class="card-body">
-                    <a class="navbar-brand" href="http://ainetproject.ainet/users">nada</a>
-                    <!-- asdasd -->
-                </div>
-            </div>
-
         </div>
     </div>
 </div>
