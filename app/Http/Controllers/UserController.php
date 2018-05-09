@@ -15,7 +15,7 @@ class UserController extends Controller
         if (Gate::allows('admin', auth()->user())){
             return view('users.list', compact('users', 'pagetitle'));
         }
-        return 'You are not admin!!!!';
+        return view('errors.admin');
         
     }
 
