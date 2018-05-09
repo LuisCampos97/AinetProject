@@ -21,7 +21,7 @@
 
             <div class="card">
                 <div class="card-body">
-                    <a class="navbar-brand" href="http://ainetproject.ainet/users">List of registered users</a>
+                <a href="{{ url('/users') }}">User's List</a>
                 </div>
             </div>
 
