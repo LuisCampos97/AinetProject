@@ -43,7 +43,7 @@
                         @can('admin', auth()->user())
                         <li>
                             <a class="nav-link" href="{{ route('users') }}">{{ __('Users List') }}</a>
-                        </li>
+                        </li>   
                         @endcan
                     </ul>
                     @endauth
@@ -69,8 +69,8 @@
                                 <a class="dropdown-item" href="{{ action('UserController@edit') }}">
                                     {{ __('Settings') }}
                                 </a>
-                                
-                                
+
+
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
