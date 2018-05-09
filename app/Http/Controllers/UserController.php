@@ -14,13 +14,12 @@ class UserController extends Controller
         return view('users.list', compact('users', 'pagetitle'));
     }
 
-    public function block($user) {
-        if($user->blocked) 
-        {
+    public function block($user)
+    {
+        if ($user->blocked) {
             return;
         }
         $user->blocked = true;
     }
 
-    
 }

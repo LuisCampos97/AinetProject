@@ -1,4 +1,6 @@
-@extends('master') @section('content') @if(count($users))
+@extends('master')
+@section('content')
+@if(count($users))
 <table class="table table-stripe">
 	<thead>
 		<tr>
