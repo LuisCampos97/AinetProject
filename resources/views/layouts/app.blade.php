@@ -33,16 +33,20 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
+                @auth
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li>
                             <a class="nav-link" href="{{ route('home') }}">{{ __('Home') }}</a>
                         </li>
-                        <li><a class="nav-link" href="{{ url('/users') }}">{{ __('Users List') }}</a></li>
+                        @can('admin', auth()->user())
+                        <li>
+                            <a class="nav-link" href="{{ route('users') }}">{{ __('Users List') }}</a>
+                        </li>
+                        @endcan
                     </ul>
-
+                    @endauth
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
@@ -60,27 +64,27 @@
                                 {{ Auth::user()->name }}
                                 <span class="caret"></span>
                             </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+                                    {{ __('Logout') }}
+                                </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </div>
                         </li>
                         @endguest
                     </ul>
-                    </div>
                 </div>
+            </div>
         </nav>
 
         <main class="py-4">
             @yield('content')
         </main>
-        </div>
+    </div>
 </body>
 
 </html>
