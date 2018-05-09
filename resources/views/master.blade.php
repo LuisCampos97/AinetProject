@@ -23,7 +23,7 @@
 </nav>
     <div class="container">
         <div class="jumbotron">
-          <h1><?= $pagetitle ?></h1>
+          <h1><?=$pagetitle?></h1>
         </div>
         <div>
         @yield('content')
