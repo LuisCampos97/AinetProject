@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Movement extends Model
 {
     protected $fillable = [
-        'type', 'category', 'date', 'value', 'startBalance', 'endBalance'
+        'type', 'movement_category_id', 'date', 'value', 'start_balance', 'end_balance'
     ];
 }
