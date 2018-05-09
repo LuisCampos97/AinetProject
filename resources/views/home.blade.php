@@ -12,20 +12,16 @@
                         <div class="alert alert-success">
                             {{ session('status') }}
                         </div>
-                    @endif
-                    You are logged in!
-                    
+                    @endif                    You are logged in!
+
                 </div>
 
-            </div>
+                              
 
-            <div class="card">
-                <div class="card-body">
-                    <a class="navbar-brand" href="http://ainetproject.ainet/users">List of registered users</a>
+
+          
+
                 </div>
             </div>
-
         </div>
     </div>
-</div>
-@endsection
