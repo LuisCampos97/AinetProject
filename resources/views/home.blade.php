@@ -14,6 +14,9 @@
                         </div>
                     @endif                    You are logged in!
 
+            <div class="card">
+                <div class="card-body">
+                <a href="{{ url('/users') }}">User's List</a>
                 </div>
             </div>
         </div>
