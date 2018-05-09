@@ -22,3 +22,4 @@
                 <a href="{{ url('/users') }}">User's List</a>
         </div>
     </div>
+@endsection
