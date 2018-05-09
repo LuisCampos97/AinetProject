@@ -27,4 +27,8 @@ class UserController extends Controller
         $user->blocked = true;
     }
 
+    public function edit(){
+        return view ('users.edit');
+    }
+
 }
