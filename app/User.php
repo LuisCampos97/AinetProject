@@ -18,6 +18,24 @@ class User extends Authenticatable
         'name', 'email', 'password', 'admin', 'blocked',
     ];
 
+    public function filter() {
+
+        // Sets the parameters from the get request to the variables.
+        $name = Request::get('name');
+        $admin = Request::get('admin');
+        $blocked = Request::get('blocked');
+
+        // Perform the query using Query Builder
+        $result = DB::table('project_db')
+            ->select(DB::raw("*"))
+            ->where('name', '=', $name)
+            ->where('admin', '=', $admin)
+            ->where('blocked', '=', $blocked)
+            ->get();
+
+        return $result;
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *
