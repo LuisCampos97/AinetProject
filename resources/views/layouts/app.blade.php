@@ -69,6 +69,10 @@
                                 <a class="dropdown-item" href="{{ action('UserController@edit') }}">
                                     {{ __('Settings') }}
                                 </a>
+
+                                <a class="dropdown-item" href="{{ action('UserController@editPassword') }}">
+                                    {{ __('Update Password') }}
+                                </a>
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
