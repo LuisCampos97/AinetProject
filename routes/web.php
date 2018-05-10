@@ -16,12 +16,16 @@
 });*/
 
 Route::get('/', 'WelcomeController@home');
-
+ 
 Route::get('/users', 'UserController@index')->name('users');
 Auth::routes();
+
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 //Edit
 Route::get('/me/profile', 'UserController@edit')->name('edit');
 Route::put('/home', 'UserController@update')->name('update');
+
+//List users
+Route::get('/', 'SearchController@index')->name('search');
