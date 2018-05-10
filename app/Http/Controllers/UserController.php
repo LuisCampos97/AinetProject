@@ -21,7 +21,7 @@ class UserController extends Controller
 
     }
 
-    public function block($user)
+    public function block($id)
     {
         if ($user->blocked) {
             return;
