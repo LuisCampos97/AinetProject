@@ -52,7 +52,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:3|confirmed',
-            'photo' => 'mimes:jpeg,png,jpg|max:1024'
+            'profile' => 'mimes:jpeg,png,jpg|max:1024'
         ]);
     }
 
@@ -69,7 +69,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'phone'=> $data['phone'],
-            'photo'=> $data['photo']
+            'profile_photo'=> $data['profile_photo']
         ]);
     }
 }

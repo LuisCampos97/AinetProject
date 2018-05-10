@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Gate;
 use Illuminate\Http\Request;
+use Auth;
 
 class UserController extends Controller
 {
@@ -34,19 +35,22 @@ class UserController extends Controller
         return view('users.edit', compact('pagetitle, user'));
     }
 
-    public function update(Request $request,User $user) //,$id
+    public function update(Request $request) //,$id
     {
         if ($request->has('cancel')) {
             return redirect()->action('UserController@index');
         }
 
-        $req = $request->validate([
+        $user = $request->validate([
             'name' => 'required|regex:/^[\pL\s]+$/u',
             'email' => 'required|email|unique:users,email,',
         ], [ // Custom Messages
             'name.regex' => 'Name must only contain letters and spaces.',
         ]);
 
+        $userModel = User::findOrFail(Auth::user()->id);
+        $userModel->fill($user);
+        $userModel->save();
         //$userModel = $user->id;
         //$userModel->fill($req);
         //$userModel->save();
