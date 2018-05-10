@@ -36,7 +36,6 @@ class UserController extends Controller
     }
 
     public function update(Request $request) //,$id
-
     {
         if ($request->has('cancel')) {
             return redirect()->action('UserController@index');
@@ -58,10 +57,17 @@ class UserController extends Controller
 
         return redirect()->action('HomeController@index')->with(['msgglobal' => 'User Edited!']);
     }
-    public function editPassword(){
+
+    public function editPassword()
+    {
 
         $pagetitle = 'Edit Password';
 
-        return view('users.editPassword', compact('pagetitle, user'));
+        return view('users.edit_password', compact('pagetitle, user'));
+    }
+
+    public function updatePassword()
+    {
+
     }
 }
