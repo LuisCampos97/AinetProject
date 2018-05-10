@@ -12,13 +12,19 @@
 	</thead>
 	<tbody>
 			<h1>List of users</h1>
-			<p>Filter:
+
+			<p>
+				Search name: 
+				<input type="text" class="form-control" id="search" name="search"></input>
+
+				Filter:
 				<a href="/?Type=Normal">Normal</a> |
 				<a href="/?Type=Admin">Admin</a> |
 				<a href="/?Type=Unblocked">Unblocked</a> |
 				<a href="/?Type=Blocked">Blocked</a> |
 				<a href="/users">Reset</a>
 			</p>
+			
 			@foreach ($users as $user)
 			<tr>
 				<td>{{ $user->name }} </td>
