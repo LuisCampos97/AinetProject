@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Gate;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -12,11 +13,11 @@ class UserController extends Controller
         $users = User::all();
         $pagetitle = 'List of users';
 
-        if (Gate::allows('admin', auth()->user())){
+        if (Gate::allows('admin', auth()->user())) {
             return view('users.list', compact('users', 'pagetitle'));
         }
         return view('errors.admin');
-        
+
     }
 
     public function block($user)
@@ -27,8 +28,29 @@ class UserController extends Controller
         $user->blocked = true;
     }
 
-    public function edit(){
-        return view ('users.edit');
+    public function edit(User $user)
+    {
+        $pagetitle = "Edit user";
+        return view('users.edit', compact('pagetitle, user'));
     }
 
+    public function update(Request $request,User $user) //,$id
+    {
+        if ($request->has('cancel')) {
+            return redirect()->action('UserController@index');
+        }
+
+        $req = $request->validate([
+            'name' => 'required|regex:/^[\pL\s]+$/u',
+            'email' => 'required|email|unique:users,email,',
+        ], [ // Custom Messages
+            'name.regex' => 'Name must only contain letters and spaces.',
+        ]);
+
+        //$userModel = $user->id;
+        //$userModel->fill($req);
+        //$userModel->save();
+
+        return redirect()->action('HomeController@index')->with(['msgglobal' => 'User Edited!']);
+        }
 }
