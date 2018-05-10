@@ -12,7 +12,12 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    You are logged in!
+                    You are logged in!<br><br>
+                    <!-- Colocar aqui a foto do utilizador -->
+                    <strong>User Name: </strong>{{ Auth::user()->name }}<br>
+                    <strong>Email: </strong>{{ Auth::user()->email }} <br>
+                    <strong>Phone Number: </strong> {{ Auth::user()->phone }}
+
                 </div>
             </div>
         </div>
