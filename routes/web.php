@@ -30,4 +30,4 @@ Route::post('/me/password', 'UserController@editPassword')->name('editPassword')
 Route::patch('/home', 'UserController@updatePassword')->name('updatePassword');
 
 //Block
-Route::patch('/users/{user}/block', 'UserController@block');
+Route::patch('/users/{user}/block', 'UserController@block')->name('users.block');

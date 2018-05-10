@@ -19,7 +19,6 @@
 				<a href="/?Type=Blocked">Blocked</a> |
 				<a href="/users">Reset</a>
 			</p>
-
 			@foreach ($users as $user)
 			<tr>
 				<td>{{ $user->name }} </td>
