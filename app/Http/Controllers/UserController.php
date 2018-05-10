@@ -44,7 +44,7 @@ class UserController extends Controller
 
         $user = $request->validate([
             'name' => 'required|regex:/^[\pL\s]+$/u',
-            'email' => 'required|email|unique:users,email,',
+            'email' =>  'required|email|unique:users,email,'.Auth::user()->id,
         ], [ // Custom Messages
             'name.regex' => 'Name must only contain letters and spaces.',
         ]);
