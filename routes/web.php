@@ -29,3 +29,6 @@ Route::put('/home', 'UserController@update')->name('update');
 //Edit Password
 Route::get('/me/password', 'UserController@editPassword')->name('editPassword');
 Route::patch('/home', 'UserController@updatePassword')->name('updatePassword');
+
+//Block
+Route::patch('/users/{user}/block', 'UserController@block')->name('users.block');
