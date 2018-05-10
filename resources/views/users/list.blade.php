@@ -14,7 +14,7 @@
 	<tbody>
 		<div class ="Container">
 		<h1>List of users</h1>
-
+		
 		<p>Filter:
 			<a href ="/?Type=Normal">Normal</a> |
 			<a href ="/?Type=Admin">Admin</a> |
