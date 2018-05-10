@@ -6,6 +6,7 @@ use App\User;
 use Auth;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -51,9 +52,6 @@ class UserController extends Controller
         $userModel = User::findOrFail(Auth::user()->id);
         $userModel->fill($user);
         $userModel->save();
-        //$userModel = $user->id;
-        //$userModel->fill($req);
-        //$userModel->save();
 
         return redirect()->action('HomeController@index')->with(['msgglobal' => 'User Edited!']);
     }
@@ -66,8 +64,23 @@ class UserController extends Controller
         return view('users.edit_password', compact('pagetitle, user'));
     }
 
-    public function updatePassword()
+    public function updatePassword(Request $request)
     {
+        if ($request->has('cancel')) {
+            return redirect()->action('UserController@index');
+        }
+
+        $user = $request->validate([
+            'password' => 'required|min:6|confirmed'
+        ]);
+
+        $user['password'] = Hash::make($request->password);
+
+        $userModel=User::FindOrFail(Auth::user()->id);
+        $userModel->fill($user);
+        $userModel->save();
+
+        return redirect()->action('HomeController@index')->with(['msgglobal' => 'Password Edited!']);
 
     }
 }
