@@ -31,5 +31,10 @@ Route::put('/home', 'UserController@update')->name('update');
 Route::get('/me/password', 'UserController@editPassword')->name('editPassword');
 Route::patch('/home', 'UserController@updatePassword')->name('updatePassword');
 
+<<<<<<< HEAD
 //List users
 Route::get('/', 'SearchController@index')->name('search');
+=======
+//Block
+Route::patch('/users/{user}/block', 'UserController@block');
+>>>>>>> b8d81beb139375ee24c37ff9badc16367db68658
