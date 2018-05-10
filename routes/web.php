@@ -25,3 +25,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 //Edit
 Route::get('/me/profile', 'UserController@edit')->name('edit');
 Route::put('/home', 'UserController@update')->name('update');
+
+Route::post('/me/password', 'UserController@editPassword')->name('editPassword');
+Route::patch('/home', 'UserController@updatePassword')->name('updatePassword');
