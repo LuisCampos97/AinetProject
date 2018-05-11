@@ -20,6 +20,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -43,7 +44,7 @@
                         @can('admin', auth()->user())
                         <li>
                             <a class="nav-link" href="{{ route('users') }}">{{ __('Users List') }}</a>
-                        </li>   
+                        </li>
                         @endcan
                     </ul>
                     @endauth
@@ -61,25 +62,26 @@
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }}
+                                <i class="fa fa-user-alt" style="color:white"></i> {{ Auth::user()->name }}
                                 <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                                 <a class="dropdown-item" href="{{ action('UserController@edit') }}">
-                                    {{ __('Settings') }}
+                                    <i class="fa fa-btn fa-cog"></i> {{ __('Settings') }}
                                 </a>
 
                                 <a class="dropdown-item" href="{{ action('UserController@editPassword') }}">
-                                    {{ __('Update Password') }}
+                                    <i class="fa fa-btn fa-key"></i> {{ __('Update Password') }}
                                 </a>
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                                    <span class="glyphicon glyphicon-log-out"></span>
+                                    <i class="fa fa-btn fa-sign-out"></i> {{ __('Logout') }}
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
+                                    @csrf
 
                                 </form>
                             </div>
