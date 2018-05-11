@@ -19,13 +19,7 @@ class UserController extends Controller
             return view('users.list', compact('users', 'pagetitle'));
         }
         return view('errors.admin');
-    }
 
-    public function profiles()
-    {
-        $users = User::all();
-        $pagetitle = 'List of users';
-        return view('users.profiles', compact('users', 'pagetitle'));
     }
 
     public function block($id)
@@ -39,14 +33,11 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $pagetitle = "Edit user";
-        if(Auth::check()){
-            return view('users.edit', compact('pagetitle, user'));
-        }
-        return view('errors.user');
-        
+        return view('users.edit', compact('pagetitle, user'));
     }
 
     public function update(Request $request) //,$id
+
     {
         if ($request->has('cancel')) {
             return redirect()->action('UserController@index');
@@ -54,7 +45,9 @@ class UserController extends Controller
 
         $user = $request->validate([
             'name' => 'required|regex:/^[\pL\s]+$/u',
-            'email' =>  'required|email|unique:users,email,'.Auth::user()->id,
+            'email' => 'required|email|unique:users,email,' . Auth::user()->id,
+            'phone' => 'min:3|max:12',
+            'profile' => 'mimes:jpeg,png,jpg|max:1024'
         ], [ // Custom Messages
             'name.regex' => 'Name must only contain letters and spaces.',
         ]);
@@ -70,10 +63,8 @@ class UserController extends Controller
     {
 
         $pagetitle = 'Edit Password';
-        if(Auth::check()){
-            return view('users.edit_password', compact('pagetitle, user'));
-        }
-        return view('errors.user'); 
+
+        return view('users.edit_password', compact('pagetitle, user'));
     }
 
     public function updatePassword(Request $request)
@@ -83,12 +74,12 @@ class UserController extends Controller
         }
 
         $user = $request->validate([
-            'password' => 'required|min:3|confirmed'
+            'password' => 'required|min:3|confirmed',
         ]);
 
         $user['password'] = Hash::make($request->password);
 
-        $userModel=User::FindOrFail(Auth::user()->id);
+        $userModel = User::FindOrFail(Auth::user()->id);
         $userModel->fill($user);
         $userModel->save();
 
