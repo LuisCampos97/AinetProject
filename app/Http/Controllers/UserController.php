@@ -19,7 +19,13 @@ class UserController extends Controller
             return view('users.list', compact('users', 'pagetitle'));
         }
         return view('errors.admin');
+    }
 
+    public function profiles()
+    {
+        $users = User::all();
+        $pagetitle = 'List of users';
+        return view('users.profiles', compact('users', 'pagetitle'));
     }
 
     public function block($id)

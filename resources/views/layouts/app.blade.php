@@ -41,6 +41,9 @@
                         <li>
                             <a class="nav-link" href="{{ route('home') }}">{{ __('Home') }}</a>
                         </li>
+                        <li>
+                            <a class="nav-link" href="{{ route('profiles') }}">{{ __('Profiles List') }}</a>
+                        </li>
                         @can('admin', auth()->user())
                         <li>
                             <a class="nav-link" href="{{ route('users') }}">{{ __('Users List') }}</a>
