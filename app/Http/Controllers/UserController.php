@@ -33,7 +33,11 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $pagetitle = "Edit user";
-        return view('users.edit', compact('pagetitle, user'));
+        if(Auth::check()){
+            return view('users.edit', compact('pagetitle, user'));
+        }
+        return view('errors.user');
+        
     }
 
     public function update(Request $request) //,$id
@@ -60,8 +64,10 @@ class UserController extends Controller
     {
 
         $pagetitle = 'Edit Password';
-
-        return view('users.edit_password', compact('pagetitle, user'));
+        if(Auth::check()){
+            return view('users.edit_password', compact('pagetitle, user'));
+        }
+        return view('errors.user'); 
     }
 
     public function updatePassword(Request $request)
