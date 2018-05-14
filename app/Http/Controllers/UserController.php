@@ -7,6 +7,7 @@ use Auth;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -104,4 +105,13 @@ class UserController extends Controller
 
         return view('users.profiles', compact('users', 'pagetitle'));
     }
+
+    public function accountsForUser($id)
+    {
+        $accounts = DB::table('accounts')->join('users', 'users.id', '==', 'accounts.owner_id');
+        $pagetitle = 'List of accounts';
+        return view('accounts.list', compact('users', 'pagetitle'));
+    }
+
+    
 }
