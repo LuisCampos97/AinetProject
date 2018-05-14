@@ -39,3 +39,4 @@ Route::get('/profiles', 'UserController@profiles')->name('profiles');
 
 //Accounts
 Route::get('/accounts/{user}', 'UserController@accountsForUser')->name('usersAccount');
+Route::get('/accounts/{user}/opened', 'UserController@openedAccounts')->name('openedAccounts');

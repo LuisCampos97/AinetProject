@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\User;
 use Auth;
 use Gate;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -37,11 +36,11 @@ class UserController extends Controller
     {
         $pagetitle = "Edit user";
 
-        if(Auth::check()){
+        if (Auth::check()) {
             return view('users.edit', compact('pagetitle, user'));
         }
         return view('errors.user');
-        
+
     }
 
     public function update(Request $request) //,$id
@@ -55,7 +54,7 @@ class UserController extends Controller
             'name' => 'required|regex:/^[\pL\s]+$/u',
             'email' => 'required|email|unique:users,email,' . Auth::user()->id,
             'phone' => 'min:3|max:12',
-            'profile' => 'mimes:jpeg,png,jpg|max:1024'
+            'profile' => 'mimes:jpeg,png,jpg|max:1024',
         ], [ // Custom Messages
             'name.regex' => 'Name must only contain letters and spaces.',
         ]);
@@ -71,7 +70,7 @@ class UserController extends Controller
     {
 
         $pagetitle = 'Edit Password';
-        if(Auth::check()){
+        if (Auth::check()) {
             return view('users.edit_password', compact('pagetitle, user'));
         }
         return view('errors.user');
@@ -108,15 +107,13 @@ class UserController extends Controller
     public function accountsForUser($id)
     {
         $accounts = DB::table('accounts')->join('users', 'accounts.owner_id', '=', 'users.id')
-        ->where('users.id' ,'=' ,$id)
-        //->select('accounts.*',  'accounts.date', 'accounts.description', 'accounts.start_balance', 'accounts.current_balance', 'accounts.last_movement_date', 'accounts.deleted_at')
-        ->get();
-        //dd($id);
-        //dd($accounts);
-        //$accounts = DB::table('users')->join('accounts', 'accounts.owner_id', '=', 'user.id', $id)->get();
-        //$accounts = DB::select("select a.owner_id, a.date, a.description, a.start_balance, a.current_balance, 
-        //a.last_movement_date, a.deleted_at from accounts a join users u on a.owner_id = '$id'")->get();
+            ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
+            ->where('users.id', '=', $id)
+            ->get();
         $pagetitle = 'List of accounts';
-        return view('accounts.list', compact('accounts', 'pagetitle'));
+        if (Auth::check()) {
+            return view('accounts.list', compact('accounts', 'pagetitle'));
+        }
+        return view('errors.user');
     }
 }

@@ -16,9 +16,15 @@
 	</thead>
 	<tbody>
 
+	<p>
+	Filter:
+				<a href="/?Type=Open">Open</a> |
+				<a href="/?Type=Closed">Closed</a>
+	</p>
+
 		@foreach($accounts as $account)
 		<tr>
-				<td>{{ $account->account_type_id }} </td>
+				<td>{{ $account->name }} </td>
 				<td>{{ $account->date }} </td>
 				<td>{{ $account->description }} </td>
 				<td>{{ $account->start_balance }}</td>
