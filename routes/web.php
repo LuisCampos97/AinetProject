@@ -36,3 +36,6 @@ Route::patch('/users/{user}/block', 'UserController@block')->name('users.block')
 
 //Profile
 Route::get('/profiles', 'UserController@profiles')->name('profiles');
+
+//Accounts
+Route::get('/accounts/{user}', 'UserController@accountsForUser')->name('usersAccount');

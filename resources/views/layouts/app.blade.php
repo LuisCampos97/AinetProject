@@ -44,10 +44,15 @@
                         <li>
                             <a class="nav-link" href="{{ route('profiles') }}">{{ __('Profiles List') }}</a>
                         </li>
+                        <li>
+                            <a class="nav-link" href="{{ action('UserController@accountsForUser', Auth::user()->id) }}">{{ __('Accounts List') }}</a>
+                        </li>
+                       
                         @can('admin', auth()->user())
                         <li>
                             <a class="nav-link" href="{{ route('users') }}">{{ __('Users List') }}</a>
                         </li>
+
                         @endcan
                     </ul>
                     @endauth
