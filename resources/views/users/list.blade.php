@@ -11,7 +11,7 @@
 		</tr>
 	</thead>
 	<tbody>
-			<h1>List of users</h1>
+			<h1>{{ $pagetitle }}</h1>
 
 			<p>
 				Search name: 

@@ -13,7 +13,7 @@
             @foreach ($users as $user)
             <tr>
                 <td>
-                    <img src="/profiles/{{ $user->profile_photo }}">
+                    <img src="/storage/app/profiles/{{ $user->profile_photo }}">
                 </td>
                 <td>{{ $user->name }} </td>
             </tr>

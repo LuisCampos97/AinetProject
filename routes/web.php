@@ -35,4 +35,4 @@ Route::patch('/home', 'UserController@updatePassword')->name('updatePassword');
 Route::patch('/users/{user}/block', 'UserController@block')->name('users.block');
 
 //Profile
-Route::get('/profiles', 'UserController@profiles')->name('profiles');
+Route::get('/profiles', 'UserController@profilesList')->name('profiles');

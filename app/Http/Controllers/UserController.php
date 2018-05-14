@@ -24,21 +24,23 @@ class UserController extends Controller
 
     public function block($id)
     {
-        if ($user->blocked) {
-            return;
-        }
-        $user->blocked = true;
+        $user = User::FindOrFail($id);
+        $user->blocked = 1;
+        $user->save();
+
+        return view('users.list');
+
     }
 
     public function edit(User $user)
     {
         $pagetitle = "Edit user";
 
-        if(Auth::check()){
+        if (Auth::check()) {
             return view('users.edit', compact('pagetitle, user'));
         }
         return view('errors.user');
-        
+
     }
 
     public function update(Request $request) //,$id
@@ -52,7 +54,7 @@ class UserController extends Controller
             'name' => 'required|regex:/^[\pL\s]+$/u',
             'email' => 'required|email|unique:users,email,' . Auth::user()->id,
             'phone' => 'min:3|max:12',
-            'profile' => 'mimes:jpeg,png,jpg|max:1024'
+            'profile' => 'mimes:jpeg,png,jpg|max:1024',
         ], [ // Custom Messages
             'name.regex' => 'Name must only contain letters and spaces.',
         ]);
@@ -68,7 +70,7 @@ class UserController extends Controller
     {
 
         $pagetitle = 'Edit Password';
-        if(Auth::check()){
+        if (Auth::check()) {
             return view('users.edit_password', compact('pagetitle, user'));
         }
         return view('errors.user');
@@ -94,9 +96,10 @@ class UserController extends Controller
 
     }
 
-    public function profiles()
+    public function profilesList()
     {
         $users = User::all();
+        //$associates = DB::table('associate_members');
         $pagetitle = 'List of profiles';
 
         return view('users.profiles', compact('users', 'pagetitle'));
