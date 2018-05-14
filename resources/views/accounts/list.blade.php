@@ -1,4 +1,4 @@
-@extends('layouts.app') @section('content') @if(count($accounts))
+@extends('layouts.app') @section('content')
 <div class="container">
 <table class="table table-bordered">
 	<thead class="thead-dark">
@@ -18,8 +18,9 @@
 
 	<p>
 	Filter:
-				<a href="/?Type=Open">Open</a> |
-				<a href="/?Type=Closed">Closed</a>
+	
+		<a href="{{ action('UserController@openedAccounts', Auth::user()->id) }}">Open</a> |
+		<a href="{{ action('UserController@closedAccounts', Auth::user()->id) }}">Closed</a>
 	</p>
 
 		@foreach($accounts as $account)
@@ -35,5 +36,5 @@
 			</tr>
 		@endforeach
 		</tbody>
-@endif	@endsection
+@endsection
 		

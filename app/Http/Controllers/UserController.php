@@ -111,9 +111,39 @@ class UserController extends Controller
             ->where('users.id', '=', $id)
             ->get();
         $pagetitle = 'List of accounts';
+
         if (Auth::check()) {
             return view('accounts.list', compact('accounts', 'pagetitle'));
         }
         return view('errors.user');
+    }
+
+    public function openedAccounts($id)
+    {
+        $accounts = DB::table('accounts')->join('users', 'accounts.owner_id', '=', 'users.id')
+            ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
+            ->where('users.id', '=', $id)
+            ->whereNull('accounts.deleted_at')
+            ->get();
+        $pagetitle = 'List of accounts';
+        
+        if (Auth::check()) {
+            return view('accounts.list', compact('accounts', 'pagetitle'));
+        }
+        return view('errors.user');
+    }
+
+    public function closedAccounts($id){
+        $accounts = DB::table('accounts')->join('users', 'accounts.owner_id', '=', 'users.id')
+        ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
+        ->where('users.id', '=', $id)
+        ->where('accounts.deleted_at', '!=', 'null')
+        ->get();
+    $pagetitle = 'List of accounts';
+    
+    if (Auth::check()) {
+        return view('accounts.list', compact('accounts', 'pagetitle'));
+    }
+    return view('errors.user');
     }
 }
