@@ -176,4 +176,10 @@ class UserController extends Controller
     }
     return view('errors.user');
     }
+
+    public function deleteAccount($id){
+       $accounts = DB::table('accounts')->whereNull('accounts.last_movement_date');
+        
+       return view('accounts.list', compact('accounts'));
+    }
 }

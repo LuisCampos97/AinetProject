@@ -42,4 +42,4 @@ Route::get('/me/associate-of', 'UserController@associateOf')->name('associateOf'
 Route::get('/accounts/{user}', 'UserController@accountsForUser')->name('usersAccount');
 Route::get('/accounts/{user}/opened', 'UserController@openedAccounts')->name('openedAccounts');
 Route::get('/accounts/{user}/closed', 'UserController@closedAccounts')->name('closedAccounts');
-
+Route::delete('/account/{account}', 'UserController@deleteAccount')->name('deleteAccount');

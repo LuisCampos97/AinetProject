@@ -9,7 +9,8 @@
 			<th>Start Balance</th>
             <th>End Balance</th>
 			<th>Last Movement</th>
-			<th>Deleted </td>
+			<th>Deleted</th>
+			<th>Options</th>
 		</tr>
 
 		<h1>{{ $pagetitle }}</h1>
@@ -29,10 +30,17 @@
 				<td>{{ $account->date }} </td>
 				<td>{{ $account->description }} </td>
 				<td>{{ $account->start_balance }}</td>
-				<td>{{ $account->current_balance }}</td>
+				<td>{{ $account->current_balance }}</td>openedAccounts
 				<td>{{ $account->last_movement_date }}</td>
 				<td>{{ $account->deleted_at }}</td>
-
+				
+				
+				<td>
+				@if(is_null($account->last_movement_date))
+				<a class="btn btn-xs btn-danger" href="{{ action('UserController@deleteAccount',$account->id) }}">Delete Account</a> <strong style="font-size: 20px"></strong>
+				@endif
+				<a class="btn btn-xs btn-success" >View Movements of Account</a> <strong style="font-size: 20px"></strong>
+				</td>
 			</tr>
 		@endforeach
 		</tbody>
