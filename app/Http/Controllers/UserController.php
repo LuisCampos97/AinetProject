@@ -189,9 +189,16 @@ class UserController extends Controller
     return view('errors.user');
     }
 
+<<<<<<< HEAD
     public function destroy($id){
         $accounts = DB::table('accounts')->where('accounts.id', '=', $id)->delete();
         //account->id esta igual ao tipo de conta id
         return redirect()->action('HomeController@index');
+=======
+    public function deleteAccount($id){
+        DB::table('accounts')->where('accounts.id', '=', $id)->delete();
+        
+       return redirect()->action('UserController@accountsForUser', 'Auth::user()->id');
+>>>>>>> d12647fc69036809e30771d45e05feb4e3e73825
     }
 }
