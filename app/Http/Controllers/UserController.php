@@ -178,8 +178,8 @@ class UserController extends Controller
     }
 
     public function deleteAccount($id){
-       $accounts = DB::table('accounts')->whereNull('accounts.last_movement_date');
+        DB::table('accounts')->where('accounts.id', '=', $id)->delete();
         
-       return view('accounts.list', compact('accounts'));
+       return redirect()->action('UserController@accountsForUser', 'Auth::user()->id');
     }
 }

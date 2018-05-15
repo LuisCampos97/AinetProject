@@ -30,7 +30,7 @@
 				<td>{{ $account->date }} </td>
 				<td>{{ $account->description }} </td>
 				<td>{{ $account->start_balance }}</td>
-				<td>{{ $account->current_balance }}</td>openedAccounts
+				<td>{{ $account->current_balance }}</td>
 				<td>{{ $account->last_movement_date }}</td>
 				<td>{{ $account->deleted_at }}</td>
 				
