@@ -136,10 +136,13 @@ class UserController extends Controller
 
     public function accountsForUser($id)
     {
-        $accounts = DB::table('accounts')->join('users', 'accounts.owner_id', '=', 'users.id')
+        $accounts =DB::table('accounts')
+            ->join('users', 'accounts.owner_id', '=', 'users.id')
             ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
             ->where('users.id', '=', $id)
+            ->select('accounts.*', 'account_types.name')
             ->get();
+        //dd($accounts);
         $pagetitle = 'List of accounts';
 
         if (Auth::check()) {
@@ -150,11 +153,16 @@ class UserController extends Controller
 
     public function openedAccounts($id)
     {
-        $accounts = DB::table('accounts')->join('users', 'accounts.owner_id', '=', 'users.id')
+            $accounts =DB::table('accounts')
+            ->join('users', 'accounts.owner_id', '=', 'users.id')
             ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
             ->where('users.id', '=', $id)
             ->whereNull('accounts.deleted_at')
+            ->select('accounts.*', 'account_types.name')
             ->get();
+
+            
+
         $pagetitle = 'List of accounts';
         
         if (Auth::check()) {
@@ -164,11 +172,15 @@ class UserController extends Controller
     }
 
     public function closedAccounts($id){
-        $accounts = DB::table('accounts')->join('users', 'accounts.owner_id', '=', 'users.id')
+
+        $accounts =DB::table('accounts')
+        ->join('users', 'accounts.owner_id', '=', 'users.id')
         ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
         ->where('users.id', '=', $id)
         ->where('accounts.deleted_at', '!=', 'null')
+        ->select('accounts.*', 'account_types.name')
         ->get();
+
     $pagetitle = 'List of accounts';
     
     if (Auth::check()) {
@@ -177,9 +189,9 @@ class UserController extends Controller
     return view('errors.user');
     }
 
-    public function deleteAccount($id){
-       $accounts = DB::table('accounts')->whereNull('accounts.last_movement_date');
-        
-       return view('accounts.list', compact('accounts'));
+    public function destroy($id){
+        $accounts = DB::table('accounts')->where('accounts.id', '=', $id)->delete();
+        //account->id esta igual ao tipo de conta id
+        return redirect()->action('HomeController@index');
     }
 }
