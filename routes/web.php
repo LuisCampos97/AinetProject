@@ -35,4 +35,10 @@ Route::patch('/home', 'UserController@updatePassword')->name('updatePassword');
 Route::patch('/users/{user}/block', 'UserController@block')->name('users.block');
 
 //Profile
-Route::get('/profiles', 'UserController@profilesList')->name('profiles');
+Route::get('/profiles', 'UserController@profiles')->name('profiles');
+
+//Accounts
+Route::get('/accounts/{user}', 'UserController@accountsForUser')->name('usersAccount');
+Route::get('/accounts/{user}/opened', 'UserController@openedAccounts')->name('openedAccounts');
+Route::get('/accounts/{user}/closed', 'UserController@closedAccounts')->name('closedAccounts');
+

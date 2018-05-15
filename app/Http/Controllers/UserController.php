@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\User;
 use Auth;
 use Gate;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -108,10 +109,44 @@ class UserController extends Controller
 
     public function accountsForUser($id)
     {
-        $accounts = DB::table('accounts')->join('users', 'users.id', '==', 'accounts.owner_id');
+        $accounts = DB::table('accounts')->join('users', 'accounts.owner_id', '=', 'users.id')
+            ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
+            ->where('users.id', '=', $id)
+            ->get();
         $pagetitle = 'List of accounts';
-        return view('accounts.list', compact('users', 'pagetitle'));
+
+        if (Auth::check()) {
+            return view('accounts.list', compact('accounts', 'pagetitle'));
+        }
+        return view('errors.user');
     }
 
+    public function openedAccounts($id)
+    {
+        $accounts = DB::table('accounts')->join('users', 'accounts.owner_id', '=', 'users.id')
+            ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
+            ->where('users.id', '=', $id)
+            ->whereNull('accounts.deleted_at')
+            ->get();
+        $pagetitle = 'List of accounts';
+        
+        if (Auth::check()) {
+            return view('accounts.list', compact('accounts', 'pagetitle'));
+        }
+        return view('errors.user');
+    }
+
+    public function closedAccounts($id){
+        $accounts = DB::table('accounts')->join('users', 'accounts.owner_id', '=', 'users.id')
+        ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
+        ->where('users.id', '=', $id)
+        ->where('accounts.deleted_at', '!=', 'null')
+        ->get();
+    $pagetitle = 'List of accounts';
     
+    if (Auth::check()) {
+        return view('accounts.list', compact('accounts', 'pagetitle'));
+    }
+    return view('errors.user');
+    }
 }
