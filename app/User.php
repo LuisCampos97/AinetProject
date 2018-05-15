@@ -48,4 +48,9 @@ class User extends Authenticatable
                 return 'Blocked';
         }
     }
+
+    public function search($querry, $s)
+    {
+        return $querry->where('name', 'like', '%' .$s. '%');
+    }
 }

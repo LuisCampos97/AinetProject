@@ -98,13 +98,25 @@ class UserController extends Controller
 
     }
 
-    public function profilesList()
+    public function profiles(Request $request)
     {
-        $users = User::all();
-        //$associates = DB::table('associate_members');
+        $name = $request->input('name');
+
+        $users = User::all()->search($name);
+        $users = DB::table('users')
+            ->leftJoin('associate_members', 'users.id', '=', 'main_user_id')
+            ->get();
+
+        $associates = DB::table('associate_members')
+            ->where('associate_members.main_user_id', Auth::user()->id)
+            ->get();
+
         $pagetitle = 'List of profiles';
 
-        return view('users.profiles', compact('users', 'pagetitle'));
+        if (Auth::check()) {
+            return view('users.profiles', compact('users', 'pagetitle', 'associates'));
+        }
+        return view('errors.user');   
     }
 
     public function accountsForUser($id)
