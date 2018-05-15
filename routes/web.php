@@ -36,6 +36,7 @@ Route::patch('/users/{user}/block', 'UserController@block')->name('users.block')
 
 //Profile
 Route::get('/profiles', 'UserController@profiles')->name('profiles');
+Route::get('/me/associate-of', 'UserController@associateOf')->name('associateOf');
 
 //Accounts
 Route::get('/accounts/{user}', 'UserController@accountsForUser')->name('usersAccount');

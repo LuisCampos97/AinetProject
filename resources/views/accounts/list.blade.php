@@ -12,15 +12,15 @@
 			<th>Deleted </td>
 		</tr>
 
-		<h1>List of Accounts</h1>
+		<h1>{{ $pagetitle }}</h1>
 	</thead>
 	<tbody>
 
 	<p>
-	Filter:
+	<strong style="font-size: 20px">Filter: </strong>
 	
-		<a href="{{ action('UserController@openedAccounts', Auth::user()->id) }}">Open</a> |
-		<a href="{{ action('UserController@closedAccounts', Auth::user()->id) }}">Closed</a>
+		<a class="btn btn-xs btn-success" href="{{ action('UserController@openedAccounts', Auth::user()->id) }}">Open</a> <strong style="font-size: 20px">|</strong>
+		<a class="btn btn-xs btn-danger" href="{{ action('UserController@closedAccounts', Auth::user()->id) }}">Closed</a>
 	</p>
 
 		@foreach($accounts as $account)

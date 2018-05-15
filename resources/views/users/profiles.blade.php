@@ -9,7 +9,7 @@
             </tr>
         </thead>
         <tbody>
-            <h1>List of users</h1>
+            <h1>{{ $pagetitle }}</h1>
 
             <form action="{{ route('profiles') }}" method="get" class="form-inline">
                 <div class="form-group">

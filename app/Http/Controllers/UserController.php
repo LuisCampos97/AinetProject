@@ -119,6 +119,21 @@ class UserController extends Controller
         return view('errors.user');   
     }
 
+    public function associateOf()
+    {
+        $users = DB::table('users')
+            ->join('associate_members', 'users.id', '=', 'main_user_id')
+            ->where('associate_members.associated_user_id', Auth::user()->id)
+            ->get();
+
+        $pagetitle = 'List of Associated-of profiles';
+
+        if (Auth::check()) {
+            return view('users.associateof', compact('users', 'pagetitle'));
+        }
+        return view('errors.user');
+    }
+
     public function accountsForUser($id)
     {
         $accounts = DB::table('accounts')->join('users', 'accounts.owner_id', '=', 'users.id')
