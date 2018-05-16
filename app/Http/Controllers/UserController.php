@@ -19,6 +19,7 @@ class UserController extends Controller
       // Returns an array of articles that have the query string located somewhere within 
       // our articles titles. Paginates them so we can break up lots of search results.
       $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(10);
+      
          
       // returns a view and passes the view the list of articles and the original query.
         $pagetitle = 'List of users';
