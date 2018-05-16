@@ -58,6 +58,7 @@ Route::patch('/users/{user}/demote', 'UserController@demote')->name('users.demot
 //Profile
 Route::get('/profiles', 'UserController@profiles')->name('profiles');
 Route::get('/me/associate-of', 'UserController@associateOf')->name('associateOf');
+Route::get('/me/associates', 'UserController@associates')->name('associates');
 
 //Accounts
 Route::get('/accounts/{user}', 'UserController@accountsForUser')->name('usersAccount');

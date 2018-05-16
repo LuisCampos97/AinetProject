@@ -12,6 +12,18 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function search(Request $request)
+    {
+      // Gets the query string from our form submission 
+      $query = Request::input('search');
+      // Returns an array of articles that have the query string located somewhere within 
+      // our articles titles. Paginates them so we can break up lots of search results.
+      $articles = DB::table('articles')->where('title', 'LIKE', '%' . $query . '%')->paginate(10);
+          
+      // returns a view and passes the view the list of articles and the original query.
+      return view('page.search', compact('articles', 'query'));
+    }
+
     public function index()
     {
         $users = User::paginate(10);
@@ -157,6 +169,21 @@ class UserController extends Controller
 
         if (Auth::check()) {
             return view('users.associateof', compact('users', 'pagetitle'));
+        }
+        return view('errors.user');
+    }
+
+    public function associates()
+    {
+        $users = DB::table('users')
+            ->join('associate_members', 'main_user_id', '=', 'users.id')
+            ->where('associate_members.associated_user_id', Auth::user()->id)
+            ->get();
+
+        $pagetitle = 'List of associates';
+
+        if (Auth::check()) {
+            return view('users.associates', compact('users', 'pagetitle'));
         }
         return view('errors.user');
     }
