@@ -24,6 +24,7 @@ Route::get('/', function () {
 Route::get('/', 'WelcomeController@home');
  
 Route::get('/users', 'UserController@index')->name('users');
+Route::get('/users/search', 'UserController@search')->name('users.search');
 /*Route::get('/users', function(){
     $q= Input::get('q');
     if($q!=""){
