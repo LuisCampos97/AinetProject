@@ -219,4 +219,22 @@ class UserController extends Controller
         
         return redirect()->action('HomeController@index');
     }
+
+    public function closeAccount($id)
+    {
+        DB::table('accounts')
+            ->where('accounts.id', $id)
+            ->update(['deleted_at' => date('Y-m-d- G:i:s')]);
+
+        return redirect()->action('HomeController@index');
+    }
+
+    public function openAccount($id)
+    {
+        DB::table('accounts')
+            ->where('accounts.id', $id)
+            ->update(['deleted_at' => NULL]);
+
+        return redirect()->action('HomeController@index');
+    }
 }

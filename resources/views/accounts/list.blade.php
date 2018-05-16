@@ -44,8 +44,21 @@
 					</form>
 				@endif
 				@if(is_null($account->deleted_at))
-					<a class="btn btn-xs btn-warning" >Close Account</a> <strong style="font-size: 20px"></strong>
+
+				<form action="{{ action('UserController@closeAccount', $account->id) }}" method="post" class="inline">
+					@csrf
+					@method('patch')
+					<input type="submit" class="btn btn-xs btn-warning" value="Close Account">
+					</form>				
+				@else
+				<form action="{{ action('UserController@openAccount', $account->id) }}" method="post" class="inline">
+					@csrf
+					@method('patch')
+					<input type="submit" class="btn btn-xs btn-info" value="Open Account">
+					</form>		
 				@endif
+
+				
 				<a class="btn btn-xs btn-success" >View Movements of Account</a> <strong style="font-size: 20px"></strong>
 				</td>
 			</tr>
