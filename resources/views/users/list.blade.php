@@ -13,17 +13,24 @@
 	<tbody>
 			<h1>List of users</h1>
 
-			<p>
-				Search name: 
-				<input type="text" class="form-control" id="search" name="search"></input>
+			<div class="wrap">
+			<div class="search">
+				<input type="text" class="searchTerm" placeholder="Search for name?" id="search" name="search">
+				<button type="submit" class="searchButton">
+					<i class="fa fa-search"></i>
+				</button>
+			</div>
+			</div>
 
+			<div>
 				Filter:
-				<a href="/?Type=Normal">Normal</a> |
-				<a href="/?Type=Admin">Admin</a> |
-				<a href="/?Type=Unblocked">Unblocked</a> |
-				<a href="/?Type=Blocked">Blocked</a> |
+				<a href="users/?type=normal">Normal</a> |
+				<a href="users/?type=admin">Admin</a> |
+				<a href="users/?status=unblocked">Unblocked</a> |
+				<a href="users/?status=blocked">Blocked</a> |
 				<a href="/users">Reset</a>
-			</p>
+
+			</div>
 			
 			@foreach ($users as $user)
 			<tr>
@@ -36,8 +43,10 @@
 					<a class="btn btn-xs btn-primary" href="#">Promote admin</a>
 				</td>
 			</tr>
-			@endforeach	
+			@endforeach
 	</tbody>
 </table>
+{{$users ->links()}}
 </div>
+
 @endif @endsection('content')
