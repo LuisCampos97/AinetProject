@@ -9,6 +9,7 @@ use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Account;
 
 class UserController extends Controller
 {
@@ -110,10 +111,9 @@ class UserController extends Controller
 
     public function editPassword()
     {
-
         $pagetitle = 'Edit Password';
         if (Auth::check()) {
-            return view('users.edit_password', compact('pagetitle, user'));
+            return view('users.edit_password', compact('pagetitle'));
         }
         return view('errors.user');
     }
@@ -279,4 +279,30 @@ class UserController extends Controller
         return view('accounts.movements', compact('movements', 'pagetitle'));
  
     }
+
+    public function createAccount(){
+        
+        $account = new Account();
+        return view ('accounts.create', compact('account'));
+    }
+
+    public function store(Request $request){
+        if ($request->has('cancel')) {
+            return redirect()->action('HomeController@home');
+        }
+        
+        $account = $request->validate([
+            'account_type_id' => 'required|min:1|max:5',
+            'code' => 'required|string',
+            'date' => 'required|date',
+            'start_balance' => 'required|float',
+            'description' => 'required|string|max:255'
+        ]);
+        
+        Account::create($account);
+        
+        return redirect()->action('HomeController@home')->with(['msgglobal' => 'Account Created!']);
+    }
+
+
 }

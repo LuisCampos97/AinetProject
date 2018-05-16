@@ -47,21 +47,6 @@
                         <li>
                             <a class="nav-link" href="{{ route('associateOf') }}">{{ __('Associate-of Profiles') }}</a>
                         </li>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> ddd55325956bd94ae754118a4cf1824f954cf2c7
-                        <li>
-                            <a class="nav-link" href="{{ route('associates') }}">{{ __('Associates') }}</a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="{{ action('UserController@accountsForUser', Auth::user()->id) }}">{{ __('Accounts') }}</a>
-                        </li>
-<<<<<<< HEAD
-=======
->>>>>>> f741a7925313c5a458329751f1c1b97f380dca74
-=======
->>>>>>> ddd55325956bd94ae754118a4cf1824f954cf2c7
                        
                         @can('admin', auth()->user())
                         <li>

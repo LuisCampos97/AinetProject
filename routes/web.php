@@ -71,3 +71,7 @@ Route::patch('/account/{account}/open', 'UserController@openAccount')->name('ope
 
 //Movements of Account
 Route::get('/movements/{account}', 'UserController@showMovementsForAccount')->name('movementsForAccount');
+
+//Create account
+Route::get('/account', 'UserController@createAccount')->name('createAccount');
+Route::post('/account', 'UserController@store')->name('store');

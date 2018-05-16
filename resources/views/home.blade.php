@@ -26,14 +26,11 @@
             </div>
         <br>
             <div class="card">
-<<<<<<< HEAD
-                <div class="card-header">Accounts</div>
-=======
                 <div class="card-header">Account</div>
->>>>>>> f741a7925313c5a458329751f1c1b97f380dca74
                 <div class="card-body">
                     <a class="btn btn-xs btn-info" href="{{ action('UserController@accountsForUser', Auth::user()->id) }}">List of my Accounts</a><br><br>
-                    <a class="btn btn-xs btn-success">Create Account</a> <strong style="font-size: 20px"></strong>
+                    
+                    <a class="btn btn-xs btn-success" href="{{ action('UserController@createAccount') }}">Add Account</a></div>
                 </div>
             </div>
         </div>
