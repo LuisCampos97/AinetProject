@@ -12,7 +12,7 @@
 	</thead>
 	<tbody>
 			<h1>{{ $pagetitle }}</h1>
-
+			
 			<div class="wrap">
 			<div class="search">
 				<input type="text" class="searchTerm" placeholder="Search for name?" id="search" name="search">
