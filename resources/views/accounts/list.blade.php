@@ -57,7 +57,6 @@
 					<input type="submit" class="btn btn-xs btn-info" value="Open Account">
 					</form>		
 				@endif
-
 				
 				<a class="btn btn-xs btn-success" >View Movements of Account</a> <strong style="font-size: 20px"></strong>
 				</td>

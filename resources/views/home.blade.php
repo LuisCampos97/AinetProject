@@ -24,6 +24,14 @@
                     </div>
                 </div>
             </div>
+        <br>
+            <div class="card">
+                <div class="card-header">Create Account</div>
+                <div class="card-body">
+                    <a class="btn btn-xs btn-success" >Create Account</a> <strong style="font-size: 20px"></strong>
+
+                </div>
+            </div>
         </div>
     </div>
     @endsection
