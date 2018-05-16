@@ -173,6 +173,21 @@ class UserController extends Controller
         return view('errors.user');
     }
 
+    public function associates()
+    {
+        $users = DB::table('users')
+            ->join('associate_members', 'main_user_id', '=', 'users.id')
+            ->where('associate_members.associated_user_id', Auth::user()->id)
+            ->get();
+
+        $pagetitle = 'List of associates';
+
+        if (Auth::check()) {
+            return view('users.associates', compact('users', 'pagetitle'));
+        }
+        return view('errors.user');
+    }
+
     public function accountsForUser($id)
     {
         $accounts =DB::table('accounts')
