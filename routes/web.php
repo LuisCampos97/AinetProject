@@ -66,3 +66,6 @@ Route::get('/accounts/{user}/closed', 'UserController@closedAccounts')->name('cl
 Route::delete('/account/{account}', 'UserController@destroy')->name('deleteAccount');
 Route::patch('/account/{account}/close', 'UserController@closeAccount')->name('closeAccount');
 Route::patch('/account/{account}/open', 'UserController@openAccount')->name('openAccount');
+
+//Movements of Account
+Route::get('/movements/{account}', 'UserController@showMovementsForAccount')->name('movementsForAccount');

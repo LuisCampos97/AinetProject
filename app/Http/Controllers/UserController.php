@@ -237,4 +237,18 @@ class UserController extends Controller
 
         return redirect()->action('HomeController@index');
     }
+
+    public function showMovementsForAccount($id){
+        $pagetitle = 'List of Movements';
+
+        $movements = DB::table('movements')
+                    ->join('movement_categories', 'movement_categories.id', '=', 'movements.movement_category_id')
+                    ->join('accounts', 'movements.account_id', '=', 'accounts.id')
+                    ->where('accounts.id', '=', $id)
+                    ->select('movements.*', 'accounts.id', 'movement_categories.name')
+                    ->get();
+
+        return view('accounts.movements', compact('movements', 'pagetitle'));
+ 
+    }
 }

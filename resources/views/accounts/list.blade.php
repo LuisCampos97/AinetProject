@@ -57,8 +57,12 @@
 					<input type="submit" class="btn btn-xs btn-info" value="Open Account">
 					</form>		
 				@endif
-				
-				<a class="btn btn-xs btn-success" >View Movements of Account</a> <strong style="font-size: 20px"></strong>
+
+				@if(!is_null($account->last_movement_date))
+				<form action="{{ action('UserController@showMovementsForAccount', $account->id) }}" method="get" class="inline">
+					<input type="submit" class="btn btn-xs btn-success" value="View Account Movements">
+					</form>	
+				@endif
 				</td>
 			</tr>
 		@endforeach
