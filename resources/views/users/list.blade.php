@@ -32,8 +32,32 @@
 				<td>{{ $user->typeToString() }} </td>
 				<td>{{ $user->blockedToString() }}</td>
 				<td>
-					<a class="btn btn-xs btn-primary" href="{{ action('UserController@block', $user->id) }}" method="PATCH">Block</a>
-					<a class="btn btn-xs btn-primary" href="#">Promote admin</a>
+				@if ($user->blocked == 0)
+				<form action="{{ route('users.block', $user->id) }}" method="post" class="inline">
+					@csrf
+					@method('patch')
+					<input type="submit" class="btn btn-xs btn-danger" value="Block">
+				</form>
+				@else
+				<form action="{{ route('users.unblock', $user->id) }}" method="post" class="inline">
+					@csrf
+					@method('patch')
+					<input type="submit" class="btn btn-xs btn-success" value="UnBlock">
+				</form>
+				@endif
+				@if ($user->admin == 0)
+				<form action="{{ route('users.promote', $user->id) }}" method="post" class="inline">
+					@csrf
+					@method('patch')
+					<input type="submit" class="btn btn-xs btn-danger" value="Promote">
+				</form>
+				@else
+				<form action="{{ route('users.demote', $user->id) }}" method="post" class="inline">
+					@csrf
+					@method('patch')
+					<input type="submit" class="btn btn-xs btn-success" value="Demote">
+				</form>
+				@endif
 				</td>
 			</tr>
 			@endforeach

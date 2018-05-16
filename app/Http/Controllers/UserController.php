@@ -26,10 +26,38 @@ class UserController extends Controller
 
     public function block($id)
     {
-        $user = DB::table('users')
+        DB::table('users')
             ->where('users.id', '=', $id)
             ->update(['blocked' => 1]);
 
+        return redirect()->action('UserController@index');
+    }
+
+    public function unblock($id)
+    {
+        DB::table('users')
+            ->where('users.id', '=', $id)
+            ->update(['blocked' => 0]);
+
+        return redirect()->action('UserController@index');
+    }
+
+
+    public function promote($id)
+    {
+        DB::table('users')
+            ->where('users.id', '=', $id)
+            ->update(['admin' => 1]);
+        
+        return redirect()->action('UserController@index');
+    }
+
+    public function demote($id)
+    {
+        DB::table('users')
+            ->where('users.id', '=', $id)
+            ->update(['admin' => 0]);
+        
         return redirect()->action('UserController@index');
     }
 

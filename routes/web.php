@@ -31,8 +31,11 @@ Route::put('/home', 'UserController@update')->name('update');
 Route::get('/me/password', 'UserController@editPassword')->name('editPassword');
 Route::patch('/home', 'UserController@updatePassword')->name('updatePassword');
 
-//Block
+//Block/Unblock/Promote/Demote
 Route::patch('/users/{user}/block', 'UserController@block')->name('users.block');
+Route::patch('/users/{user}/unblock', 'UserController@unblock')->name('users.unblock');
+Route::patch('/users/{user}/promote', 'UserController@promote')->name('users.promote');
+Route::patch('/users/{user}/demote', 'UserController@demote')->name('users.demote');
 
 //Profile
 Route::get('/profiles', 'UserController@profiles')->name('profiles');
