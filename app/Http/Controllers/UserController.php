@@ -14,15 +14,15 @@ class UserController extends Controller
 {
     public function search(Request $request)
     {
-      // Gets the query string from our form submission 
-      $query = $request->search;
-      // Returns an array of articles that have the query string located somewhere within 
-      // our articles titles. Paginates them so we can break up lots of search results.
-      $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(10);
-         
-      // returns a view and passes the view the list of articles and the original query.
+        // Gets the query string from our form submission
+        $query = $request->search;
+        // Returns an array of articles that have the query string located somewhere within
+        // our articles titles. Paginates them so we can break up lots of search results.
+        $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(10);
+
+        // returns a view and passes the view the list of articles and the original query.
         $pagetitle = 'List of users';
-      return view('users.list', compact('users', 'pagetitle'));
+        return view('users.list', compact('users', 'pagetitle'));
     }
 
     public function index()
@@ -34,44 +34,54 @@ class UserController extends Controller
             return view('users.list', compact('users', 'pagetitle'));
         }
         return view('errors.admin');
-
     }
 
     public function block($id)
     {
-        DB::table('users')
-            ->where('users.id', '=', $id)
-            ->update(['blocked' => 1]);
+        if (Gate::allows('admin', auth()->user())) {
+            DB::table('users')
+                ->where('users.id', '=', $id)
+                ->update(['blocked' => 1]);
 
-        return redirect()->action('UserController@index');
+            return redirect()->action('UserController@index');
+        }
+        return view('errors.admin');
     }
 
     public function unblock($id)
     {
-        DB::table('users')
-            ->where('users.id', '=', $id)
-            ->update(['blocked' => 0]);
+        if (Gate::allows('admin', auth()->user())) {
+            DB::table('users')
+                ->where('users.id', '=', $id)
+                ->update(['blocked' => 0]);
 
-        return redirect()->action('UserController@index');
+            return redirect()->action('UserController@index');
+        }
+        return view('errors.admin');
     }
-
 
     public function promote($id)
     {
-        DB::table('users')
-            ->where('users.id', '=', $id)
-            ->update(['admin' => 1]);
-        
-        return redirect()->action('UserController@index');
+        if (Gate::allows('admin', auth()->user())) {
+            DB::table('users')
+                ->where('users.id', '=', $id)
+                ->update(['admin' => 1]);
+
+            return redirect()->action('UserController@index');
+        }
+        return view('errors.admin');
     }
 
     public function demote($id)
     {
-        DB::table('users')
-            ->where('users.id', '=', $id)
-            ->update(['admin' => 0]);
-        
-        return redirect()->action('UserController@index');
+        if (Gate::allows('admin', auth()->user())) {
+            DB::table('users')
+                ->where('users.id', '=', $id)
+                ->update(['admin' => 0]);
+
+            return redirect()->action('UserController@index');
+        }
+        return view('errors.admin');
     }
 
     public function edit(User $user)
@@ -156,7 +166,7 @@ class UserController extends Controller
         if (Auth::check()) {
             return view('users.profiles', compact('users', 'pagetitle', 'associates'));
         }
-        return view('errors.user');   
+        return view('errors.user');
     }
 
     public function associateOf()
@@ -191,13 +201,13 @@ class UserController extends Controller
 
     public function accountsForUser($id)
     {
-        $accounts =DB::table('accounts')
+        $accounts = DB::table('accounts')
             ->join('users', 'accounts.owner_id', '=', 'users.id')
             ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
             ->where('users.id', '=', $id)
             ->select('accounts.*', 'account_types.name')
             ->get();
-        
+
         $pagetitle = 'List of accounts';
 
         if (Auth::check()) {
@@ -208,43 +218,45 @@ class UserController extends Controller
 
     public function openedAccounts($id)
     {
-            $accounts =DB::table('accounts')
+        $accounts = DB::table('accounts')
             ->join('users', 'accounts.owner_id', '=', 'users.id')
             ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
             ->where('users.id', '=', $id)
             ->whereNull('accounts.deleted_at')
             ->select('accounts.*', 'account_types.name')
-            ->get(); 
+            ->get();
 
         $pagetitle = 'List of accounts';
-        
+
         if (Auth::check()) {
             return view('accounts.list', compact('accounts', 'pagetitle'));
         }
         return view('errors.user');
     }
 
-    public function closedAccounts($id){
+    public function closedAccounts($id)
+    {
 
-        $accounts =DB::table('accounts')
-        ->join('users', 'accounts.owner_id', '=', 'users.id')
-        ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
-        ->where('users.id', '=', $id)
-        ->where('accounts.deleted_at', '!=', 'null')
-        ->select('accounts.*', 'account_types.name')
-        ->get();
+        $accounts = DB::table('accounts')
+            ->join('users', 'accounts.owner_id', '=', 'users.id')
+            ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
+            ->where('users.id', '=', $id)
+            ->where('accounts.deleted_at', '!=', 'null')
+            ->select('accounts.*', 'account_types.name')
+            ->get();
 
-    $pagetitle = 'List of accounts';
-    
-    if (Auth::check()) {
-        return view('accounts.list', compact('accounts', 'pagetitle'));
+        $pagetitle = 'List of accounts';
+
+        if (Auth::check()) {
+            return view('accounts.list', compact('accounts', 'pagetitle'));
+        }
+        return view('errors.user');
     }
-    return view('errors.user');
-    }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $accounts = DB::table('accounts')->where('accounts.id', '=', $id)->delete();
-        
+
         return redirect()->action('HomeController@index');
     }
 
@@ -261,22 +273,23 @@ class UserController extends Controller
     {
         DB::table('accounts')
             ->where('accounts.id', $id)
-            ->update(['deleted_at' => NULL]);
+            ->update(['deleted_at' => null]);
 
         return redirect()->action('HomeController@index');
     }
 
-    public function showMovementsForAccount($id){
+    public function showMovementsForAccount($id)
+    {
         $pagetitle = 'List of Movements';
 
         $movements = DB::table('movements')
-                    ->join('movement_categories', 'movement_categories.id', '=', 'movements.movement_category_id')
-                    ->join('accounts', 'movements.account_id', '=', 'accounts.id')
-                    ->where('accounts.id', '=', $id)
-                    ->select('movements.*', 'accounts.id', 'movement_categories.name')
-                    ->get();
+            ->join('movement_categories', 'movement_categories.id', '=', 'movements.movement_category_id')
+            ->join('accounts', 'movements.account_id', '=', 'accounts.id')
+            ->where('accounts.id', '=', $id)
+            ->select('movements.*', 'accounts.id', 'movement_categories.name')
+            ->get();
 
         return view('accounts.movements', compact('movements', 'pagetitle'));
- 
+
     }
 }

@@ -43,6 +43,7 @@
 				<td>{{ $user->typeToString() }} </td>
 				<td>{{ $user->blockedToString() }}</td>
 				<td>
+				@if ($user->id != Auth::user()->id)
 				@if ($user->blocked == 0)
 				<form action="{{ route('users.block', $user->id) }}" method="post" class="inline">
 					@csrf
@@ -68,6 +69,7 @@
 					@method('patch')
 					<input type="submit" class="btn btn-xs btn-success" value="Demote">
 				</form>
+				@endif
 				@endif
 				</td>
 			</tr>
