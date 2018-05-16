@@ -187,8 +187,8 @@ class UserController extends Controller
     public function associates()
     {
         $users = DB::table('users')
-            ->join('associate_members', 'main_user_id', '=', 'users.id')
-            ->where('associate_members.associated_user_id', Auth::user()->id)
+            ->join('associate_members', 'associated_user_id', '=', 'users.id')
+            ->where('associate_members.main_user_id', Auth::user()->id)
             ->get();
 
         $pagetitle = 'List of associates';
