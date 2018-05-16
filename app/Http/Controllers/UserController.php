@@ -15,6 +15,7 @@ class UserController extends Controller
 {
     public function search(Request $request)
     {
+<<<<<<< HEAD
       // Gets the query string from our form submission 
       $query = $request->search;
       // Returns an array of articles that have the query string located somewhere within 
@@ -23,6 +24,15 @@ class UserController extends Controller
       
          
       // returns a view and passes the view the list of articles and the original query.
+=======
+        // Gets the query string from our form submission
+        $query = $request->search;
+        // Returns an array of articles that have the query string located somewhere within
+        // our articles titles. Paginates them so we can break up lots of search results.
+        $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(10);
+
+        // returns a view and passes the view the list of articles and the original query.
+>>>>>>> US.12
         $pagetitle = 'List of users';
         return view('users.list', compact('users', 'pagetitle'));
     }
@@ -188,8 +198,8 @@ class UserController extends Controller
     public function associates()
     {
         $users = DB::table('users')
-            ->join('associate_members', 'main_user_id', '=', 'users.id')
-            ->where('associate_members.associated_user_id', Auth::user()->id)
+            ->join('associate_members', 'associated_user_id', '=', 'users.id')
+            ->where('associate_members.main_user_id', Auth::user()->id)
             ->get();
 
         $pagetitle = 'List of associates';
