@@ -24,7 +24,7 @@
             @foreach ($users as $user)
             <tr>
                 <td>
-                    <img src="/storage/app/profiles/{{ $user->profile_photo }}">
+                <img src="{{ asset('/storage/profiles/' . $user->profile_photo) }}">
                 </td>
                 <td>{{ $user->name }} </td>
                 @foreach ($associates as $associate) 
