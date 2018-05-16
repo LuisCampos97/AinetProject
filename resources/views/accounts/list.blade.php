@@ -1,4 +1,4 @@
-@extends('layouts.app') @section('content') @if(count($accounts))
+@extends('layouts.app') @section('content')
 <div class="container">
 <table class="table table-bordered">
 	<thead class="thead-dark">
@@ -36,16 +36,20 @@
 				
 				
 				<td>
-				@if(is_null($account->last_movement_date) && is_null($account->deleted_at))
+				@if(is_null($account->last_movement_date))
 				<form action="{{ action('UserController@destroy', $account->id) }}" method="post" class="inline">
 					@csrf
 					@method('delete')
 					<input type="submit" class="btn btn-xs btn-danger" value="Delete">
+					</form>
+				@endif
+				@if(is_null($account->deleted_at))
+					<a class="btn btn-xs btn-warning" >Close Account</a> <strong style="font-size: 20px"></strong>
 				@endif
 				<a class="btn btn-xs btn-success" >View Movements of Account</a> <strong style="font-size: 20px"></strong>
 				</td>
 			</tr>
 		@endforeach
 		</tbody>
-		@endif @endsection
+@endsection
 		
