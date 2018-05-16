@@ -1,23 +1,41 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+USE Illuminate\Support\Facades\Input;
+USE App\User;
 
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
+Route::get('/', function () {
+    if(request()->has('type')){
+        $users= App\User::where('type', request('type'))->paginate(10)->appends('type', request('type'));
+    }
+    else{
+        $users = App\User::paginate(10);
+    }
+    if(request()->has('status')){
+        $users= App\User::where('status', request('status'))->paginate(10)->appends('status', request('status'));
+    }
+    else{
+        $users = App\User::paginate(10);
+    }
+
+
+    return view('users')->with('users', $users);
+});
 
 Route::get('/', 'WelcomeController@home');
  
 Route::get('/users', 'UserController@index')->name('users');
+/*Route::get('/users', function(){
+    $q= Input::get('q');
+    if($q!=""){
+        $user = User::where('name','LIKE', '%'. $q . '%')
+                            ->get();
+        if(count($user) >0 ){
+            return view('welcome');
+        }
+    }
+    return "No users found!";
+
+})->name('users'); */
 Auth::routes();
 
 
