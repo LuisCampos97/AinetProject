@@ -1,4 +1,4 @@
-@extends('layouts.app') @section('content')
+@extends('layouts.app') @section('content') @if(count($movements))
 
 <div class="container">
 <table class="table table-bordered">
@@ -24,4 +24,11 @@
         </tr>
     @endforeach
     </tbody>
+@endif
+
+@if(count($movements) == 0)
+<div class="container">
+    <p style="font-size:30px">There are no movements for this account</p>
+</div>
+@endif
 @endsection
