@@ -15,10 +15,16 @@
             <tr>
                 <td>{{ $user->name }} </td>
                 <td>{{ $user->email }}</td>
-                <td><a class="btn btn-xs btn-primary" href="{{ action('UserController@accountsForUser',$user->id) }}">Account</a></td>
+                <td>
+                    <a class="btn btn-xs btn-primary" href="{{ action('UserController@accountsForUser',$user->id) }}">Account</a>
+                </td>
             </tr>
             @endforeach
         </tbody>
     </table>
+    @else
+    <div class="container">
+        <strong style="font-size:25px">I do not belong to any group of associate members!</strong>
+    </div>
 </div>
 @endif @endsection('content')

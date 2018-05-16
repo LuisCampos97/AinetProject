@@ -26,12 +26,11 @@ class UserController extends Controller
 
     public function block($id)
     {
-        $user = User::FindOrFail($id);
-        $user->blocked = 1;
-        $user->save();
+        $user = DB::table('users')
+            ->where('users.id', '=', $id)
+            ->update(['blocked' => 1]);
 
-        return view('users.list');
-
+        return redirect()->action('UserController@index');
     }
 
     public function edit(User $user)
@@ -142,7 +141,7 @@ class UserController extends Controller
             ->where('users.id', '=', $id)
             ->select('accounts.*', 'account_types.name')
             ->get();
-        //dd($accounts);
+        
         $pagetitle = 'List of accounts';
 
         if (Auth::check()) {
@@ -159,9 +158,7 @@ class UserController extends Controller
             ->where('users.id', '=', $id)
             ->whereNull('accounts.deleted_at')
             ->select('accounts.*', 'account_types.name')
-            ->get();
-
-            
+            ->get(); 
 
         $pagetitle = 'List of accounts';
         
@@ -189,16 +186,9 @@ class UserController extends Controller
     return view('errors.user');
     }
 
-<<<<<<< HEAD
     public function destroy($id){
         $accounts = DB::table('accounts')->where('accounts.id', '=', $id)->delete();
-        //account->id esta igual ao tipo de conta id
-        return redirect()->action('HomeController@index');
-=======
-    public function deleteAccount($id){
-        DB::table('accounts')->where('accounts.id', '=', $id)->delete();
         
-       return redirect()->action('UserController@accountsForUser', 'Auth::user()->id');
->>>>>>> d12647fc69036809e30771d45e05feb4e3e73825
+        return redirect()->action('HomeController@index');
     }
 }

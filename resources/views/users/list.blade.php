@@ -14,7 +14,7 @@
 			<h1>{{ $pagetitle }}</h1>
 
 			<p>
-				Search name: 
+				Search name:
 				<input type="text" class="form-control" id="search" name="search"></input>
 
 				Filter:
@@ -24,7 +24,7 @@
 				<a href="/?Type=Blocked">Blocked</a> |
 				<a href="/users">Reset</a>
 			</p>
-			
+
 			@foreach ($users as $user)
 			<tr>
 				<td>{{ $user->name }} </td>
@@ -32,11 +32,11 @@
 				<td>{{ $user->typeToString() }} </td>
 				<td>{{ $user->blockedToString() }}</td>
 				<td>
-					<a class="btn btn-xs btn-primary" href="#">Block</a>
+					<a class="btn btn-xs btn-primary" href="{{ action('UserController@block', $user->id) }}" method="PATCH">Block</a>
 					<a class="btn btn-xs btn-primary" href="#">Promote admin</a>
 				</td>
 			</tr>
-			@endforeach	
+			@endforeach
 	</tbody>
 </table>
 </div>
