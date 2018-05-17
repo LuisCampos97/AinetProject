@@ -47,6 +47,9 @@
                         <li>
                             <a class="nav-link" href="{{ route('associateOf') }}">{{ __('Associate-of Profiles') }}</a>
                         </li>
+                        <li>
+                            <a class="nav-link" href="{{ route('associates') }}">{{ __('Associates Profiles') }}</a>
+                        </li>
                        
                         @can('admin', auth()->user())
                         <li>
@@ -70,6 +73,7 @@
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false" v-pre>
+                                <img src="{{ asset('/storage/profiles/' . Auth::user()->profile_photo) }}" style='border-radius: 50px; width: 40px;'>
                                 <i class="fa fa-user-alt" style="color:white"></i> {{ Auth::user()->name }}
                                 <span class="caret"></span>
                             </a>

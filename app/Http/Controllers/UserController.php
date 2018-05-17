@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Account;
 use App\Http\Controllers\Controller;
 use App\User;
 use Auth;
@@ -9,22 +10,11 @@ use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Account;
 
 class UserController extends Controller
 {
     public function search(Request $request)
     {
-<<<<<<< HEAD
-      // Gets the query string from our form submission 
-      $query = $request->search;
-      // Returns an array of articles that have the query string located somewhere within 
-      // our articles titles. Paginates them so we can break up lots of search results.
-      $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(10);
-      
-         
-      // returns a view and passes the view the list of articles and the original query.
-=======
         // Gets the query string from our form submission
         $query = $request->search;
         // Returns an array of articles that have the query string located somewhere within
@@ -32,7 +22,6 @@ class UserController extends Controller
         $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(10);
 
         // returns a view and passes the view the list of articles and the original query.
->>>>>>> US.12
         $pagetitle = 'List of users';
         return view('users.list', compact('users', 'pagetitle'));
     }
@@ -161,21 +150,22 @@ class UserController extends Controller
 
     public function profiles(Request $request)
     {
-        $name = $request->input('name');
+        $users = User::all();
 
-        $users = User::all()->search($name);
-        $users = DB::table('users')
-            ->leftJoin('associate_members', 'users.id', '=', 'main_user_id')
+        $associatesOf = DB::table('users')
+            ->join('associate_members', 'users.id', '=', 'main_user_id')
+            ->where('associate_members.associated_user_id', Auth::user()->id)
             ->get();
 
-        $associates = DB::table('associate_members')
+        $associates = DB::table('users')
+            ->join('associate_members', 'associated_user_id', '=', 'users.id')
             ->where('associate_members.main_user_id', Auth::user()->id)
             ->get();
 
         $pagetitle = 'List of profiles';
 
         if (Auth::check()) {
-            return view('users.profiles', compact('users', 'pagetitle', 'associates'));
+            return view('users.profiles', compact('users', 'associates', 'associatesOf', 'pagetitle'));
         }
         return view('errors.user');
     }
@@ -304,29 +294,30 @@ class UserController extends Controller
 
     }
 
-    public function createAccount(){
-        
+    public function createAccount()
+    {
+
         $account = new Account();
-        return view ('accounts.create', compact('account'));
+        return view('accounts.create', compact('account'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         if ($request->has('cancel')) {
             return redirect()->action('HomeController@home');
         }
-        
+
         $account = $request->validate([
             'account_type_id' => 'required|min:1|max:5',
             'code' => 'required|string',
             'date' => 'required|date',
             'start_balance' => 'required|float',
-            'description' => 'required|string|max:255'
+            'description' => 'required|string|max:255',
         ]);
-        
+
         Account::create($account);
-        
+
         return redirect()->action('HomeController@home')->with(['msgglobal' => 'Account Created!']);
     }
-
 
 }

@@ -20,26 +20,19 @@
                 </div>
             </form>
 
-
             @foreach ($users as $user)
             <tr>
                 <td>
-                <img src="{{ asset('/storage/profiles/' . $user->profile_photo) }}">
+                <img src="{{ asset('/storage/profiles/' . $user->profile_photo) }}" style='border-radius: 3px; width: 125px;'>
                 </td>
                 <td>{{ $user->name }} </td>
-                @foreach ($associates as $associate) 
-                @if (Auth::user()->id == $user->associated_user_id)
-                <td>
-                    <strong>Associate-of</strong>
-                </td>
-                @elseif ($associate->associated_user_id == $user->id)
-                <td>
-                    <strong>Associate</strong>
-                </td>
+                @if ($associates->where('id', $user->id)->isNotEmpty())
+                <td><strong>Associated</strong></td>
+                @elseif ($associatesOf->where('id', $user->id)->isNotEmpty())
+                <td><strong>Associated-of</strong></td>
                 @else
-                <td>Not Associate</td>
-                @endif 
-                @endforeach
+                <td>Not associated</td>
+                @endif
             </tr>
             @endforeach
         </tbody>
