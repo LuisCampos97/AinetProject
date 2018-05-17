@@ -14,7 +14,6 @@ class UserController extends Controller
 {
     public function search(Request $request)
     {
-<<<<<<< HEAD
         // Gets the query string from our form submission
         $query = $request->search;
         // Returns an array of articles that have the query string located somewhere within
@@ -22,16 +21,6 @@ class UserController extends Controller
         $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(10);
 
         // returns a view and passes the view the list of articles and the original query.
-=======
-      // Gets the query string from our form submission 
-      $query = $request->search;
-      // Returns an array of articles that have the query string located somewhere within 
-      // our articles titles. Paginates them so we can break up lots of search results.
-      $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(10);
-      
-         
-      // returns a view and passes the view the list of articles and the original query.
->>>>>>> 7393838d2be9d315272830939c98fa3b7b507023
         $pagetitle = 'List of users';
         return view('users.list', compact('users', 'pagetitle'));
     }

@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'admin', 'blocked', 'phone', 'profile_photo'
+        'name', 'email', 'password', 'admin', 'blocked', 'phone', 'profile_photo',
     ];
 
     /**
@@ -51,6 +51,6 @@ class User extends Authenticatable
 
     public function search($querry, $s)
     {
-        return $querry->where('name', 'like', '%' .$s. '%');
+        return $querry->where('name', 'like', '%' . $s . '%');
     }
 }
