@@ -97,7 +97,7 @@ class UserController extends Controller
 
     }
 
-    public function update(Request $request) //,$id
+    public function update(Request $request)
 
     {
         if ($request->has('cancel')) {
@@ -307,15 +307,15 @@ class UserController extends Controller
         
         $account = $request->validate([
             'account_type_id' => 'required|min:1|max:5',
-            'code' => 'required|string',
+            'code' => 'required|string|size:10',
             'date' => 'required|date',
-            'start_balance' => 'required|float',
-            'description' => 'required|string|max:255'
+            'start_balance' => 'required',
+            'description' => 'string|max:255'
         ]);
-        
+
         Account::create($account);
-        
-        return redirect()->action('HomeController@home')->with(['msgglobal' => 'Account Created!']);
+            
+        return redirect()->action('HomeController@home');
     }
 
 
