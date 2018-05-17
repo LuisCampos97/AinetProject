@@ -307,7 +307,7 @@ class UserController extends Controller
         $request->validate([
             'account_type_id' => 'required|min:1|max:5',
             'code' => 'required|string',
-            'date' => 'required|date', //Verificar esta validação
+            'date' => 'required', //Verificar esta validação
             'start_balance' => 'required',
             'description' => 'string|max:255',
         ]);
@@ -316,7 +316,8 @@ class UserController extends Controller
         DB::table('accounts')->insert([
             ['owner_id' => Auth::user()->id, 'account_type_id' => $request->input('account_type_id'),
             'date' => $request->input('date'), 'code' => $request->input('code'),
-            'description' => $request->input('description'), 'start_balance' => $request->input('start_balance')]
+            'description' => $request->input('description'), 'start_balance' => $request->input('start_balance'),
+            'current_balance' => $request->input('start_balance')]
         ]);
 
         return redirect()->route('home')
