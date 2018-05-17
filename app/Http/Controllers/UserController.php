@@ -10,6 +10,7 @@ use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreAccountRequest;
 
 class UserController extends Controller
 {
@@ -295,43 +296,31 @@ class UserController extends Controller
 
     public function createAccount()
     {
-<<<<<<< HEAD
+        $accountType = DB::table('account_types')
+            ->get();
 
-        $account = new Account();
-        return view('accounts.create', compact('account'));
-=======
-        $accountType=DB::table('account_types')
-                    ->get();
-        //dd($accountType);
         return view('accounts.create', compact('accountType'));
->>>>>>> us17
     }
 
     public function store(Request $request)
     {
-        if ($request->has('cancel')) {
-            return redirect()->action('HomeController@home');
-        }
-
-        $account = $request->validate([
+        $request->validate([
             'account_type_id' => 'required|min:1|max:5',
             'code' => 'required|string',
-            'date' => 'required|date',
-<<<<<<< HEAD
-            'start_balance' => 'required|float',
-            'description' => 'required|string|max:255',
-        ]);
-
-=======
+            'date' => 'required|date', //Verificar esta validação
             'start_balance' => 'required',
-            'description' => 'required|string|max:255',
+            'description' => 'string|max:255',
         ]);
 
-        $account = new Account();
->>>>>>> us17
-        Account::create($account);
+        //Account::create($request->all());
+        DB::table('accounts')->insert([
+            ['owner_id' => Auth::user()->id, 'account_type_id' => $request->input('account_type_id'),
+            'date' => $request->input('date'), 'code' => $request->input('code'),
+            'description' => $request->input('description'), 'start_balance' => $request->input('start_balance')]
+        ]);
 
-        return redirect()->action('HomeController@home')->with(['msgglobal' => 'Account Created!']);
+        return redirect()->route('home')
+                        ->with('success','Account created successfully');
     }
 
 }

@@ -29,7 +29,6 @@
                 <div class="card-header">Account</div>
                 <div class="card-body">
                     <a class="btn btn-xs btn-info" href="{{ action('UserController@accountsForUser', Auth::user()->id) }}">List of my Accounts</a><br><br>
-                    
                     <a class="btn btn-xs btn-success" href="{{ action('UserController@createAccount') }}">Add Account</a></div>
                 </div>
             </div>
