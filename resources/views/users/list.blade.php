@@ -28,10 +28,10 @@
 
 			<div>
 				Filter:
-				<a href="users/?type=normal">Normal</a> |
-				<a href="users/?type=admin">Admin</a> |
-				<a href="users/?status=unblocked">Unblocked</a> |
-				<a href="users/?status=blocked">Blocked</a> |
+				<a href="users/?admin=0">Normal</a> |
+				<a href="users/?admin=1">Admin</a> |
+				<a href="users/?blocked=0">Unblocked</a> |
+				<a href="users/?status=1">Blocked</a> |
 				<a href="/users">Reset</a>
 
 			</div>
