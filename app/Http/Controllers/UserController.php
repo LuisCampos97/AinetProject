@@ -302,21 +302,24 @@ class UserController extends Controller
         return view('accounts.create', compact('accountType'));
     }
 
-    public function store(Request $request)
+    public function storeAccount(Request $request)
     {
         $request->validate([
             'account_type_id' => 'required|min:1|max:5',
             'code' => 'required|string',
-            'date' => 'required', //Verificar esta validação
+            //'date' => 'required', //Verificar esta validação
             'start_balance' => 'required',
             'description' => 'string|max:255',
         ]);
 
         //Account::create($request->all());
         DB::table('accounts')->insert([
-            ['owner_id' => Auth::user()->id, 'account_type_id' => $request->input('account_type_id'),
-            'date' => $request->input('date'), 'code' => $request->input('code'),
-            'description' => $request->input('description'), 'start_balance' => $request->input('start_balance'),
+            ['owner_id' => Auth::user()->id,
+             'account_type_id' => $request->input('account_type_id'),
+            'date' => $request->input('date'), 
+            'code' => $request->input('code'),
+            'description' => $request->input('description'), 
+            'start_balance' => $request->input('start_balance'),
             'current_balance' => $request->input('start_balance')]
         ]);
 
@@ -324,4 +327,30 @@ class UserController extends Controller
                         ->with('success','Account created successfully');
     }
 
+    public function updateAccountView($account){
+        $accountType = DB::table('account_types')
+            ->get();
+        $account = DB::table('accounts')
+            ->get();
+        return view('accounts.update', compact('account', 'accountType'));
+    }
+
+    public function updateAccount(Request $request){
+        if ($request->has('cancel')) {
+            return redirect()->action('HomeController@home');
+        }
+
+        $account = $request->validate([
+            'account_type_id' => 'required|min:1|max:5',
+            'code' => 'required|string',
+            'start_balance' => 'required',
+            'description' => 'string|max:255',
+        ]);
+
+        $accountModel = Account::FindOrFail($account->id);
+        $accountModel->fill($account);
+        $accountModel->save();
+
+        return redirect()->action('HomeController@index')->with(['msgglobal' => 'Password Edited!']);
+    }
 }

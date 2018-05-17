@@ -20,8 +20,8 @@
 	<p>
 	<strong style="font-size: 20px">Filter: </strong>
 	
-		<a class="btn btn-xs btn-success" href="{{ action('UserController@openedAccounts', Auth::user()->id) }}">Open</a> <strong style="font-size: 20px">|</strong>
-		<a class="btn btn-xs btn-danger" href="{{ action('UserController@closedAccounts', Auth::user()->id) }}">Closed</a>
+		<a class="btn btn-xs btn-success" href="{{ action('UserController@openedAccounts', Auth::user()->id) }}">Opened Accounts</a> <strong style="font-size: 20px">|</strong>
+		<a class="btn btn-xs btn-danger" href="{{ action('UserController@closedAccounts', Auth::user()->id) }}">Closed Accounts</a>
 	</p>
 	
 		@foreach($accounts as $account)
@@ -36,6 +36,9 @@
 				
 				
 				<td>
+				<form action="{{ action('UserController@updateAccountView', $account->id) }}" method="get" class="inline">
+					<input type="submit" class="btn btn-xs btn-primary" value="Update Account">
+				</form>
 				@if(is_null($account->last_movement_date))
 				<form action="{{ action('UserController@destroy', $account->id) }}" method="post" class="inline">
 					@csrf
