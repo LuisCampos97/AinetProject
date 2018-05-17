@@ -50,7 +50,7 @@
                         <li>
                             <a class="nav-link" href="{{ route('associates') }}">{{ __('Associates Profiles') }}</a>
                         </li>
-                       
+
                         @can('admin', auth()->user())
                         <li>
                             <a class="nav-link" href="{{ route('users') }}">{{ __('Users List') }}</a>
