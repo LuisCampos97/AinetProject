@@ -25,18 +25,6 @@ Route::get('/', 'WelcomeController@home');
  
 Route::get('/users', 'UserController@index')->name('users');
 Route::get('/users/search', 'UserController@search')->name('users.search');
-/*Route::get('/users', function(){
-    $q= Input::get('q');
-    if($q!=""){
-        $user = User::where('name','LIKE', '%'. $q . '%')
-                            ->get();
-        if(count($user) >0 ){
-            return view('welcome');
-        }
-    }
-    return "No users found!";
-
-})->name('users'); */
 Auth::routes();
 
 
