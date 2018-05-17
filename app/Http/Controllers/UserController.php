@@ -291,14 +291,20 @@ class UserController extends Controller
             ->get();
 
         return view('accounts.movements', compact('movements', 'pagetitle'));
-
     }
 
     public function createAccount()
     {
+<<<<<<< HEAD
 
         $account = new Account();
         return view('accounts.create', compact('account'));
+=======
+        $accountType=DB::table('account_types')
+                    ->get();
+        //dd($accountType);
+        return view('accounts.create', compact('accountType'));
+>>>>>>> us17
     }
 
     public function store(Request $request)
@@ -311,10 +317,18 @@ class UserController extends Controller
             'account_type_id' => 'required|min:1|max:5',
             'code' => 'required|string',
             'date' => 'required|date',
+<<<<<<< HEAD
             'start_balance' => 'required|float',
             'description' => 'required|string|max:255',
         ]);
 
+=======
+            'start_balance' => 'required',
+            'description' => 'required|string|max:255',
+        ]);
+
+        $account = new Account();
+>>>>>>> us17
         Account::create($account);
 
         return redirect()->action('HomeController@home')->with(['msgglobal' => 'Account Created!']);
