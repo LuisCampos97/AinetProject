@@ -13,11 +13,7 @@
                         <div class="form-group">
                             <label for="type" class="col-md-4 col-form-label text-md-right">{{ __('Type') }}</label>
                             <select id="type" name="inputType" class="form-control">
-                                    <option value="1">Bank account</option>
-                                    <option value="2">Pocket money</option>
-                                    <option value="3">PayPal account</option>
-                                    <option value="4">Credit card</option>
-                                    <option value="5">Meal card</option>
+                                    <?php dd($accountType->name) ?>
                             </select>
                         </div>
 
