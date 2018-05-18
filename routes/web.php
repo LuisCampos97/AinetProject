@@ -51,7 +51,7 @@ Route::get('/me/associates', 'UserController@associates')->name('associates');
 Route::delete('/me/associates/{user}', 'UserController@deleteAssociate')->name('associate.delete');
 
 Route::post('/me/associates', 'UserController@storeAssociate')->name('associate.store');
-Route::get('/ola', 'UserController@addAssociate')->name('associate.add');
+Route::get('/ola', 'UserController@addAssociate')->name('associate.add'); //Modificar nome
 
 //Accounts
 Route::get('/accounts/{user}', 'UserController@accountsForUser')->name('usersAccount');
@@ -69,4 +69,4 @@ Route::get('/account', 'UserController@createAccount')->name('createAccount');
 Route::post('/account', 'UserController@storeAccount')->name('storeAccount');
 
 Route::get('/account/{account}', 'UserController@updateAccountView')->name('updateAccountView');
-Route::put('/home', 'UserController@updateAccount')->name('updateAccount');
+Route::put('/updateAccount', 'UserController@updateAccount')->name('updateAccount');

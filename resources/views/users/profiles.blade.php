@@ -11,25 +11,30 @@
         <tbody>
             <h1>{{ $pagetitle }}</h1>
 
-            <form action="{{ route('profiles') }}" method="get" class="form-inline">
-                <div class="form-group">
-                    <input type="text" name="name" placeholder="Name">
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary" type="submit">Search</button>
-                </div>
-            </form>
+            <div class="search">
+                <form action="{{ route('users.search') }}" method="GET">
+                    <input type="text" class="searchTerm" placeholder="Search for name?" id="search" name="search">
+                    <button type="submit" class="searchButton">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
+            </div>
+            </br>
 
             @foreach ($users as $user)
             <tr>
                 <td>
-                <img src="{{ asset('/storage/profiles/' . $user->profile_photo) }}" style='border-radius: 3px; width: 125px;'>
+                    <img src="{{ asset('/storage/profiles/' . $user->profile_photo) }}" style='border-radius: 3px; width: 125px;'>
                 </td>
                 <td>{{ $user->name }} </td>
                 @if ($associates->where('id', $user->id)->isNotEmpty())
-                <td><strong>Associated</strong></td>
+                <td>
+                    <strong>Associated</strong>
+                </td>
                 @elseif ($associatesOf->where('id', $user->id)->isNotEmpty())
-                <td><strong>Associated-of</strong></td>
+                <td>
+                    <strong>Associated-of</strong>
+                </td>
                 @else
                 <td>Not associated</td>
                 @endif

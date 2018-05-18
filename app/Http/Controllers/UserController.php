@@ -328,8 +328,8 @@ class UserController extends Controller
     public function deleteAssociate($id)
     {
         DB::table('associate_members')
-            ->where('main_user_id', '=', Auth::user()->id, 'and', 
-                'associated_user_id', '=', $id)
+            ->where('main_user_id', '=', Auth::user()->id)
+            ->where('associated_user_id', '=', $id)
             ->delete();
 
         return redirect()->action('UserController@associates');
@@ -337,18 +337,26 @@ class UserController extends Controller
 
     public function addAssociate()
     {
-        $associates =DB::table('users')
-        ->join('associate_members', 'associated_user_id', '!=', 'users.id')
-        ->where('associate_members.main_user_id', Auth::user()->id)
-        ->get();
+        $users = User::all();
 
-        return view('associate.add', compact('associates'));
+        $associates = DB::table('users')
+            ->join('associate_members', 'associated_user_id', '=', 'users.id')
+            ->where('associate_members.main_user_id', Auth::user()->id)
+            ->get();
+
+        return view('associate.add', compact('users', 'associates'));
 
     }
 
     public function storeAssociate(Request $request)
     {
+        DB::table('associate_members')->insert([
+            ['main_user_id' => Auth::user()->id,
+             'associated_user_id' => $request->input('associated_user_id')]
+        ]);
 
+        return redirect()->route('associates')
+            ->with('success', 'Associate added successfully');
     }
 
     public function updateAccountView($account){

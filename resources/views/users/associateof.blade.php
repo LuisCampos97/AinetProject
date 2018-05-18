@@ -1,4 +1,5 @@
-@extends('layouts.app') @section('content') @if(count($users))
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+    crossorigin="anonymous"> @extends('layouts.app') @section('content') @if(count($users))
 <div class="container">
     <table class="table table-bordered">
         <thead class="thead-dark">
@@ -16,7 +17,8 @@
                 <td>{{ $user->name }} </td>
                 <td>{{ $user->email }}</td>
                 <td>
-                    <a class="btn btn-xs btn-primary" href="{{ action('UserController@accountsForUser',$user->id) }}">Account</a>
+                    <a class="btn btn-xs btn-primary" href="{{ action('UserController@accountsForUser',$user->id) }}">
+                        <i class="fas fa-money-check-alt"></i>  Account</a>
                 </td>
             </tr>
             @endforeach

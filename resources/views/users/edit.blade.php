@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<form action="{{ action('UserController@store') }}" method="post">
+<form action="{{ action('UserController@update') }}" method="post">
 	@method('put')
     @csrf
 <div class="container">

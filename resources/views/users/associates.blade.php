@@ -1,4 +1,6 @@
-@extends('layouts.app') @section('content') @if(count($users))
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+    crossorigin="anonymous"> @extends('layouts.app') @section('content') @if(count($users))
+
 <div class="container">
     <table class="table table-bordered">
         <thead class="thead-dark">
@@ -10,16 +12,18 @@
         </thead>
         <tbody>
             <h1>{{ $pagetitle }}</h1>
-            <a class="btn btn-xs btn-success" href="{{ action('UserController@addAssociate') }}">Add Associate</a></div>
-            <br><br>
-            @foreach ($users as $user)
+            <a class="btn btn-xs btn-success" href="{{ action('UserController@addAssociate') }}">
+                <i class="fas fa-user-plus"></i>  Add Associate</a>
+            <br>
+            <br> @foreach ($users as $user)
             <tr>
                 <td>{{ $user->name }} </td>
                 <td>{{ $user->email }}</td>
                 <td>
                     <form action="{{ action('UserController@deleteAssociate', $user->id) }}" method="post" class="inline">
                         @csrf @method('delete')
-                        <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                        <button type="submit" class="btn btn-xs btn-danger">
+                            <i class="fas fa-user-minus"></i>  Remove Associate</button>
                     </form>
                 </td>
             </tr>
@@ -29,6 +33,10 @@
     @else
     <div class="container">
         <strong style="font-size:25px">You do not have any associate members!</strong>
+        <div>
+            <a class="btn btn-xs btn-success" href="{{ action('UserController@addAssociate') }}">
+                <i class="fas fa-user-plus"></i>Add Associate</a>
+        </div>
     </div>
 </div>
 @endif @endsection('content')

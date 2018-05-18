@@ -74,7 +74,7 @@
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false" v-pre>
                                 <img src="{{ asset('/storage/profiles/' . Auth::user()->profile_photo) }}" style='border-radius: 50px; width: 40px;'>
-                                <i class="fa fa-user-alt" style="color:white"></i> {{ Auth::user()->name }}
+                                 {{ Auth::user()->name }}
                                 <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">

@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+    crossorigin="anonymous">
 @extends('layouts.app') @section('content') @if(count($users))
 <div class="container">
 
@@ -6,7 +8,7 @@
 	<form action="{{ route('users.search') }}" method="GET">
 		<input type="text" class="searchTerm" placeholder="Search for name?" id="search" name="search">
 		<button type="submit" class="searchButton">
-			<i class="fa fa-search"></i>
+			<i class="fa fa-search"></i> Search
 		</button>
 	</form>
 </div>
@@ -45,30 +47,32 @@
 				<td>
 				@if ($user->id != Auth::user()->id)
 				@if ($user->blocked == 0)
+				<div class="form-group">
 				<form action="{{ route('users.block', $user->id) }}" method="post" class="inline">
 					@csrf
 					@method('patch')
-					<input type="submit" class="btn btn-xs btn-danger" value="Block">
+					<button type="submit" class="btn btn-xs btn-danger"><i class="fas fa-lock"></i> Block</button>
 				</form>
 				@else
 				<form action="{{ route('users.unblock', $user->id) }}" method="post" class="inline">
 					@csrf
 					@method('patch')
-					<input type="submit" class="btn btn-xs btn-success" value="UnBlock">
+					<button type="submit" class="btn btn-xs btn-success"><i class="fas fa-unlock"></i> Unblock</button>
 				</form>
 				@endif
 				@if ($user->admin == 0)
 				<form action="{{ route('users.promote', $user->id) }}" method="post" class="inline">
 					@csrf
 					@method('patch')
-					<input type="submit" class="btn btn-xs btn-danger" value="Promote">
+					<button type="submit" class="btn btn-xs btn-success"><i class="fas fa-user-tie"></i> Promote</button>
 				</form>
 				@else
 				<form action="{{ route('users.demote', $user->id) }}" method="post" class="inline">
 					@csrf
 					@method('patch')
-					<input type="submit" class="btn btn-xs btn-success" value="Demote">
+					<button type="submit" class="btn btn-xs btn-danger"><i class="fas fa-user-minus"></i> Demote</button>
 				</form>
+				</div>
 				@endif
 				@endif
 				</td>
