@@ -48,6 +48,10 @@ Route::patch('/users/{user}/demote', 'UserController@demote')->name('users.demot
 Route::get('/profiles', 'UserController@profiles')->name('profiles');
 Route::get('/me/associate-of', 'UserController@associateOf')->name('associateOf');
 Route::get('/me/associates', 'UserController@associates')->name('associates');
+Route::delete('/me/associates/{user}', 'UserController@deleteAssociate')->name('associate.delete');
+
+Route::post('/me/associates', 'UserController@storeAssociate')->name('associate.store');
+Route::get('/ola', 'UserController@addAssociate')->name('associate.add');
 
 //Accounts
 Route::get('/accounts/{user}', 'UserController@accountsForUser')->name('usersAccount');

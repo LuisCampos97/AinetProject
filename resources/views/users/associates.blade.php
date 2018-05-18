@@ -5,15 +5,23 @@
             <tr>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <h1>{{ $pagetitle }}</h1>
-
+            <a class="btn btn-xs btn-success" href="{{ action('UserController@addAssociate') }}">Add Associate</a></div>
+            <br><br>
             @foreach ($users as $user)
             <tr>
                 <td>{{ $user->name }} </td>
                 <td>{{ $user->email }}</td>
+                <td>
+                    <form action="{{ action('UserController@deleteAssociate', $user->id) }}" method="post" class="inline">
+                        @csrf @method('delete')
+                        <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                    </form>
+                </td>
             </tr>
             @endforeach
         </tbody>

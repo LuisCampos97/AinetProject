@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Account;
 use App\Http\Controllers\Controller;
 use App\User;
 use Auth;
@@ -10,7 +9,6 @@ use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\StoreAccountRequest;
 
 class UserController extends Controller
 {
@@ -324,7 +322,33 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('home')
-                        ->with('success','Account created successfully');
+            ->with('success', 'Account created successfully');
+    }
+
+    public function deleteAssociate($id)
+    {
+        DB::table('associate_members')
+            ->where('main_user_id', '=', Auth::user()->id, 'and', 
+                'associated_user_id', '=', $id)
+            ->delete();
+
+        return redirect()->action('UserController@associates');
+    }
+
+    public function addAssociate()
+    {
+        $associates =DB::table('users')
+        ->join('associate_members', 'associated_user_id', '!=', 'users.id')
+        ->where('associate_members.main_user_id', Auth::user()->id)
+        ->get();
+
+        return view('associate.add', compact('associates'));
+
+    }
+
+    public function storeAssociate(Request $request)
+    {
+
     }
 
     public function updateAccountView($account){
