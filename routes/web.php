@@ -3,6 +3,7 @@
 USE Illuminate\Support\Facades\Input;
 USE App\User;
 
+//User
 Route::get('/', function () {
     if(request()->has('type')){
         $users= App\User::where('type', request('type'))->paginate(10)->appends('type', request('type'));
@@ -26,7 +27,10 @@ Route::get('/', 'WelcomeController@home');
 Route::get('/users', 'UserController@index')->name('users');
 Route::get('/users/search', 'UserController@search')->name('users.search');
 Auth::routes();
-
+Route::get('/users/normalUser', 'UserController@normalUser')->name('normalUser');
+Route::get('/users/adminUser', 'UserController@adminUser')->name('adminUser');
+Route::get('/users/unblockedUser', 'UserController@unblockedUser')->name('unblockedUser');
+Route::get('/users/blockedUser', 'UserController@blockedUser')->name('blockedUser');
 
 Route::get('/home', 'HomeController@index')->name('home');
 

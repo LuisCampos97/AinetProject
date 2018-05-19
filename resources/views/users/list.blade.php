@@ -1,6 +1,7 @@
-@extends('layouts.app') @section('content') @if(count($users))
+@extends('layouts.app') @section('content') 
 <div class="container">
 
+<p>
 <h1>{{ $pagetitle }}</h1>
 <div class="search">
 	<form action="{{ route('users.search') }}" method="GET">
@@ -10,7 +11,20 @@
 		</button>
 	</form>
 </div>
-			
+</p>
+
+<p>
+<div>
+	<strong style="font-size: 20px">Filter:</strong>
+	<a class="btn btn-xs btn-success" href="{{ action('UserController@normalUser') }}">Normal</a> 
+	<a class="btn btn-xs btn-success" href="{{ action('UserController@adminUser') }}">Admin</a>
+	<a class="btn btn-xs btn-success" href="{{ action('UserController@unblockedUser') }}">Unblocked</a>
+	<a class="btn btn-xs btn-success" href="{{ action('UserController@blockedUser') }}">Blocked</a>
+	<a class="btn btn-xs btn-success" href="{{ action('UserController@index') }}">Reset</a>
+</div>
+</p>
+
+@if(count($users))
 <table class="table table-bordered">
 	<thead class="thead-dark">
 		<tr>
@@ -22,21 +36,7 @@
 		</tr>
 	</thead>
 	<tbody>
-			
-			<div class="wrap">
-			</div>
-
-			<div>
-				Filter:
-				<a href="users/?admin=0">Normal</a> |
-				<a href="users/?admin=1">Admin</a> |
-				<a href="users/?blocked=0">Unblocked</a> |
-				<a href="users/?status=1">Blocked</a> |
-				<a href="/users">Reset</a>
-
-			</div>
-			
-			@foreach ($users as $user)
+		@foreach ($users as $user)
 			<tr>
 				<td>{{ $user->name }} </td>
 				<td>{{ $user->email }} </td>
@@ -78,4 +78,8 @@
 </table>
 {{$users ->links()}}
 </div>
-@endif @endsection('content')
+@else
+<p></p>
+<h1>Your search found no matches!</h1>
+@endif
+ @endsection('content')
