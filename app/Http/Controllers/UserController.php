@@ -305,7 +305,7 @@ class UserController extends Controller
         $request->validate([
             'account_type_id' => 'required|min:1|max:5',
             'code' => 'required|string',
-            //'date' => 'required', //Verificar esta validação
+            'date' => 'required', //Verificar esta validação
             'start_balance' => 'required',
             'description' => 'string|max:255',
         ]);

@@ -25,7 +25,8 @@
                                 <label for="code" class="col-md-4 col-form-label text-md-right">{{ __('Code') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="code" type="text" class="form-control{{ $errors->has('code') ? ' is-invalid' : '' }}" name="code" required> @if ($errors->has('code'))
+                                    <input id="code" type="text" class="form-control{{ $errors->has('code') ? ' is-invalid' : '' }}" name="code" required>
+                                    @if ($errors->has('code'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('code') }}</strong>
                                     </span>
@@ -37,7 +38,12 @@
                                 <label for="date" class="col-md-4 col-form-label text-md-right">{{ __('Date') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="date" type="date" class="form-control" name="date">
+                                    <input id="date" type="date" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" name="date" required>
+                                    @if ($errors->has('date'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('date') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -45,7 +51,12 @@
                                 <label for="start_balance" class="col-md-4 col-form-label text-md-right">{{ __('Start Balance') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="start_balance" type="number" class="form-control" name="start_balance">
+                                    <input id="start_balance" type="number" class="form-control{{ $errors->has('start_balance') ? ' is-invalid' : '' }}" name="start_balance">
+                                    @if ($errors->has('start_balance'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('start_balance') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
 
