@@ -29,8 +29,18 @@
                 <div class="card-header">Account</div>
                 <div class="card-body">
                     <a class="btn btn-xs btn-info" href="{{ action('UserController@accountsForUser', Auth::user()->id) }}">List of my Accounts</a><br><br>
-                    <a class="btn btn-xs btn-success" href="{{ action('UserController@createAccount') }}">Add Account</a></div> <br>
-                    <strong>TOTAL BALANCE OF ALL ACCOUNTS</strong>{{ $total }} <strong>€</strong>
+                    <a class="btn btn-xs btn-success" href="{{ action('UserController@createAccount') }}">Add Account</a> <br><br>
+
+                    <strong> TOTAL BALANCE OF ALL ACCOUNTS:</strong> <strong style="font-size: 20px"> {{ $total[0]->somatorio }} € </strong><br><br>
+                    
+                    <strong>PERCENTAGE OF EACH ACCOUNT IN TOTAL BALANCE:</strong>
+                    <br>
+                    @foreach ($accountsForUser as $account)
+                        <strong style="font-size: 20px">Account ID: {{ $account->id }} = {{ round($account->current_balance * 100/$total[0]->somatorio, 2)}} % <br></strong>
+                    @endforeach
+                </div> <br>
+                   
+                    
                 </div>
             </div>
         </div>

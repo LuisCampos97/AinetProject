@@ -8,7 +8,7 @@
 				<th>Date</th>
 				<th>Description</th>
 				<th>Start Balance</th>
-				<th>End Balance</th>
+				<th>Current Balance</th>
 				<th>Last Movement</th>
 				<th>Deleted</th>
 				<th>Options</th>
