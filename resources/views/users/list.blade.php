@@ -1,10 +1,6 @@
-<<<<<<< HEAD
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
     crossorigin="anonymous">
-@extends('layouts.app') @section('content') @if(count($users))
-=======
 @extends('layouts.app') @section('content') 
->>>>>>> sergio6
 <div class="container">
 
 <p>
