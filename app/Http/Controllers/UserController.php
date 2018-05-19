@@ -12,17 +12,19 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    //Users
     public function search(Request $request)
     {
-        // Gets the query string from our form submission
         $query = $request->search;
-        // Returns an array of articles that have the query string located somewhere within
-        // our articles titles. Paginates them so we can break up lots of search results.
         $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(10);
 
-        // returns a view and passes the view the list of articles and the original query.
+        
         $pagetitle = 'List of users';
-        return view('users.list', compact('users', 'pagetitle'));
+
+        if (Gate::allows('admin', auth()->user())) {
+            return view('users.list', compact('users', 'pagetitle'));
+        }
+        return view('errors.admin');
     }
 
     public function index()
@@ -95,6 +97,57 @@ class UserController extends Controller
 
     }
 
+    public function normalUser()
+    {
+        $users = User::where('admin', '=', '0')->paginate(10);
+
+        $pagetitle = 'List of users';
+
+        if (Gate::allows('admin', auth()->user())) {
+            return view('users.list', compact('users', 'pagetitle'));
+        }
+        return view('errors.admin');
+    }
+
+    public function adminUser()
+    {
+        $users = User::where('admin', '=', '1')->paginate(10);
+
+        $pagetitle = 'List of users';
+
+        if (Gate::allows('admin', auth()->user())) {
+            return view('users.list', compact('users', 'pagetitle'));
+        }
+        return view('errors.admin');
+    }
+    
+    public function unblockedUser()
+    {
+        $users = User::where('blocked', '=', '0')->paginate(10);
+
+        $pagetitle = 'List of users';
+
+        if (Gate::allows('admin', auth()->user())) {
+            return view('users.list', compact('users', 'pagetitle'));
+        }
+        return view('errors.admin');
+    } 
+
+    public function blockedUser()
+    {
+        $users = User::where('blocked', '=', '1')->paginate(10);
+
+        $pagetitle = 'List of users';
+
+        if (Gate::allows('admin', auth()->user())) {
+            return view('users.list', compact('users', 'pagetitle'));
+        }
+        return view('errors.admin');
+    }
+
+    //__________________________________________
+
+    //Edit User
     public function update(Request $request) //,$id
 
     {
@@ -146,7 +199,9 @@ class UserController extends Controller
         return redirect()->action('HomeController@index')->with(['msgglobal' => 'Password Edited!']);
 
     }
+    //__________________________________________
 
+    //Profiles
     public function profiles(Request $request)
     {
         $users = User::all();
@@ -198,7 +253,9 @@ class UserController extends Controller
         }
         return view('errors.user');
     }
+    //__________________________________________
 
+    //Accounts
     public function accountsForUser($id)
     {
         $accounts = DB::table('accounts')
@@ -324,6 +381,7 @@ class UserController extends Controller
         return redirect()->route('home')
             ->with('success', 'Account created successfully');
     }
+    //__________________________________________
 
     public function deleteAssociate($id)
     {
