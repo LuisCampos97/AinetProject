@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $total = DB::table('accounts')
+                ->join('users', 'users.id', '=', 'accounts.owner_id')
+                ->where('owner_id', '=', Auth::user()->id)
+                ->select(DB::raw('SUM(accounts.current_balance)'))
+                ->get();
+
+        return view('home', compact('total'));
     }
 }

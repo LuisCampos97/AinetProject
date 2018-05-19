@@ -74,3 +74,4 @@ Route::post('/account', 'UserController@storeAccount')->name('storeAccount');
 
 Route::get('/account/{account}', 'UserController@updateAccountView')->name('updateAccountView');
 Route::put('/updateAccount', 'UserController@updateAccount')->name('updateAccount');
+
