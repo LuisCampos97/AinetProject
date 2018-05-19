@@ -28,15 +28,15 @@ Route::get('/users/search', 'UserController@search')->name('users.search');
 Auth::routes();
 
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/me/dashboard', 'HomeController@index')->name('home');
 
 //Edit
 Route::get('/me/profile', 'UserController@edit')->name('edit');
-Route::put('/home', 'UserController@update')->name('update');
+Route::put('/me/dashboard', 'UserController@update')->name('update');
 
 //Edit Password
 Route::get('/me/password', 'UserController@editPassword')->name('editPassword');
-Route::patch('/home', 'UserController@updatePassword')->name('updatePassword');
+Route::patch('/me/dashboard', 'UserController@updatePassword')->name('updatePassword');
 
 //Block/Unblock/Promote/Demote
 Route::patch('/users/{user}/block', 'UserController@block')->name('users.block');
