@@ -1,5 +1,5 @@
 @extends('layouts.app') @section('content')
-<form action="{{ action('UserController@storeAccount') }}" method="post" class="form-group">
+<form action="{{ action('UserController@updateAccount', $account->id) }}" method="post" class="form-group">
     {{ csrf_field() }}
     @method('put')
     <div class="container">
@@ -8,7 +8,7 @@
                 <div class="card">
                     <div class="card-header">{{ __('Update Account') }}</div>
                     <div class="card-body">
-                        <form method="POST" action="{{ route('updateAccount') }}">
+                        <form method="post" action="{{ route('updateAccount') }}">
                             @csrf
                             <div class="form-group row">
                                 <label for="type" class="col-md-4 col-form-label text-md-right">{{ __('Type') }}</label>
@@ -38,7 +38,7 @@
                                 <label for="start_balance" class="col-md-4 col-form-label text-md-right">{{ __('Start Balance') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="start_balance" type="number" class="form-control" name="start_balance">
+                                    <input id="start_balance" type="number" class="form-control" name="start_balance" value="{{ $account->start_balance }}">
                                 </div>
                             </div>
 
@@ -46,14 +46,14 @@
                                 <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="description" type="text" class="form-control" name="description" optional>
+                                    <input id="description" type="text" class="form-control" name="description" value="{{ $account->description }}" optional>
                                 </div>
                             </div>
 
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
-                                        {{ __('Create') }}
+                                        {{ __('Update') }}
                                     </button>
                                 </div>
                             </div>
