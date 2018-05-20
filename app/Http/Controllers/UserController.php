@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AccountRequest;
 use App\User;
 use Auth;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\AccountRequest;
 
 class UserController extends Controller
 {
@@ -19,7 +19,6 @@ class UserController extends Controller
         $query = $request->search;
         $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(10);
 
-        
         $pagetitle = 'List of users';
 
         if (Gate::allows('admin', auth()->user())) {
@@ -30,10 +29,19 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::paginate(10);
         $pagetitle = 'List of users';
 
         if (Gate::allows('admin', auth()->user())) {
+
+            if (request()->has('type')) {
+                $users = User::where('admin', request('type'))
+                    ->paginate(10)->appends('type', request('type'));
+            } elseif (request()->has('status')) {
+                    $users = User::where('blocked', request('status'))
+                        ->paginate(10)->appends('status', request('status'));
+            } else {
+                $users = User::paginate(10);
+            }
             return view('users.list', compact('users', 'pagetitle'));
         }
         return view('errors.admin');
@@ -121,7 +129,7 @@ class UserController extends Controller
         }
         return view('errors.admin');
     }
-    
+
     public function unblockedUser()
     {
         $users = User::where('blocked', '=', '0')->paginate(10);
@@ -132,7 +140,7 @@ class UserController extends Controller
             return view('users.list', compact('users', 'pagetitle'));
         }
         return view('errors.admin');
-    } 
+    }
 
     public function blockedUser()
     {
@@ -365,12 +373,12 @@ class UserController extends Controller
         //Account::create($request->all());
         DB::table('accounts')->insert([
             ['owner_id' => Auth::user()->id,
-             'account_type_id' => $request->input('account_type_id'),
-            'date' => $request->input('date'), 
-            'code' => $request->input('code'),
-            'description' => $request->input('description'), 
-            'start_balance' => $request->input('start_balance'),
-            'current_balance' => $request->input('start_balance')]
+                'account_type_id' => $request->input('account_type_id'),
+                'date' => $request->input('date'),
+                'code' => $request->input('code'),
+                'description' => $request->input('description'),
+                'start_balance' => $request->input('start_balance'),
+                'current_balance' => $request->input('start_balance')],
         ]);
 
         return redirect()->route('home')
@@ -409,14 +417,15 @@ class UserController extends Controller
 
         DB::table('associate_members')->insert([
             ['main_user_id' => Auth::user()->id,
-             'associated_user_id' => $request->input('associated_user_id')]
+                'associated_user_id' => $request->input('associated_user_id')],
         ]);
 
         return redirect()->route('associates')
             ->with('success', 'Associate added successfully');
     }
 
-    public function updateAccountView($account){
+    public function updateAccountView($account)
+    {
         $accountType = DB::table('account_types')
             ->get();
         $account = DB::table('accounts')
@@ -424,7 +433,8 @@ class UserController extends Controller
         return view('accounts.update', compact('account', 'accountType'));
     }
 
-    public function updateAccount(AccountRequest $request){
+    public function updateAccount(AccountRequest $request)
+    {
         if ($request->has('cancel')) {
             return redirect()->action('HomeController@home');
         }
