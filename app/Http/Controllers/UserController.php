@@ -9,6 +9,7 @@ use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\AccountRequest;
 
 class UserController extends Controller
 {
@@ -357,15 +358,9 @@ class UserController extends Controller
         return view('accounts.create', compact('accountType'));
     }
 
-    public function storeAccount(Request $request)
+    public function storeAccount(AccountRequest $request)
     {
-        $request->validate([
-            'account_type_id' => 'required|min:1|max:5',
-            'code' => 'required|string',
-            'date' => 'required', //Verificar esta validação
-            'start_balance' => 'required',
-            'description' => 'string|max:255',
-        ]);
+        $request->validated();
 
         //Account::create($request->all());
         DB::table('accounts')->insert([
@@ -408,6 +403,10 @@ class UserController extends Controller
 
     public function storeAssociate(Request $request)
     {
+        $request->validate([
+            'associated_user_id' => 'required',
+        ]);
+
         DB::table('associate_members')->insert([
             ['main_user_id' => Auth::user()->id,
              'associated_user_id' => $request->input('associated_user_id')]
@@ -425,17 +424,12 @@ class UserController extends Controller
         return view('accounts.update', compact('account', 'accountType'));
     }
 
-    public function updateAccount(Request $request){
+    public function updateAccount(AccountRequest $request){
         if ($request->has('cancel')) {
             return redirect()->action('HomeController@home');
         }
 
-        $account = $request->validate([
-            'account_type_id' => 'required|min:1|max:5',
-            'code' => 'required|string',
-            'start_balance' => 'required',
-            'description' => 'string|max:255',
-        ]);
+        $account = $request->validated();
 
         $accountModel = Account::FindOrFail($account->id);
         $accountModel->fill($account);
