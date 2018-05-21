@@ -347,7 +347,7 @@ class UserController extends Controller
             ->select('movements.*', 'accounts.id', 'movement_categories.name')
             ->get();
 
-        return view('accounts.movements', compact('movements', 'pagetitle'));
+        return view('accounts.movements', compact('movements', 'pagetitle', 'id'));
     }
 
     public function createAccount()
@@ -436,5 +436,19 @@ class UserController extends Controller
         $accountModel->save();
 
         return redirect()->action('HomeController@index')->with(['msgglobal' => 'Password Edited!']);
+    }
+
+    public function viewCreateMovement($id)
+    {
+        $accounts = DB::table('accounts')
+            ->where('accounts.id', '=', $id)
+            ->get();
+        //dd($accounts[0]);
+        return view('movements.create', compact('accounts'));
+    }
+
+    public function storeMovement(Request $request, $id)
+    {
+
     }
 }

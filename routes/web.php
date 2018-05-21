@@ -75,3 +75,6 @@ Route::post('/account', 'UserController@storeAccount')->name('storeAccount');
 Route::get('/account/{account}', 'UserController@updateAccountView')->name('updateAccountView');
 Route::put('/updateAccount', 'UserController@updateAccount')->name('updateAccount');
 
+//Movements
+Route::get('/movements/{account}/create', 'UserController@viewCreateMovement')->name('viewCreateAccount');
+Route::post('/movements/{account}/create', 'UserController@storeMovement')->name('storeMovement');
