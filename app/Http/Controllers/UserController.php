@@ -10,6 +10,7 @@ use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Account;
 
 class UserController extends Controller
 {
@@ -377,6 +378,7 @@ class UserController extends Controller
             ->select('movements.*', 'accounts.id', 'movement_categories.name')
             ->get();
 
+          
         return view('accounts.movements', compact('movements', 'pagetitle', 'id'));
     }
 
@@ -452,6 +454,7 @@ class UserController extends Controller
             ->get();
         $account = DB::table('accounts')
             ->get();
+
         return view('accounts.update', compact('account', 'accountType'));
     }
 
@@ -476,11 +479,54 @@ class UserController extends Controller
             ->where('accounts.id', '=', $id)
             ->get();
         //dd($accounts[0]);
-        return view('movements.create', compact('accounts'));
+        $movementType=DB::table('movements')
+            ->select('movements.type')
+            ->distinct()
+            ->get();
+        //dd($movementType);
+
+        $categories=DB::table('movement_categories')
+        ->get();
+
+        return view('movements.create', compact('accounts', 'movementType', 'categories'));
     }
 
     public function storeMovement(Request $request, $id)
     {
 
+        if($request->input('date') == 'revenue'){
+
+        }
+
+        $account = Account::FindOrFail($id);
+
+       
+        $movement = DB::table('movements')->insert([
+            'account_id' => $id,
+            'movement_category_id' =>$request->input('category'),
+            'date' => $request->input('date'),
+            'value' => $request->input('value'),
+            'type' =>$request->input('type'),
+            'description' => $request->input('description'),
+            'start_balance' => $account->current_balance,
+            'end_balance' => $account->current_balance +  $request->input('value')
+        ]);
+
+        DB::table('accounts')
+        ->where('accounts.id', '=', $id)
+        ->update(['current_balance' => $account->current_balance + $request->input('value')]);
+/*
+        $total = DB::table('movements')
+        ->where('movements.account_id', '=', $id)
+        ->select(DB::raw('SUM(movements.value) as somatorio'))
+        ->get();
+
+        dd($total);
+*/  
+
+       //dd($account->current_balance);
+        
+        return redirect()->route('home')
+            ->with('success', 'Movement created successfully');
     }
 }

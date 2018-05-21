@@ -15,7 +15,7 @@
 		<th> Account: {{ $id }} </th> <th>Current Balance:</th> 
 		
 		<th>
-		{{$movements[0]->end_balance}} €
+		{{$movements[count($movements)-1]->end_balance}} €
 		</th>
 	</tr>
 </thead>
@@ -29,6 +29,7 @@
 			<th>Date</th>
 			<th>Value</th>
 			<th>Type</th>
+			<th>Start Balance</th>
             <th>End Balance</th>
 		</tr>
 
@@ -43,9 +44,10 @@
 				<td>{{ $movement->account_id}}</td>
 				<td>{{ $movement->name }}</td>
 				<td>{{ $movement->date }} </td>
-				<td>{{ $movement->value }} </td>
+				<td><strong>{{ $movement->value }} €</strong></td>
 				<td>{{ $movement->type }}</td>
-				<td>{{ $movement->end_balance }}</td>
+				<td>{{ $movement->start_balance}} €</td>
+				<td>{{ $movement->end_balance }} €</td>
         </tr>
     @endforeach
     </tbody>
