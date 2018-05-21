@@ -12,19 +12,17 @@
 <table class="table table-bordered">
 <thead class="thead-dark">
 	<tr>
-		<th> Account: {{ $id }} </th> <th>Current Balance:</th> 
-		
+		<th> Account: {{ $id }} </th> <th>Current Balance:</th>
+
 		<th>
 		{{$movements[0]->end_balance}} €
 		</th>
 	</tr>
 </thead>
 </table>
-
 <table class="table table-bordered">
 	<thead class="thead-dark">
 		<tr>
-			<th>ID</th>
 			<th>Category</th>
 			<th>Date</th>
 			<th>Value</th>
@@ -32,15 +30,14 @@
             <th>End Balance</th>
 		</tr>
 
-		
+
 		<br>
-		
+
 	</thead>
-	
+
     <tbody>
     @foreach($movements as $movement)
 		<tr>
-				<td>{{ $movement->account_id}}</td>
 				<td>{{ $movement->name }}</td>
 				<td>{{ $movement->date }} </td>
 				<td>{{ $movement->value }} </td>
@@ -49,6 +46,20 @@
         </tr>
     @endforeach
     </tbody>
+	@else
+	<div class="container">
+	<table class="table table-bordered">
+<thead class="thead-dark">
+	<tr>
+		<th> Account: {{ $id }} </th> <th>Current Balance:</th>
+
+		<th>
+		0 €
+		</th>
+	</tr>
+</thead>
+</table>
+</div>
 @endif
 
 @endsection
