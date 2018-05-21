@@ -18,10 +18,10 @@
 <p>
 <div>
 	<strong style="font-size: 20px">Filter:</strong>
-	<a class="btn btn-xs btn-info" href="/users?type=0">Normal</a>
-	<a class="btn btn-xs btn-info" href="/users?type=1">Admin</a>
-	<a class="btn btn-xs btn-info" href="/users?status=0">Unblocked</a>
-	<a class="btn btn-xs btn-info" href="/users?status=1">Blocked</a>
+	<a class="btn btn-xs btn-info" href="/users?type=normal">Normal</a>
+	<a class="btn btn-xs btn-info" href="/users?type=admin">Admin</a>
+	<a class="btn btn-xs btn-info" href="/users?status=unblocked">Unblocked</a>
+	<a class="btn btn-xs btn-info" href="/users?status=blocked">Blocked</a>
 	<a class="btn btn-xs btn-success" href="{{ action('UserController@index') }}"><i class="fas fa-redo"></i> Reset</a>
 </div>
 </p>

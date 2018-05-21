@@ -34,25 +34,35 @@ class UserController extends Controller
         $queries = [];
         $i = 0;
         $columns = [
-            'type', 'status', 'name'
+            'type', 'status', 'name',
         ];
 
         $variables = [
-            'admin', 'blocked', 'name'
+            'admin', 'blocked', 'name',
         ];
 
+        $teste = array(
+            array('admin', 1),
+            array('normal', 0),
+            array('blocked', 1),
+            array('unblocked', 0),
+        );
 
         if (Gate::allows('admin', auth()->user())) {
             foreach ($columns as $column) {
-                if(request()->has($column)) {
-                    $users = $users->where($variables[$i], 'LIKE', '%' . request($column) . '%');
-                    $queries[$column] = request($column);
+                if (request()->has($column)) {
+                    foreach ($teste as $t) {
+                        if (request($column) == $t[0]) {
+                            $users = $users->where($variables[$i], 'LIKE', '%' . $t[1] . '%');
+                            $queries[$column] = request($column);
+                        }
+                    }
                 }
                 $i++;
             }
 
             //Para poder utilizar vários filtros oa mesmo tempo
-            $users = $users->paginate(10)->appends($queries); 
+            $users = $users->paginate(10)->appends($queries);
 
             return view('users.list', compact('users', 'pagetitle'));
         }
