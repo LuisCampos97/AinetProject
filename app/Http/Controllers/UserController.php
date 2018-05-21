@@ -30,18 +30,30 @@ class UserController extends Controller
     public function index()
     {
         $pagetitle = 'List of users';
+        $users = new User;
+        $queries = [];
+        $i = 0;
+        $columns = [
+            'type', 'status', 'name'
+        ];
+
+        $variables = [
+            'admin', 'blocked', 'name'
+        ];
+
 
         if (Gate::allows('admin', auth()->user())) {
-
-            if (request()->has('type')) {
-                $users = User::where('admin', request('type'))
-                    ->paginate(10)->appends('type', request('type'));
-            } elseif (request()->has('status')) {
-                    $users = User::where('blocked', request('status'))
-                        ->paginate(10)->appends('status', request('status'));
-            } else {
-                $users = User::paginate(10);
+            foreach ($columns as $column) {
+                if(request()->has($column)) {
+                    $users = $users->where($variables[$i], 'LIKE', '%' . request($column) . '%');
+                    $queries[$column] = request($column);
+                }
+                $i++;
             }
+
+            //Para poder utilizar vários filtros oa mesmo tempo
+            $users = $users->paginate(10)->appends($queries); 
+
             return view('users.list', compact('users', 'pagetitle'));
         }
         return view('errors.admin');
