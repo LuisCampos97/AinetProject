@@ -18,10 +18,10 @@
 <p>
 <div>
 	<strong style="font-size: 20px">Filter:</strong>
-	<a class="btn btn-xs btn-success" href="{{ action('UserController@normalUser') }}"><i class="fas fa-user-tag"></i> Normal</a> 
-	<a class="btn btn-xs btn-success" href="{{ action('UserController@adminUser') }}"><i class="fas fa-user-tag"></i> Admin</a>
-	<a class="btn btn-xs btn-success" href="{{ action('UserController@unblockedUser') }}"><i class="fas fa-user-tag"></i> Unblocked</a>
-	<a class="btn btn-xs btn-success" href="{{ action('UserController@blockedUser') }}"><i class="fas fa-user-tag"></i> Blocked</a>
+	<a class="btn btn-xs btn-info" href="/users?type=normal">Normal</a>
+	<a class="btn btn-xs btn-info" href="/users?type=admin">Admin</a>
+	<a class="btn btn-xs btn-info" href="/users?status=unblocked">Unblocked</a>
+	<a class="btn btn-xs btn-info" href="/users?status=blocked">Blocked</a>
 	<a class="btn btn-xs btn-success" href="{{ action('UserController@index') }}"><i class="fas fa-redo"></i> Reset</a>
 </div>
 </p>
@@ -57,7 +57,7 @@
 				<form action="{{ route('users.unblock', $user->id) }}" method="post" class="inline">
 					@csrf
 					@method('patch')
-					<button type="submit" class="btn btn-xs btn-success"><i class="fas fa-unlock"></i><i class="fas fa-unlock"></i> Unblock</button>
+					<button type="submit" class="btn btn-xs btn-success"></i><i class="fas fa-unlock"></i> Unblock</button>
 				</form>
 				@endif
 				@if ($user->admin == 0)

@@ -22,11 +22,13 @@
             </br>
 
             @foreach ($users as $user)
+            @if($user->id != Auth::user()->id)
             <tr>
                 <td>
                     <img src="{{ asset('/storage/profiles/' . $user->profile_photo) }}" style='border-radius: 3px; width: 125px;'>
                 </td>
                 <td>{{ $user->name }} </td>
+                
                 @if ($associates->where('id', $user->id)->isNotEmpty())
                 <td>
                     <strong>Associated</strong>
@@ -37,6 +39,7 @@
                 </td>
                 @else
                 <td>Not associated</td>
+                @endif
                 @endif
             </tr>
             @endforeach
