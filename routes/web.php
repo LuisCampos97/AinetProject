@@ -4,33 +4,11 @@ USE Illuminate\Support\Facades\Input;
 USE App\User;
 
 //User
-Route::get('/', function () {
-    if(request()->has('type')){
-        $users= App\User::where('type', request('type'))->paginate(10)->appends('type', request('type'));
-    }
-    else{
-        $users = App\User::paginate(10);
-    }
-    if(request()->has('status')){
-        $users= App\User::where('status', request('status'))->paginate(10)->appends('status', request('status'));
-    }
-    else{
-        $users = App\User::paginate(10);
-    }
-
-
-    return view('users')->with('users', $users);
-});
-
 Route::get('/', 'WelcomeController@home');
  
 Route::get('/users', 'UserController@index')->name('users');
 Route::get('/users/search', 'UserController@search')->name('users.search');
 Auth::routes();
-Route::get('/users/normalUser', 'UserController@normalUser')->name('normalUser');
-Route::get('/users/adminUser', 'UserController@adminUser')->name('adminUser');
-Route::get('/users/unblockedUser', 'UserController@unblockedUser')->name('unblockedUser');
-Route::get('/users/blockedUser', 'UserController@blockedUser')->name('blockedUser');
 
 Route::get('/me/dashboard', 'HomeController@index')->name('home');
 
@@ -53,6 +31,7 @@ Route::get('/profiles', 'UserController@profiles')->name('profiles');
 Route::get('/me/associate-of', 'UserController@associateOf')->name('associateOf');
 Route::get('/me/associates', 'UserController@associates')->name('associates');
 Route::delete('/me/associates/{user}', 'UserController@deleteAssociate')->name('associate.delete');
+Route::get('/profiles/search', 'UserController@searchNameProfiles')->name('profiles.searchNameProfiles');
 
 Route::post('/me/associates', 'UserController@storeAssociate')->name('associate.store');
 Route::get('/ola', 'UserController@addAssociate')->name('associate.add'); //Modificar nome
