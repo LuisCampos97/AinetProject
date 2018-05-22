@@ -1,4 +1,22 @@
-@extends('layouts.app') @section('content') 
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+@extends('layouts.app') @section('content')
+<script type="text/javascript">
+        $(document).ready(function(){
+            $("select").change(function(){
+                var str=$(this).val();
+                if(str=='revenue')
+                {
+                    var start_balance="+";
+                }
+                else if(str=='expense')
+                {
+                    var start_balance="-";
+                }
+                $(".signal").html(start_balance);
+            });
+        });
+    </script>
+    
 <form action="{{ route('storeMovement', $accounts[0]->id) }}" method="post" class="form-group">
 {{ csrf_field() }}
     <div class="container">
@@ -49,7 +67,7 @@
 
                             <div class="form-group row">
                                 <label for="value" class="col-md-4 col-form-label text-md-right">{{ __('Value') }}</label>
-
+                                <a class="signal" style="font-size:30px"></a>
                                 <div class="col-md-6">
                                     <input id="start_balance" type="number" class="form-control{{ $errors->has('value') ? ' is-invalid' : '' }}" name="value">
                                     @if ($errors->has('value'))
