@@ -49,6 +49,7 @@
     @endforeach
     </tbody>
 	@else
+	<a class="btn btn-xs btn-success" href="{{ action('UserController@viewCreateMovement',$id) }}"> <i class="fas fa-plus"></i> Create Movement </a>
 	<div class="container">
 	<table class="table table-bordered">
 <thead class="thead-dark">

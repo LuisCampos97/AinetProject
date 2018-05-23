@@ -129,54 +129,6 @@ class UserController extends Controller
 
     }
 
-    public function normalUser()
-    {
-        $users = User::where('admin', '=', '0')->paginate(10);
-
-        $pagetitle = 'List of users';
-
-        if (Gate::allows('admin', auth()->user())) {
-            return view('users.list', compact('users', 'pagetitle'));
-        }
-        return view('errors.admin');
-    }
-
-    public function adminUser()
-    {
-        $users = User::where('admin', '=', '1')->paginate(10);
-
-        $pagetitle = 'List of users';
-
-        if (Gate::allows('admin', auth()->user())) {
-            return view('users.list', compact('users', 'pagetitle'));
-        }
-        return view('errors.admin');
-    }
-
-    public function unblockedUser()
-    {
-        $users = User::where('blocked', '=', '0')->paginate(10);
-
-        $pagetitle = 'List of users';
-
-        if (Gate::allows('admin', auth()->user())) {
-            return view('users.list', compact('users', 'pagetitle'));
-        }
-        return view('errors.admin');
-    }
-
-    public function blockedUser()
-    {
-        $users = User::where('blocked', '=', '1')->paginate(10);
-
-        $pagetitle = 'List of users';
-
-        if (Gate::allows('admin', auth()->user())) {
-            return view('users.list', compact('users', 'pagetitle'));
-        }
-        return view('errors.admin');
-    }
-
     //__________________________________________
 
     //Edit User
@@ -236,7 +188,7 @@ class UserController extends Controller
     //Profiles
     public function profiles(Request $request)
     {
-        $users = User::all();
+        $users = DB::table('users')->paginate(10);
 
         $associatesOf = DB::table('users')
             ->join('associate_members', 'users.id', '=', 'main_user_id')
@@ -254,6 +206,27 @@ class UserController extends Controller
             return view('users.profiles', compact('users', 'associates', 'associatesOf', 'pagetitle'));
         }
         return view('errors.user');
+    }
+
+    public function searchNameProfiles(Request $request)
+    {
+        $query = $request->search;
+        $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(10);
+        $associates = DB::table('users')
+            ->join('associate_members', 'associated_user_id', '=', 'users.id')
+            ->where('associate_members.main_user_id', Auth::user()->id)
+            ->get();
+        $associatesOf = DB::table('users')
+            ->join('associate_members', 'users.id', '=', 'main_user_id')
+            ->where('associate_members.associated_user_id', Auth::user()->id)
+            ->get();
+
+        $pagetitle = 'List of users';
+
+        if (Gate::allows('admin', auth()->user())) {
+            return view('users.profiles', compact('users', 'associates', 'associatesOf', 'pagetitle'));
+        }
+        return view('errors.admin');
     }
 
     public function associateOf()

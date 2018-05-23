@@ -1,5 +1,20 @@
-@extends('layouts.app') @section('content') @if(count($users))
+@extends('layouts.app') 
+@section('content')
+@if(count($users))
 <div class="container">
+
+<h1>{{ $pagetitle }}</h1>
+
+<div class="search">
+    <form action="{{ route('profiles.searchNameProfiles') }}" method="GET">
+        <input type="text" class="searchTerm" placeholder="Search for name?" id="search" name="search">
+            <button type="submit" class="searchButton">
+                <i class="fa fa-search"></i> Search
+            </button>
+    </form>
+</div>
+
+
     <table class="table table-bordered">
         <thead class="thead-dark">
             <tr>
@@ -9,17 +24,7 @@
             </tr>
         </thead>
         <tbody>
-            <h1>{{ $pagetitle }}</h1>
-
-            <div class="search">
-                <form action="{{ route('users.search') }}" method="GET">
-                    <input type="text" class="searchTerm" placeholder="Search for name?" id="search" name="search">
-                    <button type="submit" class="searchButton">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </form>
-            </div>
-            </br>
+            <br>
 
             @foreach ($users as $user)
             @if($user->id != Auth::user()->id)
@@ -45,5 +50,6 @@
             @endforeach
         </tbody>
     </table>
+    {{$users ->links()}}
 </div>
 @endif @endsection('content')
