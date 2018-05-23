@@ -191,7 +191,7 @@ class UserController extends Controller
             'name' => 'required|regex:/^[\pL\s]+$/u',
             'email' => 'required|email|unique:users,email,' . Auth::user()->id,
             'phone' => 'min:3|max:12',
-            'profile' => 'mimes:jpeg,png,jpg|max:1024',
+            'profile' => 'mimes:jpeg,png,jpg|max:1999',
         ], [ // Custom Messages
             'name.regex' => 'Name must only contain letters and spaces.',
         ]);
@@ -406,7 +406,7 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('home')
-            ->with('success', 'Account created successfully');
+            ->with('msgglobal', 'Account created successfully');
     }
     //__________________________________________
 
