@@ -29,6 +29,7 @@
 			<th>Type</th>
 			<th>Start Balance</th>
             <th>End Balance</th>
+			<th>Option</th>
 		</tr>
 
 
@@ -45,6 +46,13 @@
 				<td>{{ $movement->type }}</td>
 				<td>{{ $movement->start_balance}} €</td>
 				<td>{{ $movement->end_balance }} €</td>
+				<td>
+				<form action="{{ action('UserController@destroy', $movement->account_id, $movement->id) }}" method="post" class="inline">
+						@csrf @method('delete')
+						<button type="submit" class="btn btn-xs btn-danger">
+							<i class="fas fa-trash"></i> Delete</button>
+				</form>
+				</td>
         </tr>
     @endforeach
     </tbody>

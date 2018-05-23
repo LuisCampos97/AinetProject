@@ -467,39 +467,43 @@ class UserController extends Controller
     public function storeMovement(Request $request, $id)
     {
 
-        if($request->input('date') == 'revenue'){
 
-        }
 
         $account = Account::FindOrFail($id);
 
+        if($request->input('type') == 'expense'){
+            $signal = '-';
+        }
+        else{
+            $signal = '+';
+        }
        
         $movement = DB::table('movements')->insert([
             'account_id' => $id,
             'movement_category_id' =>$request->input('category'),
             'date' => $request->input('date'),
-            'value' => $request->input('value'),
+            'value' =>intval($signal.$request->input('value')),
             'type' =>$request->input('type'),
             'description' => $request->input('description'),
             'start_balance' => $account->current_balance,
-            'end_balance' => $account->current_balance +  $request->input('value')
+            'end_balance' => $account->current_balance +  intval($signal.$request->input('value'))
         ]);
 
         DB::table('accounts')
         ->where('accounts.id', '=', $id)
-        ->update(['current_balance' => $account->current_balance + $request->input('value')]);
-/*
-        $total = DB::table('movements')
-        ->where('movements.account_id', '=', $id)
-        ->select(DB::raw('SUM(movements.value) as somatorio'))
-        ->get();
-
-        dd($total);
-*/  
-
-       //dd($account->current_balance);
+        ->update(['current_balance' => $account->current_balance + intval($signal.$request->input('value'))]);
         
         return redirect()->route('home')
             ->with('success', 'Movement created successfully');
+    }
+
+    public function deleteMovement($account_id, $movement_id)
+    {
+        $movements = DB::table('movements')
+        ->join('accounts', 'accounts.id', '=', $account_id)
+        ->where('movements.id', '=', $movement_id);
+        dd($movements);
+
+        return redirect()->action('HomeController@index');
     }
 }
