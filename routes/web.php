@@ -7,7 +7,6 @@ USE App\User;
 Route::get('/', 'WelcomeController@home');
  
 Route::get('/users', 'UserController@index')->name('users');
-Route::get('/users/search', 'UserController@search')->name('users.search');
 Auth::routes();
 
 Route::get('/me/dashboard', 'HomeController@index')->name('home');

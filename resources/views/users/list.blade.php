@@ -6,8 +6,8 @@
 <p>
 <h1>{{ $pagetitle }}</h1>
 <div class="search">
-	<form action="{{ route('users.search') }}" method="GET">
-		<input type="text" class="searchTerm" placeholder="Search for name?" id="search" name="search">
+	<form action="{{ route('users') }}" method="GET">
+		<input type="text" class="searchTerm" placeholder="Search for name?" id="search" name="name">
 		<button type="submit" class="searchButton">
 			<i class="fa fa-search"></i> Search
 		</button>

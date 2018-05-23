@@ -16,19 +16,6 @@ use App\Account;
 class UserController extends Controller
 {
     //Users
-    public function search(Request $request)
-    {
-        $query = $request->search;
-        $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(10);
-
-        $pagetitle = 'List of users';
-
-        if (Gate::allows('admin', auth()->user())) {
-            return view('users.list', compact('users', 'pagetitle'));
-        }
-        return view('errors.admin');
-    }
-
     public function index()
     {
         $pagetitle = 'List of users';
@@ -48,6 +35,7 @@ class UserController extends Controller
             array('normal', 0),
             array('blocked', 1),
             array('unblocked', 0),
+            array( request('name'), request('name'))
         );
 
         if (Gate::allows('admin', auth()->user())) {
