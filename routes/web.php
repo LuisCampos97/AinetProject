@@ -42,7 +42,7 @@ Route::get('/accounts/{user}/opened', 'UserController@openedAccounts')->name('op
 Route::get('/accounts/{user}/closed', 'UserController@closedAccounts')->name('closedAccounts');
 Route::delete('/account/{account}', 'UserController@destroy')->name('deleteAccount');
 Route::patch('/account/{account}/close', 'UserController@closeAccount')->name('closeAccount');
-Route::patch('/account/{account}/open', 'UserController@openAccount')->name('openAccount');
+Route::patch('/account/{account}/reopen', 'UserController@openAccount')->name('openAccount');
 
 //Movements of Account
 Route::get('/movements/{account}', 'UserController@showMovementsForAccount')->name('movementsForAccount');

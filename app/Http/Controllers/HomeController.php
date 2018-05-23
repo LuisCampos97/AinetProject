@@ -40,6 +40,6 @@ class HomeController extends Controller
         //dd($accountsForUser);
 
        
-        return view('home', compact('total', 'accountsForUser'));
+        return view('home', compact('total', 'accountsForUser'))->with('msgglobal', 'Welcome');
     }
 }

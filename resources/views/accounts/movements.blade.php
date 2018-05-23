@@ -6,13 +6,13 @@
 <div class="container">
 
 <h1>{{ $pagetitle }}</h1>
-<a class="btn btn-xs btn-success" href="{{ action('UserController@viewCreateMovement',$id) }}"> <i class="fas fa-plus"></i> Create Movement </a>
+<a class="btn btn-xs btn-success" href="{{ action('UserController@viewCreateMovement',$account->id) }}"> <i class="fas fa-plus"></i> Create Movement </a>
 <br><br>
 
 <table class="table table-bordered">
 <thead class="thead-dark">
 	<tr>
-		<th> Account: {{ $id }} </th> <th>Current Balance:</th>
+		<th> Account: {{ $account->id }} </th> <th>Current Balance:</th>
 
 		<th>
 		{{$movements[count($movements)-1]->end_balance}} €
@@ -31,8 +31,6 @@
             <th>End Balance</th>
 			<th>Option</th>
 		</tr>
-
-
 		<br>
 
 	</thead>
@@ -47,8 +45,9 @@
 				<td>{{ $movement->start_balance}} €</td>
 				<td>{{ $movement->end_balance }} €</td>
 				<td>
-				<form action="{{ action('UserController@destroy', $movement->account_id, $movement->id) }}" method="post" class="inline">
-						@csrf @method('delete')
+				<form action="{{ action('UserController@deleteMovement', [$account->id, $movement->id]) }}" method="post" class="inline">
+						@csrf
+						@method('delete')
 						<button type="submit" class="btn btn-xs btn-danger">
 							<i class="fas fa-trash"></i> Delete</button>
 				</form>
@@ -57,15 +56,15 @@
     @endforeach
     </tbody>
 	@else
-	<a class="btn btn-xs btn-success" href="{{ action('UserController@viewCreateMovement',$id) }}"> <i class="fas fa-plus"></i> Create Movement </a>
 	<div class="container">
+	<a class="btn btn-xs btn-success" href="{{ action('UserController@viewCreateMovement',$account->id) }}"> <i class="fas fa-plus"></i> Create Movement </a> <br> <br>
 	<table class="table table-bordered">
 <thead class="thead-dark">
 	<tr>
-		<th> Account: {{ $id }} </th> <th>Current Balance:</th>
+		<th> Account: {{ $account->id }} </th> <th>Current Balance:</th>
 
 		<th>
-		0 €
+		{{$account->current_balance}} €
 		</th>
 	</tr>
 </thead>

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AccountRequest extends FormRequest
+class MovementRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,10 @@ class AccountRequest extends FormRequest
     public function rules()
     {
         return [
-            'account_type_id' => 'required|min:1|max:5',
-            'code' => 'required|string',
-            'date' => 'required',
-            'start_balance' => 'required',
+            'type' =>'required|min:1',
+            'category' =>'required|min:1',
+            'date' => 'required|date',
+            'value' => 'required',
         ];
     }
 }

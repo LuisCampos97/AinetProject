@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
+use App\Http\Requests\MovementRequest;
 use App\User;
 use Auth;
 use Gate;
@@ -143,7 +144,7 @@ class UserController extends Controller
             'name' => 'required|regex:/^[\pL\s]+$/u',
             'email' => 'required|email|unique:users,email,' . Auth::user()->id,
             'phone' => 'min:3|max:12',
-            'profile' => 'mimes:jpeg,png,jpg|max:1999',
+            'profile_photo' => 'mimes:jpeg,png,jpg|max:1999',
         ], [ // Custom Messages
             'name.regex' => 'Name must only contain letters and spaces.',
         ]);
@@ -171,6 +172,7 @@ class UserController extends Controller
         }
 
         $user = $request->validate([
+            'old_password' => 'required|string|min:6',
             'password' => 'required|min:3|confirmed',
         ]);
 
@@ -324,10 +326,13 @@ class UserController extends Controller
 
     public function closeAccount($id)
     {
+        $account = Account::find($id);
+        $account->delete();
+        /*
         DB::table('accounts')
             ->where('accounts.id', $id)
             ->update(['deleted_at' => date('Y-m-d- G:i:s')]);
-
+        */
         return redirect()->action('HomeController@index');
     }
 
@@ -342,6 +347,10 @@ class UserController extends Controller
 
     public function showMovementsForAccount($id)
     {
+
+        $account=Account::findOrFail($id);
+
+        
         $pagetitle = 'List of Movements';
 
         $movements = DB::table('movements')
@@ -351,8 +360,8 @@ class UserController extends Controller
             ->select('movements.*', 'accounts.id', 'movement_categories.name')
             ->get();
 
-          
-        return view('accounts.movements', compact('movements', 'pagetitle', 'id'));
+
+        return view('accounts.movements', compact('movements', 'pagetitle', 'account'));
     }
 
     public function createAccount()
@@ -368,6 +377,7 @@ class UserController extends Controller
         $request->validated();
 
         //Account::create($request->all());
+        
         DB::table('accounts')->insert([
             ['owner_id' => Auth::user()->id,
                 'account_type_id' => $request->input('account_type_id'),
@@ -464,11 +474,8 @@ class UserController extends Controller
         return view('movements.create', compact('accounts', 'movementType', 'categories'));
     }
 
-    public function storeMovement(Request $request, $id)
+    public function storeMovement(MovementRequest $request, $id)
     {
-
-
-
         $account = Account::FindOrFail($id);
 
         if($request->input('type') == 'expense'){
@@ -477,6 +484,8 @@ class UserController extends Controller
         else{
             $signal = '+';
         }
+
+        $request->validated();
        
         $movement = DB::table('movements')->insert([
             'account_id' => $id,
@@ -491,18 +500,26 @@ class UserController extends Controller
 
         DB::table('accounts')
         ->where('accounts.id', '=', $id)
-        ->update(['current_balance' => $account->current_balance + intval($signal.$request->input('value'))]);
+        ->update(['current_balance' => $account->current_balance + intval($signal.$request->input('value')),
+        'last_movement_date' => date('Y-m-d- G:i:s'),
+        ]);
         
-        return redirect()->route('home')
-            ->with('success', 'Movement created successfully');
+        return redirect()->route('home');
     }
 
     public function deleteMovement($account_id, $movement_id)
     {
-        $movements = DB::table('movements')
-        ->join('accounts', 'accounts.id', '=', $account_id)
-        ->where('movements.id', '=', $movement_id);
-        dd($movements);
+        /*
+        DB::table('movements')
+        ->join('accounts', $account_id, '=', 'movements.account_id')
+        ->where('movements.id', '=', $movement_id)
+        ->delete();
+        */
+
+        //dd($movement_id);
+        //dd($account_id);
+
+        $movements = DB::table('movements')->where('movements.id', '=', $movement_id)->delete();
 
         return redirect()->action('HomeController@index');
     }
