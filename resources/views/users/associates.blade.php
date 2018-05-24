@@ -12,7 +12,7 @@
         </thead>
         <tbody>
             <h1>{{ $pagetitle }}</h1>
-            <a class="btn btn-xs btn-success" href="{{ action('UserController@addAssociate') }}">
+            <a class="btn btn-xs btn-success" href="{{ action('ProfileController@addAssociate') }}">
                 <i class="fas fa-user-plus"></i>  Add Associate</a>
             <br>
             <br> @foreach ($users as $user)
@@ -20,7 +20,7 @@
                 <td>{{ $user->name }} </td>
                 <td>{{ $user->email }}</td>
                 <td>
-                    <form action="{{ action('UserController@deleteAssociate', $user->id) }}" method="post" class="inline">
+                    <form action="{{ action('ProfileController@deleteAssociate', $user->id) }}" method="post" class="inline">
                         @csrf @method('delete')
                         <button type="submit" class="btn btn-xs btn-danger">
                             <i class="fas fa-user-minus"></i>  Remove Associate</button>
@@ -34,7 +34,7 @@
     <div class="container">
         <strong style="font-size:25px">You do not have any associate members!</strong>
         <div>
-            <a class="btn btn-xs btn-success" href="{{ action('UserController@addAssociate') }}">
+            <a class="btn btn-xs btn-success" href="{{ action('ProfileController@addAssociate') }}">
                 <i class="fas fa-user-plus"></i>Add Associate</a>
         </div>
     </div>

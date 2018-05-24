@@ -17,7 +17,7 @@
                 <td>{{ $user->name }} </td>
                 <td>{{ $user->email }}</td>
                 <td>
-                    <a class="btn btn-xs btn-primary" href="{{ action('UserController@accountsForUser',$user->id) }}">
+                    <a class="btn btn-xs btn-primary" href="{{ action('AccountController@accountsForUser',$user->id) }}">
                         <i class="fas fa-money-check-alt"></i>  Account</a>
                 </td>
             </tr>

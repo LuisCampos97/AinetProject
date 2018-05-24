@@ -30,29 +30,28 @@ Route::get('/profiles', 'ProfileController@profiles')->name('profiles');
 Route::get('/me/associate-of', 'ProfileController@associateOf')->name('associateOf');
 Route::get('/me/associates', 'ProfileController@associates')->name('associates');
 Route::delete('/me/associates/{user}', 'ProfileController@deleteAssociate')->name('associate.delete');
-
-Route::post('/me/associates', 'UserController@storeAssociate')->name('associate.store');
-Route::get('/ola', 'UserController@addAssociate')->name('associate.add'); //Modificar nome
+Route::post('/me/associates', 'ProfileController@storeAssociate')->name('associate.store');
+Route::get('/ola', 'ProfileController@addAssociate')->name('associate.add'); //Modificar nome
 
 //Accounts
-Route::get('/accounts/{user}', 'UserController@accountsForUser')->name('usersAccount');
-Route::get('/accounts/{user}/opened', 'UserController@openedAccounts')->name('openedAccounts');
-Route::get('/accounts/{user}/closed', 'UserController@closedAccounts')->name('closedAccounts');
-Route::delete('/account/{account}', 'UserController@destroy')->name('deleteAccount');
-Route::patch('/account/{account}/close', 'UserController@closeAccount')->name('closeAccount');
-Route::patch('/account/{account}/reopen', 'UserController@openAccount')->name('openAccount');
+Route::get('/accounts/{user}', 'AccountController@accountsForUser')->name('usersAccount');
+Route::get('/accounts/{user}/opened', 'AccountController@openedAccounts')->name('openedAccounts');
+Route::get('/accounts/{user}/closed', 'AccountController@closedAccounts')->name('closedAccounts');
+Route::delete('/account/{account}', 'AccountController@destroy')->name('deleteAccount');
+Route::patch('/account/{account}/close', 'AccountController@closeAccount')->name('closeAccount');
+Route::patch('/account/{account}/reopen', 'AccountController@openAccount')->name('openAccount');
 
 //Movements of Account
-Route::get('/movements/{account}', 'UserController@showMovementsForAccount')->name('movementsForAccount');
+Route::get('/movements/{account}', 'AccountController@showMovementsForAccount')->name('movementsForAccount');
 
 //Create account
-Route::get('/account', 'UserController@createAccount')->name('createAccount');
-Route::post('/account', 'UserController@storeAccount')->name('storeAccount');
+Route::get('/account', 'AccountController@createAccount')->name('createAccount');
+Route::post('/account', 'AccountController@storeAccount')->name('storeAccount');
 
-Route::get('/account/{account}', 'UserController@updateAccountView')->name('updateAccountView');
-Route::put('/updateAccount', 'UserController@updateAccount')->name('updateAccount');
+Route::get('/account/{account}', 'AccountController@updateAccountView')->name('updateAccountView');
+Route::put('/updateAccount', 'AccountController@updateAccount')->name('updateAccount');
 
 //Movements
-Route::get('/movements/{account}/create', 'UserController@viewCreateMovement')->name('viewCreateAccount');
-Route::post('/movements/{account}/create', 'UserController@storeMovement')->name('storeMovement');
-Route::delete('/account/{account}/{movement}', 'UserController@deleteMovement')->name('deleteMovement');
+Route::get('/movements/{account}/create', 'MovementController@viewCreateMovement')->name('viewCreateAccount');
+Route::post('/movements/{account}/create', 'MovementController@storeMovement')->name('storeMovement');
+Route::delete('/account/{account}/{movement}', 'MovementController@deleteMovement')->name('deleteMovement');

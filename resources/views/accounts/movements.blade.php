@@ -6,7 +6,7 @@
 <div class="container">
 
 <h1>{{ $pagetitle }}</h1>
-<a class="btn btn-xs btn-success" href="{{ action('UserController@viewCreateMovement',$account->id) }}"> <i class="fas fa-plus"></i> Create Movement </a>
+<a class="btn btn-xs btn-success" href="{{ action('MovementController@viewCreateMovement',$account->id) }}"> <i class="fas fa-plus"></i> Create Movement </a>
 <br><br>
 
 <table class="table table-bordered">
@@ -45,7 +45,7 @@
 				<td>{{ $movement->start_balance}} €</td>
 				<td>{{ $movement->end_balance }} €</td>
 				<td>
-				<form action="{{ action('UserController@deleteMovement', [$account->id, $movement->id]) }}" method="post" class="inline">
+				<form action="{{ action('MovementController@deleteMovement', [$account->id, $movement->id]) }}" method="post" class="inline">
 						@csrf
 						@method('delete')
 						<button type="submit" class="btn btn-xs btn-danger">
@@ -57,7 +57,7 @@
     </tbody>
 	@else
 	<div class="container">
-	<a class="btn btn-xs btn-success" href="{{ action('UserController@viewCreateMovement',$account->id) }}"> <i class="fas fa-plus"></i> Create Movement </a> <br> <br>
+	<a class="btn btn-xs btn-success" href="{{ action('MovementController@viewCreateMovement',$account->id) }}"> <i class="fas fa-plus"></i> Create Movement </a> <br> <br>
 	<table class="table table-bordered">
 <thead class="thead-dark">
 	<tr>
