@@ -26,11 +26,10 @@ Route::patch('/users/{user}/promote', 'UserController@promote')->name('users.pro
 Route::patch('/users/{user}/demote', 'UserController@demote')->name('users.demote');
 
 //Profile
-Route::get('/profiles', 'UserController@profiles')->name('profiles');
-Route::get('/me/associate-of', 'UserController@associateOf')->name('associateOf');
-Route::get('/me/associates', 'UserController@associates')->name('associates');
-Route::delete('/me/associates/{user}', 'UserController@deleteAssociate')->name('associate.delete');
-Route::get('/profiles/search', 'UserController@searchNameProfiles')->name('profiles.searchNameProfiles');
+Route::get('/profiles', 'ProfileController@profiles')->name('profiles');
+Route::get('/me/associate-of', 'ProfileController@associateOf')->name('associateOf');
+Route::get('/me/associates', 'ProfileController@associates')->name('associates');
+Route::delete('/me/associates/{user}', 'ProfileController@deleteAssociate')->name('associate.delete');
 
 Route::post('/me/associates', 'UserController@storeAssociate')->name('associate.store');
 Route::get('/ola', 'UserController@addAssociate')->name('associate.add'); //Modificar nome

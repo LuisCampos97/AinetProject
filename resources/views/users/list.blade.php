@@ -8,9 +8,9 @@
 <div class="search">
 	<form action="{{ route('users') }}" method="GET">
 		<input type="text" class="searchTerm" placeholder="Search for name?" id="search" name="name">
-		<button type="submit" class="searchButton">
-			<i class="fa fa-search"></i> Search
-		</button>
+			<button type="submit" class="searchButton">
+				<i class="fa fa-search"></i> Search
+			</button>
 	</form>
 </div>
 </p>
