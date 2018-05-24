@@ -173,81 +173,7 @@ class UserController extends Controller
         return redirect()->action('HomeController@index')->with(['msgglobal' => 'Password Edited!']);
 
     }
-    //__________________________________________
-
-    //Profiles
-    public function profiles(Request $request)
-    {
-        $users = DB::table('users')->paginate(10);
-
-        $associatesOf = DB::table('users')
-            ->join('associate_members', 'users.id', '=', 'main_user_id')
-            ->where('associate_members.associated_user_id', Auth::user()->id)
-            ->get();
-
-        $associates = DB::table('users')
-            ->join('associate_members', 'associated_user_id', '=', 'users.id')
-            ->where('associate_members.main_user_id', Auth::user()->id)
-            ->get();
-
-        $pagetitle = 'List of profiles';
-
-        if (Auth::check()) {
-            return view('users.profiles', compact('users', 'associates', 'associatesOf', 'pagetitle'));
-        }
-        return view('errors.user');
-    }
-
-    public function searchNameProfiles(Request $request)
-    {
-        $query = $request->search;
-        $users = User::where('name', 'LIKE', '%' . $query . '%')->paginate(10);
-        $associates = DB::table('users')
-            ->join('associate_members', 'associated_user_id', '=', 'users.id')
-            ->where('associate_members.main_user_id', Auth::user()->id)
-            ->get();
-        $associatesOf = DB::table('users')
-            ->join('associate_members', 'users.id', '=', 'main_user_id')
-            ->where('associate_members.associated_user_id', Auth::user()->id)
-            ->get();
-
-        $pagetitle = 'List of users';
-
-        if (Gate::allows('admin', auth()->user())) {
-            return view('users.profiles', compact('users', 'associates', 'associatesOf', 'pagetitle'));
-        }
-        return view('errors.admin');
-    }
-
-    public function associateOf()
-    {
-        $users = DB::table('users')
-            ->join('associate_members', 'users.id', '=', 'main_user_id')
-            ->where('associate_members.associated_user_id', Auth::user()->id)
-            ->get();
-
-        $pagetitle = 'List of Associated-of profiles';
-
-        if (Auth::check()) {
-            return view('users.associateof', compact('users', 'pagetitle'));
-        }
-        return view('errors.user');
-    }
-
-    public function associates()
-    {
-        $users = DB::table('users')
-            ->join('associate_members', 'associated_user_id', '=', 'users.id')
-            ->where('associate_members.main_user_id', Auth::user()->id)
-            ->get();
-
-        $pagetitle = 'List of associates';
-
-        if (Auth::check()) {
-            return view('users.associates', compact('users', 'pagetitle'));
-        }
-        return view('errors.user');
-    }
+    
     //__________________________________________
 
     //Accounts
@@ -263,7 +189,7 @@ class UserController extends Controller
         $pagetitle = 'List of accounts';
 
         if (Auth::check()) {
-            return view('accounts.list', compact('accounts', 'pagetitle'));
+            return view('accounts.list', compact('accounts', 'pagetitle', 'id'));
         }
         return view('errors.user');
     }
@@ -281,7 +207,7 @@ class UserController extends Controller
         $pagetitle = 'List of accounts';
 
         if (Auth::check()) {
-            return view('accounts.list', compact('accounts', 'pagetitle'));
+            return view('accounts.list', compact('accounts', 'pagetitle', 'id'));
         }
         return view('errors.user');
     }
@@ -300,7 +226,7 @@ class UserController extends Controller
         $pagetitle = 'List of accounts';
 
         if (Auth::check()) {
-            return view('accounts.list', compact('accounts', 'pagetitle'));
+            return view('accounts.list', compact('accounts', 'pagetitle', 'id'));
         }
         return view('errors.user');
     }
@@ -321,7 +247,7 @@ class UserController extends Controller
             ->where('accounts.id', $id)
             ->update(['deleted_at' => date('Y-m-d- G:i:s')]);
         */
-        return redirect()->action('HomeController@index');
+        return redirect()->route('usersAccount', Auth::user()->id);
     }
 
     public function openAccount($id)
@@ -330,7 +256,7 @@ class UserController extends Controller
             ->where('accounts.id', $id)
             ->update(['deleted_at' => null]);
 
-        return redirect()->action('HomeController@index');
+        return redirect()->route('usersAccount', Auth::user()->id);
     }
 
     public function showMovementsForAccount($id)
@@ -375,7 +301,7 @@ class UserController extends Controller
                 'current_balance' => $request->input('start_balance')],
         ]);
 
-        return redirect()->route('home')
+        return redirect()->route('usersAccount', Auth::user()->id)
             ->with('msgglobal', 'Account created successfully');
     }
     //__________________________________________
@@ -494,7 +420,7 @@ class UserController extends Controller
         'last_movement_date' => date('Y-m-d- G:i:s'),
         ]);
         
-        return redirect()->route('home');
+        return redirect()->route('movementsForAccount', $id);
     }
 
     public function deleteMovement($account_id, $movement_id)

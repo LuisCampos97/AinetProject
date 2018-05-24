@@ -25,9 +25,10 @@ class AccountRequest extends FormRequest
     {
         return [
             'account_type_id' => 'required|min:1|max:5',
-            'code' => 'required|string',
+            'code' => 'required|string|unique:accounts',
             'date' => 'required',
             'start_balance' => 'required',
+            'description' => 'nullable',
         ];
     }
 }

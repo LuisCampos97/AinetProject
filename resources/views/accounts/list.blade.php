@@ -20,11 +20,11 @@
 
 			<p>
 				<strong style="font-size: 20px">Filter: </strong>
-				<a class="btn btn-xs btn-info" href="{{ action('UserController@accountsForUser', Auth::user()->id) }}"><i class="fas fa-book"></i>  All Accounts</a>
+				<a class="btn btn-xs btn-info" href="{{ action('UserController@accountsForUser', $id) }}"><i class="fas fa-book"></i>  All Accounts</a>
 				<strong style="font-size: 20px">|</strong>
-				<a class="btn btn-xs btn-success" href="{{ action('UserController@openedAccounts', Auth::user()->id) }}"><i class="fas fa-lock-open"></i>  Opened Accounts</a>
+				<a class="btn btn-xs btn-success" href="{{ action('UserController@openedAccounts', $id) }}"><i class="fas fa-lock-open"></i>  Opened Accounts</a>
 				<strong style="font-size: 20px">|</strong>
-				<a class="btn btn-xs btn-danger" href="{{ action('UserController@closedAccounts', Auth::user()->id) }}"><i class="fas fa-lock"></i>  Closed Accounts</a>
+				<a class="btn btn-xs btn-danger" href="{{ action('UserController@closedAccounts', $id) }}"><i class="fas fa-lock"></i>  Closed Accounts</a>
 
 			</p>
 
