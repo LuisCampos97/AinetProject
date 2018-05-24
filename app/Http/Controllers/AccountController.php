@@ -108,7 +108,7 @@ class AccountController extends Controller
             ->select('movements.*', 'movement_categories.name')
             ->get();
 
-        return view('accounts.movements', compact('movements', 'pagetitle', 'account'));
+        return view('movements.list', compact('movements', 'pagetitle', 'account'));
     }
 
     public function createAccount()
@@ -137,12 +137,18 @@ class AccountController extends Controller
             ->with('msgglobal', 'Account created successfully');
     }
 
-    public function updateAccountView($account)
+    public function updateAccountView($id)
     {
-        $accountType = DB::table('account_types')
-            ->get();
         $account = DB::table('accounts')
+            ->where('accounts.id', '=', $id)
+            ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
+            ->select('accounts.*', 'account_types.name')
             ->get();
+
+        $accountType = DB::table('account_types')
+            ->where('account_types.id', '!=', $account[0]->account_type_id)
+            ->get();
+
 
         return view('accounts.update', compact('account', 'accountType'));
     }
@@ -153,12 +159,15 @@ class AccountController extends Controller
             return redirect()->action('HomeController@home');
         }
 
-        $account = $request->validated();
+        //$account = $request->validated();
 
         $accountModel = Account::FindOrFail($account->id);
         $accountModel->fill($account);
         $accountModel->save();
 
-        return redirect()->action('HomeController@index')->with(['msgglobal' => 'Password Edited!']);
+        dd($accountModel);
+
+        return redirect()->route('usersAccount', Auth::user()->id)
+            ->with('msgglobal', 'Account edited successfully');
     }
 }

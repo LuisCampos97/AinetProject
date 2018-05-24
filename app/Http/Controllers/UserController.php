@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AccountRequest;
-use App\Http\Requests\MovementRequest;
+use App\Http\Requests\UserRequest;
 use App\User;
 use Auth;
 use Gate;
@@ -118,21 +117,14 @@ class UserController extends Controller
 
     }
 
-    public function update(Request $request) //,$id
+    public function update(UserRequest $request) //,$id
 
     {
         if ($request->has('cancel')) {
             return redirect()->action('UserController@index');
         }
 
-        $user = $request->validate([
-            'name' => 'required|regex:/^[\pL\s]+$/u',
-            'email' => 'required|email|unique:users,email,' . Auth::user()->id,
-            'phone' => 'min:3|max:12',
-            'profile_photo' => 'mimes:jpeg,png,jpg|max:1999',
-        ], [ // Custom Messages
-            'name.regex' => 'Name must only contain letters and spaces.',
-        ]);
+        $user = $request->validated();
 
         $userModel = User::findOrFail(Auth::user()->id);
         $userModel->fill($user);

@@ -69,7 +69,13 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'phone'=> $data['phone'],
-            'profile_photo'=> $data['profile_photo']
+            //'profile_photo'=> $data['profile_photo']
         ]);
+
+        if ($request->file('profile_photo')->isValid()) {
+            $path= Storage::putFile('public/profiles',
+            $request->file('profile_photo'));
+            // Save $path on DB
+            }
     }
 }

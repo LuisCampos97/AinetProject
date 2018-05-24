@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Auth;
 
-class AccountRequest extends FormRequest
+class UserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +25,13 @@ class AccountRequest extends FormRequest
     public function rules()
     {
         return [
-            'account_type_id' => 'required|min:1|max:5',
-            //'code' => 'required|string|unique:accounts',
-            'date' => 'required',
-            'start_balance' => 'required',
-            'description' => 'nullable',
+            'name' => 'required|regex:/^[\pL\s]+$/u',
+            'email' => 'required|email|unique:users,email,' . Auth::user()->id,
+            'phone' => 'nullable|min:3|max:12',
+            'profile_photo' => 'mimes:jpeg,png,jpg|max:1999',
+            [ // Custom Messages
+                'name.regex' => 'Name must only contain letters and spaces.',
+            ]
         ];
     }
 }
