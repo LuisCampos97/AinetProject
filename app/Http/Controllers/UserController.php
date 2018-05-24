@@ -344,10 +344,9 @@ class UserController extends Controller
         $movements = DB::table('movements')
             ->join('movement_categories', 'movement_categories.id', '=', 'movements.movement_category_id')
             ->join('accounts', 'movements.account_id', '=', 'accounts.id')
-            ->where('accounts.id', '=', $id)
-            ->select('movements.*', 'accounts.id', 'movement_categories.name')
+            ->where('movements.account_id', '=', $id)
+            ->select('movements.*', 'movement_categories.name')
             ->get();
-
 
         return view('accounts.movements', compact('movements', 'pagetitle', 'account'));
     }
@@ -486,6 +485,9 @@ class UserController extends Controller
             'end_balance' => $account->current_balance +  intval($signal.$request->input('value'))
         ]);
 
+
+        
+
         DB::table('accounts')
         ->where('accounts.id', '=', $id)
         ->update(['current_balance' => $account->current_balance + intval($signal.$request->input('value')),
@@ -507,7 +509,15 @@ class UserController extends Controller
         //dd($movement_id);
         //dd($account_id);
 
+        $somatorio=DB::table('movements')
+        ->where('account_id', '=', $account_id)
+        ->select(DB::raw('sum(movements.value) as somatorioMovimentos'))
+        ->get();
+
         $movements = DB::table('movements')->where('movements.id', '=', $movement_id)->delete();
+
+        DB::table('accounts')->where('id', '=', $account->id)->update(['accounts.current_balance' => $somatorio[0]->somatorioMovimentos + 'accounts.start_balance']);
+        //dd($somatorio[0]->somatorioMovimentos);
 
         return redirect()->action('HomeController@index');
     }
