@@ -73,11 +73,14 @@ class MovementController extends Controller
         ->select(DB::raw('sum(movements.value) as somatorioMovimentos'))
         ->get();
 
+        //dd($somatorio);
+
         $movements = DB::table('movements')->where('movements.id', '=', $movement_id)->delete();
+        
+        //DB::table('accounts')->where('id', '=', $account_id)->update(['accounts.current_balance' => $somatorio[0]->somatorioMovimentos + 'accounts.start_balance']);
 
-        DB::table('accounts')->where('id', '=', $account_id)->update(['accounts.current_balance' => $somatorio[0]->somatorioMovimentos + 'accounts.start_balance']);
-
-        return redirect()->action('HomeController@index');
+        return redirect()->action('AccountController@showMovementsForAccount', $account_id);
     }
+    
     
 }

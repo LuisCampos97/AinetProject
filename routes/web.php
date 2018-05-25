@@ -48,8 +48,8 @@ Route::get('/movements/{account}', 'AccountController@showMovementsForAccount')-
 Route::get('/account', 'AccountController@createAccount')->name('createAccount');
 Route::post('/account', 'AccountController@storeAccount')->name('storeAccount');
 
+Route::put('/accounts/{account}', 'AccountController@updateAccount')->name('updateAccount');
 Route::get('/account/{account}', 'AccountController@updateAccountView')->name('updateAccountView');
-Route::put('/updateAccount', 'AccountController@updateAccount')->name('updateAccount');
 
 //Movements
 Route::get('/movements/{account}/create', 'MovementController@viewCreateMovement')->name('viewCreateAccount');

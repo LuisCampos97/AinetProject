@@ -104,9 +104,12 @@ class AccountController extends Controller
         $movements = DB::table('movements')
             ->join('movement_categories', 'movement_categories.id', '=', 'movements.movement_category_id')
             ->join('accounts', 'movements.account_id', '=', 'accounts.id')
+            ->leftJoin('documents', 'documents.id', '=', 'movements.document_id')
             ->where('movements.account_id', '=', $id)
-            ->select('movements.*', 'movement_categories.name')
+            ->select('movements.*', 'movement_categories.name', 'documents.original_name')
             ->get();
+
+            //dd($movements);
 
         return view('movements.list', compact('movements', 'pagetitle', 'account'));
     }
@@ -137,35 +140,31 @@ class AccountController extends Controller
             ->with('msgglobal', 'Account created successfully');
     }
 
-    public function updateAccountView($id)
+    public function updateAccountView(Account $account)
     {
-        $account = DB::table('accounts')
-            ->where('accounts.id', '=', $id)
-            ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
-            ->select('accounts.*', 'account_types.name')
-            ->get();
 
         $accountType = DB::table('account_types')
-            ->where('account_types.id', '!=', $account[0]->account_type_id)
             ->get();
-
 
         return view('accounts.update', compact('account', 'accountType'));
     }
 
-    public function updateAccount(AccountRequest $request)
+    public function updateAccount(Request $request, $id)
     {
         if ($request->has('cancel')) {
             return redirect()->action('HomeController@home');
         }
 
-        //$account = $request->validated();
+        $account = $request->validate([
+            'account_type_id' => 'required|min:1|max:5',
+            'code' => 'required|string|unique:accounts',
+            'start_balance' => 'required',
+            'description' => 'nullable',
+        ]);
 
-        $accountModel = Account::FindOrFail($account->id);
+        $accountModel = Account::FindOrFail($id);
         $accountModel->fill($account);
         $accountModel->save();
-
-        dd($accountModel);
 
         return redirect()->route('usersAccount', Auth::user()->id)
             ->with('msgglobal', 'Account edited successfully');

@@ -16,6 +16,7 @@
 
 		<th>
 		{{$movements[count($movements)-1]->end_balance}} €
+
 		</th>
 	</tr>
 </thead>
@@ -27,6 +28,7 @@
 			<th>Date</th>
 			<th>Value</th>
 			<th>Type</th>
+			<th>Document</th>
 			<th>Start Balance</th>
             <th>End Balance</th>
 			<th>Option</th>
@@ -42,6 +44,21 @@
 				<td>{{ $movement->date }} </td>
 				<td><strong>{{ $movement->value }} €</strong></td>
 				<td>{{ $movement->type }}</td>
+				<td>
+				@if(is_null($movement->original_name))
+				<form class="inline">
+						<button type="submit" class="btn btn-xs btn-success">
+							<i class="fas fa-plus"></i> Add Document</button>
+				</form>
+				
+				@else
+				{{ $movement->original_name }} 
+				<form class="inline">
+						<button type="submit" class="btn btn-xs btn-danger">
+							<i class="fas fa-trash"></i> Delete Document</button>
+				</form>
+				@endif
+				</td>
 				<td>{{ $movement->start_balance}} €</td>
 				<td>{{ $movement->end_balance }} €</td>
 				<td>

@@ -44,14 +44,16 @@
 						<button type="submit" class="btn btn-xs btn-primary">
 							<i class="fas fa-edit"></i> Update Account</button>
 					</form>
+					
 					@if(is_null($account->last_movement_date))
 					<form action="{{ action('AccountController@destroy', $account->id) }}" method="post" class="inline">
 						@csrf @method('delete')
 						<button type="submit" class="btn btn-xs btn-danger">
 							<i class="fas fa-trash"></i> Delete</button>
 					</form>
-					@endif @if(is_null($account->deleted_at))
+					@endif 
 
+					@if(is_null($account->deleted_at))
 					<form action="{{ action('AccountController@closeAccount', $account->id) }}" method="post" class="inline">
 						@csrf @method('patch')
 						<button type="submit" class="btn btn-xs btn-warning">
