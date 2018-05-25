@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Gate;
+use App\Account;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-//use DB;
-//use Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -27,21 +28,42 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        /**
+         * Gate to define an admin
+         */
         Gate::define('admin', function ($user) {
-            if($user->admin == 1)
-            {
-                return true;
-            }
-            return false;
+            return $user->admin == 1;
         });
 
-        /*Gate::define('associate', function($associate) {
-            $associates = DB::table('users')
-            ->join('associate_members', 'associated_user_id', '=', 'users.id')
-            ->where('associate_members.main_user_id', Auth::user()->id)
-            ->get();
+        /**
+         * Gate to define that only the account owner can change it.
+         */
+        Gate::define('change-account', function ($user, $account_id) {
 
-            return $associates->where('id', $associate->id)->isNotEmpty();
-        });*/
+            //If the parameter is a Account id
+            if (is_numeric($account_id)) {
+                $account = Account::findOrFail($account_id);
+
+                return $user->id == $account->owner_id;
+            }
+
+            //If the parameter is a Account (Just the updateAccountView method)
+            $account = $account_id;
+            return $user->id == $account->owner_id;
+        });
+
+        /**
+         * Gate to define that only me and my associates
+         * can have access to my personal finances just to read.
+         */
+        Gate::define('associate', function ($user, $associate) {
+            $users = DB::table('users')
+                ->join('associate_members', 'users.id', '=', 'main_user_id')
+                ->where('associate_members.associated_user_id', $user->id)
+                ->orWhere('users.id', '=', $user->id)
+                ->get();;
+
+            return $users->where('id', $associate)->isNotEmpty();
+        });
     }
 }

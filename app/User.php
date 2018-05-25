@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -49,8 +50,19 @@ class User extends Authenticatable
         }
     }
 
-    public function search($querry, $s)
+    public function associates_of()
     {
-        return $querry->where('name', 'like', '%' . $s . '%');
+        return DB::table('users')
+            ->join('associate_members', 'users.id', '=', 'main_user_id')
+            ->where('associate_members.associated_user_id', $this->id)
+            ->get();
+    }
+
+    public function my_associates()
+    {
+        return DB::table('users')
+            ->join('associate_members', 'associated_user_id', '=', 'users.id')
+            ->where('associate_members.main_user_id', $this->id)
+            ->get();
     }
 }

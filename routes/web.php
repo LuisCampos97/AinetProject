@@ -1,11 +1,10 @@
 <?php
 
-USE Illuminate\Support\Facades\Input;
-USE App\User;
+use Illuminate\Support\Facades\Input;
 
 //User
 Route::get('/', 'WelcomeController@home');
- 
+
 Route::get('/users', 'UserController@index')->name('users');
 Auth::routes();
 
@@ -34,12 +33,18 @@ Route::post('/me/associates', 'ProfileController@storeAssociate')->name('associa
 Route::get('/ola', 'ProfileController@addAssociate')->name('associate.add'); //Modificar nome
 
 //Accounts
-Route::get('/accounts/{user}', 'AccountController@accountsForUser')->name('usersAccount');
-Route::get('/accounts/{user}/opened', 'AccountController@openedAccounts')->name('openedAccounts');
-Route::get('/accounts/{user}/closed', 'AccountController@closedAccounts')->name('closedAccounts');
-Route::delete('/account/{account}', 'AccountController@destroy')->name('deleteAccount');
-Route::patch('/account/{account}/close', 'AccountController@closeAccount')->name('closeAccount');
-Route::patch('/account/{account}/reopen', 'AccountController@openAccount')->name('openAccount');
+Route::get('/accounts/{user}', 'AccountController@accountsForUser')->name('usersAccount')
+    ->middleware('can:associate,user');
+Route::get('/accounts/{user}/opened', 'AccountController@openedAccounts')->name('openedAccounts')
+    ->middleware('can:associate,user');
+Route::get('/accounts/{user}/closed', 'AccountController@closedAccounts')->name('closedAccounts')
+    ->middleware('can:associate,user');
+Route::delete('/account/{account}', 'AccountController@destroy')->name('deleteAccount')
+    ->middleware('can:change-account,account');
+Route::patch('/account/{account}/close', 'AccountController@closeAccount')->name('closeAccount')
+    ->middleware('can:change-account,account');
+Route::patch('/account/{account}/open', 'AccountController@openAccount')->name('openAccount')
+    ->middleware('can:change-account,account');
 
 //Movements of Account
 Route::get('/movements/{account}', 'AccountController@showMovementsForAccount')->name('movementsForAccount');
@@ -48,8 +53,10 @@ Route::get('/movements/{account}', 'AccountController@showMovementsForAccount')-
 Route::get('/account', 'AccountController@createAccount')->name('createAccount');
 Route::post('/account', 'AccountController@storeAccount')->name('storeAccount');
 
-Route::put('/accounts/{account}', 'AccountController@updateAccount')->name('updateAccount');
-Route::get('/account/{account}', 'AccountController@updateAccountView')->name('updateAccountView');
+Route::put('/accounts/{account}', 'AccountController@updateAccount')->name('updateAccount')
+    ->middleware('can:change-account,account');
+Route::get('/account/{account}', 'AccountController@updateAccountView')->name('updateAccountView')
+    ->middleware('can:change-account,account');
 
 //Movements
 Route::get('/movements/{account}/create', 'MovementController@viewCreateMovement')->name('viewCreateAccount');

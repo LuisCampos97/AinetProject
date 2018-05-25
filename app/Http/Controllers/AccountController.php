@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
+use App\Account;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
-use App\Http\Requests\MovementRequest;
 use App\User;
 use Auth;
-use Gate;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use App\Account;
 
 class AccountController extends Controller
 {
@@ -74,7 +70,7 @@ class AccountController extends Controller
     {
         $accounts = DB::table('accounts')->where('accounts.id', '=', $id)->delete();
 
-        return redirect()->action('HomeController@index');
+        return redirect()->route('usersAccount', Auth::user()->id);
     }
 
     public function closeAccount($id)
@@ -97,8 +93,8 @@ class AccountController extends Controller
     public function showMovementsForAccount($id)
     {
 
-        $account=Account::findOrFail($id);
-        
+        $account = Account::findOrFail($id);
+
         $pagetitle = 'List of Movements';
 
         $movements = DB::table('movements')
@@ -109,7 +105,7 @@ class AccountController extends Controller
             ->select('movements.*', 'movement_categories.name', 'documents.original_name')
             ->get();
 
-            //dd($movements);
+        //dd($movements);
 
         return view('movements.list', compact('movements', 'pagetitle', 'account'));
     }
@@ -125,7 +121,7 @@ class AccountController extends Controller
     public function storeAccount(AccountRequest $request)
     {
         $request->validated();
-        
+
         DB::table('accounts')->insert([
             ['owner_id' => Auth::user()->id,
                 'account_type_id' => $request->input('account_type_id'),
