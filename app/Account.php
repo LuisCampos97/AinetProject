@@ -9,7 +9,7 @@ class Account extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'owner_id', 'code', 'account_type_id', 'date', 'description', 'start_balance', 'created_at, last_movement_date', 'deleted_at'
+        'owner_id', 'code', 'account_type_id', 'date', 'description', 'start_balance', 'created_at, last_movement_date', 'deleted_at', 'current_balance'
     ];
 
     public $timestamps = false;

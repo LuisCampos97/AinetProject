@@ -15,7 +15,6 @@
                                     <select class="custom-select" id="type" name="account_type_id" class="form-control">
                                         <option disabled> -- Select an option -- </option>
                                         @foreach($accountType as $type)
-                                    
                                             <option value="{{ $type->id }}" {{ old('type', strval($account->account_type_id)) == $type->id ? "selected" : "" }}>{{ $type->name }}</option>
                                         @endforeach
                                     </select>

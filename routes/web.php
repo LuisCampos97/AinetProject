@@ -55,3 +55,5 @@ Route::get('/account/{account}', 'AccountController@updateAccountView')->name('u
 Route::get('/movements/{account}/create', 'MovementController@viewCreateMovement')->name('viewCreateAccount');
 Route::post('/movements/{account}/create', 'MovementController@storeMovement')->name('storeMovement');
 Route::delete('/account/{account}/{movement}', 'MovementController@deleteMovement')->name('deleteMovement');
+Route::get('/account/{account}/{movement}', 'MovementController@renderViewUpdateMovement')->name('viewUpdateMovement');
+Route::put('/account/{account}/{movement}', 'MovementController@updateMovement')->name('updateMovement');

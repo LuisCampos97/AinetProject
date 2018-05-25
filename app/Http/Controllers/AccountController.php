@@ -116,10 +116,14 @@ class AccountController extends Controller
 
     public function createAccount()
     {
+        if (Auth::check()) {        
+
         $accountType = DB::table('account_types')
             ->get();
 
-        return view('accounts.create', compact('accountType'));
+            return view('accounts.create', compact('accountType'));
+        }
+        return view('errors.user');
     }
 
     public function storeAccount(AccountRequest $request)
@@ -163,6 +167,23 @@ class AccountController extends Controller
         ]);
 
         $accountModel = Account::FindOrFail($id);
+
+        $somatorio=DB::table('movements')
+        ->join('accounts', 'accounts.id', '=', 'movements.account_id')
+        ->where('movements.account_id', '=', $id)
+        ->select(DB::raw('sum(movements.value) as somatorioMovimentos'))
+        ->get();
+
+        //$diferenceValueStartBalance = $request->start_balance-$accountModel->start_balance;
+
+        $accountModel->current_balance = $request->start_balance +$somatorio[0]->somatorioMovimentos;
+
+        //dd((string)intval($diferenceValueStartBalance));
+/*
+        DB::table('movements')->
+        where('movements.account_id', '=', $id)->
+        update(['movements.start_balance' => 'movements.start_balance'+(string)intval($diferenceValueStartBalance)]);
+*/
         $accountModel->fill($account);
         $accountModel->save();
 

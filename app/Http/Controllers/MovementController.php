@@ -16,12 +16,8 @@ use App\Account;
 
 class MovementController extends Controller
 {
-    public function viewCreateMovement($id)
+    public function viewCreateMovement(Account $account)
     {
-        $accounts = DB::table('accounts')
-            ->where('accounts.id', '=', $id)
-            ->get();
-
         $movementType=DB::table('movements')
             ->select('movements.type')
             ->distinct()
@@ -30,7 +26,7 @@ class MovementController extends Controller
         $categories=DB::table('movement_categories')
         ->get();
 
-        return view('movements.create', compact('accounts', 'movementType', 'categories'));
+        return view('movements.create', compact('account', 'movementType', 'categories'));
     }
 
     public function storeMovement(MovementRequest $request, $id)
@@ -73,14 +69,47 @@ class MovementController extends Controller
         ->select(DB::raw('sum(movements.value) as somatorioMovimentos'))
         ->get();
 
-        //dd($somatorio);
-
         $movements = DB::table('movements')->where('movements.id', '=', $movement_id)->delete();
-        
-        //DB::table('accounts')->where('id', '=', $account_id)->update(['accounts.current_balance' => $somatorio[0]->somatorioMovimentos + 'accounts.start_balance']);
+
+        DB::table('accounts')->where('accounts.id', '=', $account_id)->update(['accounts.current_balance' => $somatorio[0]->somatorioMovimentos + intval('accounts.start_balance')]);
 
         return redirect()->action('AccountController@showMovementsForAccount', $account_id);
     }
     
+    public function renderViewUpdateMovement(Account $account, Movement $movement)
+    {
+        $movementType=DB::table('movements')
+            ->select('movements.type')
+            ->distinct()
+            ->get();
+
+        $categories=DB::table('movement_categories')
+            ->get();
+
+        return view('movements.update', compact('account', 'movement', 'movementType', 'categories'));
+    }
+
+    public function updateMovement(MovementRequest $request, $movement_id, $account_id)
+    {
+        if ($request->has('cancel')) {
+            return redirect()->action('HomeController@home');
+        }
+
+        $movement = $request->validated([
+            'type' =>'required|min:1',
+            'category' =>'required|min:1',
+            'date' => 'required|date',
+            'value' => 'required',
+            'description' => 'nullable'
+        ]);
+
+        $movementModel = Movement::FindOrFail($movement_id);
+        //dd($movementModel);
+        $movementModel->fill($movement);
+        $movementModel->save();
+
+        return redirect()->route('usersAccount', Auth::user()->id)
+            ->with('msgglobal', 'Account edited successfully');
+    }
     
 }

@@ -15,7 +15,7 @@
 		<th> Account: {{ $account->id }} </th> <th>Current Balance:</th>
 
 		<th>
-		{{$movements[count($movements)-1]->end_balance}} €
+		{{$account->current_balance}} €
 
 		</th>
 	</tr>
@@ -28,9 +28,9 @@
 			<th>Date</th>
 			<th>Value</th>
 			<th>Type</th>
-			<th>Document</th>
 			<th>Start Balance</th>
             <th>End Balance</th>
+			<th>Document</th>
 			<th>Option</th>
 		</tr>
 		<br>
@@ -44,6 +44,9 @@
 				<td>{{ $movement->date }} </td>
 				<td><strong>{{ $movement->value }} €</strong></td>
 				<td>{{ $movement->type }}</td>
+				
+				<td>{{ $movement->start_balance}} €</td>
+				<td>{{ $movement->end_balance }} €</td>
 				<td>
 				@if(is_null($movement->original_name))
 				<form class="inline">
@@ -59,14 +62,17 @@
 				</form>
 				@endif
 				</td>
-				<td>{{ $movement->start_balance}} €</td>
-				<td>{{ $movement->end_balance }} €</td>
 				<td>
 				<form action="{{ action('MovementController@deleteMovement', [$account->id, $movement->id]) }}" method="post" class="inline">
 						@csrf
 						@method('delete')
 						<button type="submit" class="btn btn-xs btn-danger">
 							<i class="fas fa-trash"></i> Delete</button>
+				</form>
+
+				<form action="{{ action('MovementController@renderViewUpdateMovement', [$account->id, $movement->id]) }}" method="get" class="inline">
+						<button type="submit" class="btn btn-xs btn-info">
+							<i class="fas fa-list"></i> Update Movement</button>
 				</form>
 				</td>
         </tr>
