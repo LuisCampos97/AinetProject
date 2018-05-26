@@ -1,6 +1,6 @@
 @extends('layouts.app') 
 @section('content')
-@if(count($users))
+
 <div class="container">
 
 <h1>{{ $pagetitle }}</h1>
@@ -14,7 +14,7 @@
     </form>
 </div>
 
-
+@if(count($users))
     <table class="table table-bordered">
         <thead class="thead-dark">
             <tr>
@@ -52,4 +52,8 @@
     </table>
     {{$users ->links()}}
 </div>
-@endif @endsection('content')
+@else
+<p></p>
+<h1>Your search found no matches!</h1>
+@endif
+@endsection('content')

@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
-    public function profiles(Request $request)
+    public function profiles()
     {
-        $query = $request->search;
+        $query = request('name');
         $users = User::where('name', 'LIKE', '%' . $query . '%');
 
         $associatesOf = Auth::user()->associates_of();
