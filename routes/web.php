@@ -47,7 +47,8 @@ Route::patch('/account/{account}/open', 'AccountController@openAccount')->name('
     ->middleware('can:change-account,account');
 
 //Movements of Account
-Route::get('/movements/{account}', 'AccountController@showMovementsForAccount')->name('movementsForAccount');
+Route::get('/movements/{account}', 'AccountController@showMovementsForAccount')->name('movementsForAccount')
+    ->middleware('can:view-movements,account');
 
 //Create account
 Route::get('/account', 'AccountController@createAccount')->name('createAccount');
@@ -59,8 +60,10 @@ Route::get('/account/{account}', 'AccountController@updateAccountView')->name('u
     ->middleware('can:change-account,account');
 
 //Movements
-Route::get('/movements/{account}/create', 'MovementController@viewCreateMovement')->name('viewCreateAccount');
-Route::post('/movements/{account}/create', 'MovementController@storeMovement')->name('storeMovement');
+Route::get('/movements/{account}/create', 'MovementController@viewCreateMovement')->name('viewCreateAccount')
+    ->middleware('can:change-movement,account');
+Route::post('/movements/{account}/create', 'MovementController@storeMovement')->name('storeMovement')
+    ->middleware('can:change-movement,account');
 Route::delete('/account/{account}/{movement}', 'MovementController@deleteMovement')->name('deleteMovement');
 Route::get('/account/{account}/{movement}', 'MovementController@renderViewUpdateMovement')->name('viewUpdateMovement');
 Route::put('/account/{account}/{movement}', 'MovementController@updateMovement')->name('updateMovement');

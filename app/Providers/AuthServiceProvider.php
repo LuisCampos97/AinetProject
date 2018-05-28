@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Account;
+use App\Movement;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -64,6 +65,39 @@ class AuthServiceProvider extends ServiceProvider
                 ->get();
 
             return $users->where('id', $associate)->isNotEmpty();
+        });
+
+        /**
+         * Gate to define that only the account owner can change the movement.
+         */
+        Gate::define('change-movement', function ($user, $movement_id) {
+            $movement = Movement::findOrFail($movement_id);
+            $account = Account::findOrFail($movement->account_id);
+
+            return $user->id == $account->owner_id;
+        });
+
+        /**
+         * Gate to define that only me and my associates
+         * can have access to my movements just to read.
+         */
+        Gate::define('view-movements', function($user, $account_id) {
+            $account = Account::findOrFail($account_id);
+
+            $users = DB::table('users')
+                ->join('associate_members', 'users.id', '=', 'main_user_id')
+                ->where('associate_members.associated_user_id', $user->id)
+                ->orWhere('users.id', '=', $user->id)
+                ->get();
+
+            /*foreach(Account::all() as $a) {
+                if($users->where('id', $a->owner_id)->isNotEmpty()) {
+                    print($a->id .', ');
+                }
+            }*/
+
+            return $users->where('id', $account->owner_id)->isNotEmpty();   
+
         });
     }
 }
