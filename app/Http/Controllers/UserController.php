@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\User;
-use Auth;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Account;
 
 class UserController extends Controller
 {
@@ -34,7 +33,7 @@ class UserController extends Controller
             array('normal', 0),
             array('blocked', 1),
             array('unblocked', 0),
-            array( request('name'), request('name'))
+            array(request('name'), request('name')),
         );
 
         if (Gate::allows('admin', auth()->user())) {

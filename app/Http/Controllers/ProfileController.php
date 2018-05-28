@@ -3,14 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AccountRequest;
 use App\User;
 use Auth;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use App\Account;
 
 class ProfileController extends Controller
 {
@@ -19,15 +16,9 @@ class ProfileController extends Controller
         $query = $request->search;
         $users = User::where('name', 'LIKE', '%' . $query . '%');
 
-        $associatesOf = DB::table('users')
-            ->join('associate_members', 'users.id', '=', 'main_user_id')
-            ->where('associate_members.associated_user_id', Auth::user()->id)
-            ->get();
+        $associatesOf = Auth::user()->associates_of();
 
-        $associates = DB::table('users')
-            ->join('associate_members', 'associated_user_id', '=', 'users.id')
-            ->where('associate_members.main_user_id', Auth::user()->id)
-            ->get();
+        $associates = Auth::user()->my_associates();
 
         $pagetitle = 'List of profiles';
 
@@ -61,10 +52,7 @@ class ProfileController extends Controller
 
     public function associateOf()
     {
-        $users = DB::table('users')
-            ->join('associate_members', 'users.id', '=', 'main_user_id')
-            ->where('associate_members.associated_user_id', Auth::user()->id)
-            ->get();
+        $users = Auth::user()->associates_of();
 
         $pagetitle = 'List of Associated-of profiles';
 
@@ -76,10 +64,7 @@ class ProfileController extends Controller
 
     public function associates()
     {
-        $users = DB::table('users')
-            ->join('associate_members', 'associated_user_id', '=', 'users.id')
-            ->where('associate_members.main_user_id', Auth::user()->id)
-            ->get();
+        $users = Auth::user()->my_associates();
 
         $pagetitle = 'List of associates';
 
