@@ -40,6 +40,7 @@
 
 
 				<td>
+					@can('change-account', $account)
 					<form action="{{ action('AccountController@updateAccountView', $account->id) }}" method="get" class="inline">
 						<button type="submit" class="btn btn-xs btn-primary">
 							<i class="fas fa-edit"></i> Update Account</button>
@@ -66,6 +67,7 @@
 							<i class="fas fa-lock-open"></i> Open Account</button>
 					</form>
 					@endif
+					@endcan
 
 					<form action="{{ action('AccountController@showMovementsForAccount', $account->id) }}" method="get" class="inline">
 						<button type="submit" class="btn btn-xs btn-success"><i class="fas fa-money-bill-alt"></i>  View Account Movements</button>
