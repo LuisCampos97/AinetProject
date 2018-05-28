@@ -10,14 +10,11 @@
                 <div class="card-header">{{ __('Update') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('update') }}">
-                        @csrf
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ Auth::user()->name }}" required autofocus>
-
                                 @if ($errors->has('name'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('name') }}</strong>
@@ -43,7 +40,12 @@
                             <label for="phone" class="col-md-4 col-form-label text-md-right">{{ __('Phone Number') }}</label>
 
                             <div class="col-md-6">
-                                <input id="phone" type="text" class="form-control" name="phone" value ="{{ Auth::user()->phone }}" optional>
+                                <input id="phone" type="text" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" name="phone" value ="{{ Auth::user()->phone }}" optional>
+                                @if ($errors->has('phone'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('phone') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
 
@@ -51,7 +53,12 @@
                             <label for="profile_photo" class="col-md-4 col-form-label text-md-right">{{ __('Profile Photo') }}</label>
 
                             <div class="col-md-6">
-                                <input id="profile_photo" type="file" class="form-control" name="profile_photo" accept="image/*" optional>
+                                <input id="profile_photo" type="file" class="form-control{{ $errors->has('profile_photo') ? ' is-invalid' : '' }}" name="profile_photo" accept="image/*" optional>
+                                @if ($errors->has('profile_photo'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('profile_photo') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
 
@@ -62,7 +69,6 @@
                                 </button>
                             </div>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>

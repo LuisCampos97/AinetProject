@@ -25,12 +25,13 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|regex:/^[\pL\s]+$/u',
-            'email' => 'required|email|unique:users,email,' . Auth::user()->id,
-            'phone' => 'nullable|min:3|max:12',
-            'profile_photo' => 'mimes:jpeg,png,jpg|max:1999',
+            'name' => 'required|string|max:255|regex:/^[\pL\s]+$/u',
+            'email' => 'required|email|max:255|unique:users,email,'. Auth::user()->id,
+            'phone' => 'nullable|regex:/^(\+?)([0-9] ?){9,20}$/',
+            'profile_photo' => 'nullable|mimes:jpeg,png,jpg|max:1024',
             [ // Custom Messages
-                'name.regex' => 'Name must only contain letters and spaces.',
+            'name.regex' => 'Name must only contain letters and spaces.',
+            'phone.regex' => 'Format: (+351) xxx xxx xxx',
             ]
         ];
     }

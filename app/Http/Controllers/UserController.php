@@ -133,24 +133,26 @@ class UserController extends Controller
         if (Auth::check()) {
             return view('users.edit', compact('pagetitle, user'));
         }
-        return view('errors.user');
+        return response('Unauthorized action.', 403);
 
     }
 
     public function update(UserRequest $request) //,$id
-
     {
-        if ($request->has('cancel')) {
-            return redirect()->action('UserController@index');
+        if(Auth::check()){
+            if ($request->has('cancel')) {
+                return redirect()->action('UserController@index');
+            }
+    
+            $user = $request->validated();
+    
+            $userModel = User::findOrFail(Auth::user()->id);
+            $userModel->fill($user);
+            $userModel->save();
+    
+            return redirect()->action('HomeController@index')->with(['msgglobal' => 'User Edited!']);
         }
-
-        $user = $request->validated();
-
-        $userModel = User::findOrFail(Auth::user()->id);
-        $userModel->fill($user);
-        $userModel->save();
-
-        return redirect()->action('HomeController@index')->with(['msgglobal' => 'User Edited!']);
+        return response('Unauthorized action.', 403);
     }
 
     public function editPassword()
