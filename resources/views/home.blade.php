@@ -42,7 +42,9 @@
                     <br>
 
                     @foreach ($accountsForUser as $account)
+                    @if($total[0]->somatorio != 0)
                         <strong style="font-size: 20px">Account ID: {{ $account->id }} = {{ round($account->current_balance * 100/$total[0]->somatorio, 2)}} % <br></strong>
+                    @endif
                     @endforeach
                 </div> <br>
                    

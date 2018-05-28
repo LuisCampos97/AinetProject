@@ -69,7 +69,7 @@
                                 <label for="value" class="col-md-4 col-form-label text-md-right">{{ __('Value') }}</label>
                                 <a class="signal" style="font-size:30px"></a>
                                 <div class="col-md-6">
-                                    <input id="start_balance" type="number" class="form-control{{ $errors->has('value') ? ' is-invalid' : '' }}" name="value">
+                                    <input id="start_balance" type="text" class="form-control{{ $errors->has('value') ? ' is-invalid' : '' }}" name="value">
                                     @if ($errors->has('value'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('value') }}</strong>

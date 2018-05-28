@@ -9,6 +9,7 @@ use App\User;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Movement;
 
 class AccountController extends Controller
 {
@@ -103,6 +104,8 @@ class AccountController extends Controller
             ->leftJoin('documents', 'documents.id', '=', 'movements.document_id')
             ->where('movements.account_id', '=', $id)
             ->select('movements.*', 'movement_categories.name', 'documents.original_name')
+            ->orderBy('movements.date', 'desc')
+            ->orderBy('movements.id', 'desc')
             ->get();
 
         //dd($movements);
@@ -170,16 +173,26 @@ class AccountController extends Controller
         ->select(DB::raw('sum(movements.value) as somatorioMovimentos'))
         ->get();
 
-        //$diferenceValueStartBalance = $request->start_balance-$accountModel->start_balance;
+        $diferenceValueStartBalance = $request->start_balance- $accountModel->start_balance;
 
         $accountModel->current_balance = $request->start_balance +$somatorio[0]->somatorioMovimentos;
 
-        //dd((string)intval($diferenceValueStartBalance));
-/*
-        DB::table('movements')->
+        $movements = DB::table('movements')->
         where('movements.account_id', '=', $id)->
-        update(['movements.start_balance' => 'movements.start_balance'+(string)intval($diferenceValueStartBalance)]);
-*/
+        select('movements.*')->
+        orderBy('movements.date', 'asc')->
+        get();
+
+        foreach($movements as $movement){
+            $mov = Movement::findOrFail($movement->id);
+
+            $start = DB::table('movements')->
+            where('movements.account_id', '=', $id)->
+            update(['start_balance' => $diferenceValueStartBalance + $mov->start_balance, 
+                    'end_balance' => $mov->end_balance + $diferenceValueStartBalance]);
+        }
+        dd($mov->end_balance + $diferenceValueStartBalance);
+
         $accountModel->fill($account);
         $accountModel->save();
 

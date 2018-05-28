@@ -40,38 +40,44 @@
 
 
 				<td>
-					@can('change-account', $account)
-					<form action="{{ action('AccountController@updateAccountView', $account->id) }}" method="get" class="inline">
-						<button type="submit" class="btn btn-xs btn-primary">
-							<i class="fas fa-edit"></i> Update Account</button>
-					</form>
-					
-					@if(is_null($account->last_movement_date))
-					<form action="{{ action('AccountController@destroy', $account->id) }}" method="post" class="inline">
-						@csrf @method('delete')
-						<button type="submit" class="btn btn-xs btn-danger">
-							<i class="fas fa-trash"></i> Delete</button>
-					</form>
-					@endif 
+					@can('change-account', $account) 
 
 					@if(is_null($account->deleted_at))
-					<form action="{{ action('AccountController@closeAccount', $account->id) }}" method="post" class="inline">
-						@csrf @method('patch')
-						<button type="submit" class="btn btn-xs btn-warning">
-							<i class="fas fa-lock"></i> Close Account</button>
-					</form>
+
+						@if(is_null($account->last_movement_date))
+						<form action="{{ action('AccountController@destroy', $account->id) }}" method="post" class="inline">
+							@csrf @method('delete')
+							<button type="submit" class="btn btn-xs btn-danger">
+								<i class="fas fa-trash"></i> Delete</button>
+						</form>
+						@endif
+
+						<form action="{{ action('AccountController@updateAccountView', $account->id) }}" method="get" class="inline">
+							<button type="submit" class="btn btn-xs btn-primary">
+								<i class="fas fa-edit"></i> Update Account</button>
+						</form>
+
+						<form action="{{ action('AccountController@closeAccount', $account->id) }}" method="post" class="inline">
+							@csrf 
+							@method('patch')
+							<button type="submit" class="btn btn-xs btn-warning">
+								<i class="fas fa-lock"></i> Close Account</button>
+						</form>
+
+						<form action="{{ action('AccountController@showMovementsForAccount', $account->id) }}" method="get" class="inline">
+							<button type="submit" class="btn btn-xs btn-success"><i class="fas fa-money-bill-alt"></i>  View Account Movements</button>
+						</form>
+
 					@else
-					<form action="{{ action('AccountController@openAccount', $account->id) }}" method="post" class="inline">
-						@csrf @method('patch')
-						<button type="submit" class="btn btn-xs btn-info">
-							<i class="fas fa-lock-open"></i> Open Account</button>
-					</form>
+						<form action="{{ action('AccountController@openAccount', $account->id) }}" method="post" class="inline">
+							@csrf @method('patch')
+							<button type="submit" class="btn btn-xs btn-info">
+								<i class="fas fa-lock-open"></i> Open Account</button>
+						</form>
 					@endif
 					@endcan
 
-					<form action="{{ action('AccountController@showMovementsForAccount', $account->id) }}" method="get" class="inline">
-						<button type="submit" class="btn btn-xs btn-success"><i class="fas fa-money-bill-alt"></i>  View Account Movements</button>
-					</form>
+					
 				</td>
 			</tr>
 			@endforeach

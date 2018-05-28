@@ -59,7 +59,7 @@ class AuthServiceProvider extends ServiceProvider
          */
         Gate::define('associate', function ($user, $associate) {
             $users = DB::table('users')
-                ->join('associate_members', 'users.id', '=', 'main_user_id')
+                ->join('associate_members', 'users.id', '=', 'associate_members.main_user_id')
                 ->where('associate_members.associated_user_id', $user->id)
                 ->orWhere('users.id', '=', $user->id)
                 ->get();
