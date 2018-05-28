@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function profiles()
     {
         $query = request('name');

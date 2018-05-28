@@ -5,14 +5,19 @@ namespace App\Http\Controllers;
 use App\Account;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MovementRequest;
-use Illuminate\Support\Facades\DB;
 use App\Movement;
+use Illuminate\Support\Facades\DB;
 
 class MovementController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function viewCreateMovement(Account $account)
     {
-        $movementType=DB::table('movements')
+        $movementType = DB::table('movements')
             ->select('movements.type')
             ->distinct()
             ->get();
@@ -68,15 +73,15 @@ class MovementController extends Controller
 
         return redirect()->action('AccountController@showMovementsForAccount', $account_id);
     }
-    
+
     public function renderViewUpdateMovement(Account $account, Movement $movement)
     {
-        $movementType=DB::table('movements')
+        $movementType = DB::table('movements')
             ->select('movements.type')
             ->distinct()
             ->get();
 
-        $categories=DB::table('movement_categories')
+        $categories = DB::table('movement_categories')
             ->get();
 
         return view('movements.update', compact('account', 'movement', 'movementType', 'categories'));
@@ -89,11 +94,11 @@ class MovementController extends Controller
         }
 
         $movement = $request->validated([
-            'type' =>'required|min:1',
-            'category' =>'required|min:1',
+            'type' => 'required|min:1',
+            'category' => 'required|min:1',
             'date' => 'required|date',
             'value' => 'required',
-            'description' => 'nullable'
+            'description' => 'nullable',
         ]);
 
         $movementModel = Movement::FindOrFail($movement_id);
@@ -104,5 +109,5 @@ class MovementController extends Controller
         return redirect()->route('usersAccount', Auth::user()->id)
             ->with('msgglobal', 'Account edited successfully');
     }
-    
+
 }

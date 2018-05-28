@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     //Users
     public function index()
     {
@@ -54,11 +59,15 @@ class UserController extends Controller
 
             return view('users.list', compact('users', 'pagetitle'));
         }
-        return view('errors.admin');
+        return response('Unauthorized action.', 403);
     }
 
     public function block($id)
     {
+        if (Auth::user()->id == $id) {
+            return response('Unauthorized action.', 403);
+        }
+
         if (Gate::allows('admin', auth()->user())) {
             DB::table('users')
                 ->where('users.id', '=', $id)
@@ -66,11 +75,15 @@ class UserController extends Controller
 
             return redirect()->action('UserController@index');
         }
-        return view('errors.admin');
+        return response('Unauthorized action.', 403);
     }
 
     public function unblock($id)
     {
+        if (Auth::user()->id == $id) {
+            return response('Unauthorized action.', 403);
+        }
+
         if (Gate::allows('admin', auth()->user())) {
             DB::table('users')
                 ->where('users.id', '=', $id)
@@ -78,11 +91,15 @@ class UserController extends Controller
 
             return redirect()->action('UserController@index');
         }
-        return view('errors.admin');
+        return response('Unauthorized action.', 403);
     }
 
     public function promote($id)
     {
+        if (Auth::user()->id == $id) {
+            return response('Unauthorized action.', 403);
+        }
+
         if (Gate::allows('admin', auth()->user())) {
             DB::table('users')
                 ->where('users.id', '=', $id)
@@ -90,11 +107,15 @@ class UserController extends Controller
 
             return redirect()->action('UserController@index');
         }
-        return view('errors.admin');
+        return response('Unauthorized action.', 403);
     }
 
     public function demote($id)
     {
+        if (Auth::user()->id == $id) {
+            return response('Unauthorized action.', 403);
+        }
+
         if (Gate::allows('admin', auth()->user())) {
             DB::table('users')
                 ->where('users.id', '=', $id)
@@ -102,7 +123,7 @@ class UserController extends Controller
 
             return redirect()->action('UserController@index');
         }
-        return view('errors.admin');
+        return response('Unauthorized action.', 403);
     }
 
     public function edit(User $user)
