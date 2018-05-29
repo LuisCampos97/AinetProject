@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\PasswordRequest;
+use Illuminate\Routing\Redirector;
+
 
 class UserController extends Controller
 {
@@ -170,28 +173,29 @@ class UserController extends Controller
         if (Auth::check()) {
             return view('users.edit_password', compact('pagetitle'));
         }
-        return view('errors.user');
+        return response('Page not found.', 404);
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(PasswordRequest $request)
     {
         if ($request->has('cancel')) {
             return redirect()->action('UserController@index');
         }
 
-        $user = $request->validate([
-            'old_password' => 'required|string|min:3|regex:/^[\pL\s]+$/u',
-            'password' => 'required|string|min:3|confirmed|regex:/^[\pL\s]+$/u',
-            'password_confirmation' => 'required|string|min:3|regex:/^[\pL\s]+$/u'
-        ]);
+        $userModel = User::findOrFail(Auth::user()->id);
+        $oldPassword = $userModel->password;
+        $oldPasswordForm = Hash::make($request->old_password);
 
-        $user['password'] = Hash::make($request->password);
-
-        $userModel = User::FindOrFail(Auth::user()->id);
-        $userModel->fill($user);
-        $userModel->save();
-
-        return redirect()->action('HomeController@index', Auth::user())->with(['msgglobal' => 'Password Edited!']);
-
+        if(Hash::check($oldPassword, $oldPasswordForm)){
+            $request->validated()->addMessage("Old password doesnt match the one in form");
+            return redirect()->action('UserController@updatePassword');
+        }
+            $user = $request->validated();
+            $user['password'] = Hash::make($request->password); 
+    
+            $userModel->fill($user);
+            $userModel->save();
+    
+            return redirect()->action('HomeController@index', Auth::user())->with(['msgglobal' => 'Password Edited!']);
     }
 }
