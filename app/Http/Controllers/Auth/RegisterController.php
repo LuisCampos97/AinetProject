@@ -52,8 +52,8 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255|regex:/^[\pL\s]+$/u',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:3|confirmed',
-            'phone' => 'nullable|regex:/[0-9]{9}/',
-            'profile' => 'nullable|mimes:jpeg,png,jpg|max:1024'
+            'phone' => 'nullable|regex:/^(\+?)([0-9] ?){9,20}$/',
+            'profile_photo' => 'nullable|mimes:jpeg,png,jpg|max:1024'
         ]);
     }
 
@@ -69,7 +69,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'phone'=> $data['phone']
+            'phone'=> $data['phone'],
             //'profile_photo'=> $data['profile_photo']
         ]);
 

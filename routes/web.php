@@ -43,7 +43,7 @@ Route::delete('/account/{account}', 'AccountController@destroy')->name('deleteAc
     ->middleware('can:change-account,account');
 Route::patch('/account/{account}/close', 'AccountController@closeAccount')->name('closeAccount')
     ->middleware('can:change-account,account');
-Route::patch('/account/{account}/open', 'AccountController@openAccount')->name('openAccount')
+Route::patch('/account/{account}/reopen', 'AccountController@openAccount')->name('openAccount')
     ->middleware('can:change-account,account');
  
 //Movements of Account
