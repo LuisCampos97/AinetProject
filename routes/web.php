@@ -8,7 +8,8 @@ Route::get('/', 'WelcomeController@home');
 Route::get('/users', 'UserController@index')->name('users');
 Auth::routes();
  
-Route::get('/dashboard/{user}', 'HomeController@index')->name('home');
+Route::get('/dashboard/{user}', 'HomeController@index')->name('home')
+    ->middleware('can:owner,user');
 
 //Edit
 Route::get('/me/profile/edit', 'UserController@edit')->name('edit');

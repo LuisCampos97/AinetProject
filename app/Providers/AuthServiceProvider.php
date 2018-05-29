@@ -103,5 +103,10 @@ class AuthServiceProvider extends ServiceProvider
             return $users->where('id', $account->owner_id)->isNotEmpty();   
 
         });
+
+        Gate::define('owner', function($user1, $user2) {
+            User::findOrFail($user2);
+            return $user1->id == $user2;
+        });
     }
 }

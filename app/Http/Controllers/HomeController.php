@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\User;
 
 class HomeController extends Controller
 {
@@ -23,24 +23,28 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(User $user)
+    public function index($id)
     {
-        if (Auth::check()) {
-            $total = DB::table('accounts')
-                ->join('users', 'users.id', '=', 'accounts.owner_id')
-                ->where('owner_id', '=', $user)
-                ->select(DB::raw('SUM(accounts.current_balance) as somatorio'))
-                ->get();
+        $user = User::findOrFail($id);
+        
+        $accounts = DB::table('accounts')
+            ->join('users', 'users.id', '=', 'accounts.owner_id')
+            ->where('owner_id', '=', $user->id)
+            ->get();
 
-            $accountsForUser = DB::table('accounts')
-                ->join('users', 'accounts.owner_id', '=', 'users.id')
-                ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
-                ->where('users.id', '=', $user)
-                ->select('accounts.*', 'account_types.name')
-                ->get();
+        $summary = $accounts->pluck('current_balance');
+        $total = $summary->sum();
+        $percentage = $accounts->transform(function ($account) use ($total) {
+            return number_format($account->current_balance * 100 / $total, 2);
+        });
 
-            return view('home',['user'=>Auth::user()], compact('total', 'accountsForUser'))->with('msgglobal', 'Welcome');
-        }
-        return response('Unauthorized action.', 404);
+        $accountsForUser = DB::table('accounts')
+            ->join('users', 'accounts.owner_id', '=', 'users.id')
+            ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
+            ->where('users.id', '=', $id)
+            ->select('accounts.*', 'account_types.name')
+            ->get();
+
+        return view('home', ['user' => Auth::user()], compact('total', 'accountsForUser', 'summary', 'percentage'))->with('msgglobal', 'Welcome');
     }
 }
