@@ -34,13 +34,18 @@
                 </td>
                 <td>{{ $user->name }} </td>
                 
-                @if ($associates->where('id', $user->id)->isNotEmpty())
+                @if ($associates->where('id', $user->id)->isNotEmpty() && $associatesOf->where('id', $user->id)->isNotEmpty())
                 <td>
-                    <strong>Associated</strong>
+                    <span>Associate</span><br>
+                    <span>Associate-of</span>
                 </td>
                 @elseif ($associatesOf->where('id', $user->id)->isNotEmpty())
                 <td>
-                    <strong>Associated-of</strong>
+                    <span>Associate-of</span>
+                </td>
+                @elseif ($associates->where('id', $user->id)->isNotEmpty())
+                <td>
+                    <span>Associate</span>
                 </td>
                 @else
                 <td>Not associated</td>
