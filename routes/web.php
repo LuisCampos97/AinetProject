@@ -8,8 +8,8 @@ Route::get('/', 'WelcomeController@home');
 Route::get('/users', 'UserController@index')->name('users');
 Auth::routes();
  
-Route::get('/me/dashboard', 'HomeController@index')->name('home');
- 
+Route::get('/dashboard/{user}', 'HomeController@index')->name('home');
+
 //Edit
 Route::get('/me/profile/edit', 'UserController@edit')->name('edit');
 Route::put('/me/profile', 'UserController@update')->name('update');

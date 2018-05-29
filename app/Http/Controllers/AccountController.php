@@ -160,7 +160,7 @@ class AccountController extends Controller
     public function updateAccount(Request $request, $id)
     {
         if ($request->has('cancel')) {
-            return redirect()->action('HomeController@home');
+            return redirect()->action('HomeController@home', Auth::user());
         }
 
         $account = $request->validate([

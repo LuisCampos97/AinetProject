@@ -39,7 +39,7 @@
                     @auth
                     <ul class="navbar-nav mr-auto">
                         <li>
-                            <a class="nav-link" href="{{ route('home') }}">{{ __('Home') }}</a>
+                            <a class="nav-link" href="{{ route('home', Auth::user()->id) }}">{{ __('Home') }}</a>
                         </li>
                         <li>
                             <a class="nav-link" href="{{ route('profiles') }}">{{ __('Profiles List') }}</a>

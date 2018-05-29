@@ -150,7 +150,7 @@ class UserController extends Controller
             $userModel->fill($user);
             $userModel->save();
     
-            return redirect()->action('HomeController@index')->with(['msgglobal' => 'User Edited!']);
+            return redirect()->action('HomeController@index', Auth::user()->id)->with(['msgglobal' => 'User Edited!']);
         }
         return response('Unauthorized action.', 403);
     }
@@ -181,7 +181,7 @@ class UserController extends Controller
         $userModel->fill($user);
         $userModel->save();
 
-        return redirect()->action('HomeController@index')->with(['msgglobal' => 'Password Edited!']);
+        return redirect()->action('HomeController@index', Auth::user()->id)->with(['msgglobal' => 'Password Edited!']);
 
     }
 }
