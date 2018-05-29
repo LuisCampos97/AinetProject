@@ -76,18 +76,27 @@ class AccountController extends Controller
 
     public function destroy($id)
     {
-        $accounts = DB::table('accounts')->where('accounts.id', '=', $id)->delete();
+        $account = Account::findOrFail($id);
 
-        return redirect()->route('usersAccount', Auth::user()->id);
+        $movements = DB::table('movements')
+            ->join('accounts', 'accounts.id', '=', 'movements.account_id')
+            ->where('account_id', '=', $id)
+            ->get();
+
+        if (is_null($account->last_movement_date) && count($movements) == 0) {
+            $account->forceDelete();
+
+            return redirect()->route('usersAccount', Auth::user()->id);
+        }
     }
 
     public function closeAccount($id)
     {
         $account = Account::findOrFail($id);
-        if($account->last_movement_date != null){
-            $account->delete();
-            return redirect()->route('usersAccount', Auth::user()->id);
-        }
+
+        $account->delete();
+
+        return redirect()->route('usersAccount', Auth::user()->id);
     }
 
     public function openAccount($id)
