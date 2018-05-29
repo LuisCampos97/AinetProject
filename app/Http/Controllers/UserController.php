@@ -180,8 +180,9 @@ class UserController extends Controller
         }
 
         $user = $request->validate([
-            'old_password' => 'required|string|min:6',
-            'password' => 'required|min:3|confirmed',
+            'old_password' => 'required|string|min:3|regex:/^[\pL\s]+$/u',
+            'password' => 'required|string|min:3|confirmed|regex:/^[\pL\s]+$/u',
+            'password_confirmation' => 'required|string|min:3|regex:/^[\pL\s]+$/u'
         ]);
 
         $user['password'] = Hash::make($request->password);
@@ -190,7 +191,7 @@ class UserController extends Controller
         $userModel->fill($user);
         $userModel->save();
 
-        return redirect()->action('HomeController@index', Auth::user()->id)->with(['msgglobal' => 'Password Edited!']);
+        return redirect()->action('HomeController@index', Auth::user())->with(['msgglobal' => 'Password Edited!']);
 
     }
 }

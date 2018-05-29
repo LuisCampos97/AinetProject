@@ -102,7 +102,6 @@ class ProfileController extends Controller
             ->get();
 
         return view('associate.add', compact('users', 'associates'));
-
     }
 
     public function storeAssociate(Request $request)

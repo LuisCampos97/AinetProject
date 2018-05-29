@@ -90,7 +90,7 @@ class MovementController extends Controller
     public function updateMovement(MovementRequest $request, $movement_id, $account_id)
     {
         if ($request->has('cancel')) {
-            return redirect()->action('HomeController@home', Auth::user()->id);
+            return redirect()->action('HomeController@home', Auth::user());
         }
 
         $movement = $request->validated([

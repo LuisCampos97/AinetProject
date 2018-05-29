@@ -23,7 +23,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($user)
+    public function index(User $user)
     {
         if (Auth::check()) {
             $total = DB::table('accounts')
@@ -39,7 +39,7 @@ class HomeController extends Controller
                 ->select('accounts.*', 'account_types.name')
                 ->get();
 
-            return view('home',['user'=>Auth::user()->id], compact('total', 'accountsForUser'))->with('msgglobal', 'Welcome');
+            return view('home',['user'=>Auth::user()], compact('total', 'accountsForUser'))->with('msgglobal', 'Welcome');
         }
         return response('Unauthorized action.', 404);
     }
