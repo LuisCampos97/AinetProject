@@ -82,6 +82,8 @@ class ProfileController extends Controller
 
     public function deleteAssociate($id)
     {
+        $user = User::findOrFail($id);
+
         DB::table('associate_members')
             ->where('main_user_id', '=', Auth::user()->id)
             ->where('associated_user_id', '=', $id)

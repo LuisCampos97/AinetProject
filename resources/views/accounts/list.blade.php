@@ -4,6 +4,7 @@
 	<table class="table table-bordered">
 		<thead class="thead-dark">
 			<tr>
+				<th>Code</th>
 				<th>Account type</th>
 				<th>Date</th>
 				<th>Description</th>
@@ -30,6 +31,7 @@
 
 			@foreach($accounts as $account)
 			<tr>
+				<td>{{ $account->code }}</td>
 				<td>{{ $account->name }}</td>
 				<td>{{ $account->date }} </td>
 				<td>{{ $account->description }} </td>

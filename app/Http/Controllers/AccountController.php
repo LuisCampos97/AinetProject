@@ -20,6 +20,8 @@ class AccountController extends Controller
 
     public function accountsForUser($id)
     {
+        User::findOrFail($id);
+
         $accounts = DB::table('accounts')
             ->join('users', 'accounts.owner_id', '=', 'users.id')
             ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
@@ -81,10 +83,11 @@ class AccountController extends Controller
 
     public function closeAccount($id)
     {
-        $account = Account::find($id);
-        $account->delete();
-
-        return redirect()->route('usersAccount', Auth::user()->id);
+        $account = Account::findOrFail($id);
+        if($account->last_movement_date != null){
+            $account->delete();
+            return redirect()->route('usersAccount', Auth::user()->id);
+        }
     }
 
     public function openAccount($id)
