@@ -64,13 +64,15 @@ class UserController extends Controller
 
     public function block($id)
     {
+        //If fails, return a 404 HTTP Response
+        $user = User::findOrFail($id);
+
         if (Auth::user()->id == $id) {
             return response('Unauthorized action.', 403);
         }
 
         if (Gate::allows('admin', auth()->user())) {
-            DB::table('users')
-                ->where('users.id', '=', $id)
+            $user->where('users.id', '=', $id)
                 ->update(['blocked' => 1]);
 
             return redirect()->action('UserController@index');
@@ -80,13 +82,15 @@ class UserController extends Controller
 
     public function unblock($id)
     {
+        //If fails, return a 404 HTTP Response
+        $user = User::findOrFail($id);
+
         if (Auth::user()->id == $id) {
             return response('Unauthorized action.', 403);
         }
 
         if (Gate::allows('admin', auth()->user())) {
-            DB::table('users')
-                ->where('users.id', '=', $id)
+            $user->where('users.id', '=', $id)
                 ->update(['blocked' => 0]);
 
             return redirect()->action('UserController@index');
@@ -96,13 +100,15 @@ class UserController extends Controller
 
     public function promote($id)
     {
+        //If fails, return a 404 HTTP Response
+        $user = User::findOrFail($id);
+        
         if (Auth::user()->id == $id) {
             return response('Unauthorized action.', 403);
         }
 
         if (Gate::allows('admin', auth()->user())) {
-            DB::table('users')
-                ->where('users.id', '=', $id)
+            $user->where('users.id', '=', $id)
                 ->update(['admin' => 1]);
 
             return redirect()->action('UserController@index');
@@ -112,13 +118,15 @@ class UserController extends Controller
 
     public function demote($id)
     {
+        //If fails, return a 404 HTTP Response
+        $user = User::findOrFail($id);
+
         if (Auth::user()->id == $id) {
             return response('Unauthorized action.', 403);
         }
 
         if (Gate::allows('admin', auth()->user())) {
-            DB::table('users')
-                ->where('users.id', '=', $id)
+            $user->where('users.id', '=', $id)
                 ->update(['admin' => 0]);
 
             return redirect()->action('UserController@index');
@@ -138,18 +146,19 @@ class UserController extends Controller
     }
 
     public function update(UserRequest $request) //,$id
+
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             if ($request->has('cancel')) {
                 return redirect()->action('UserController@index');
             }
-    
+
             $user = $request->validated();
-    
+
             $userModel = User::findOrFail(Auth::user()->id);
             $userModel->fill($user);
             $userModel->save();
-    
+
             return redirect()->action('HomeController@index')->with(['msgglobal' => 'User Edited!']);
         }
         return response('Unauthorized action.', 403);
