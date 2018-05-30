@@ -29,7 +29,7 @@ class AccountRequest extends FormRequest
             'account_type_id' => 'required',
             'code' => 'required|string|unique:accounts,code,'.Auth::user()->id,
             //Rule::unique('accounts')->ignore(Auth::user()->id),
-            'date' => 'required|date', //|date_format:"d-m-Y H:i:s"
+            'date' => 'nullable|date', //|date_format:"d-m-Y H:i:s"
             'start_balance' => 'required|numeric',
             'description' => 'nullable|string',
         ];

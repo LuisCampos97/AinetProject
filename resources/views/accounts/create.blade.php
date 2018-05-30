@@ -43,7 +43,7 @@
                                 <label for="date" class="col-md-4 col-form-label text-md-right">{{ __('Date') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="date" type="date" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" name="date" required>
+                                    <input id="date" type="date" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" name="date" optional>
                                     @if ($errors->has('date'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('date') }}</strong>
