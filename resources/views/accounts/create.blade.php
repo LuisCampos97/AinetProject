@@ -55,7 +55,7 @@
                                 <label for="start_balance" class="col-md-4 col-form-label text-md-right">{{ __('Start Balance') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="start_balance" type="text" class="form-control{{ $errors->has('start_balance') ? ' is-invalid' : '' }}" name="start_balance">
+                                    <input id="start_balance" type="text" class="form-control{{ $errors->has('start_balance') ? ' is-invalid' : '' }}" name="start_balance" required>
                                     @if ($errors->has('start_balance'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('start_balance') }}</strong>

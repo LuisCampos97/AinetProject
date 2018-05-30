@@ -48,6 +48,10 @@ class AuthServiceProvider extends ServiceProvider
                     ->where('id', '=', $account_id)
                     ->first();
 
+                if(is_null($account)) {
+                    return response('User not found', 404);
+                }
+
                 return $user->id == $account->owner_id;
             }
 
