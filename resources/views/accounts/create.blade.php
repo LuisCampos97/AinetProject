@@ -6,13 +6,12 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">{{ __('Create Account') }}</div>
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('createAccount') }}">
+                        <div class="card-body">
                             @csrf
                             <div class="form-group row">
                                 <label for="type" class="col-md-4 col-form-label text-md-right">{{ __('Type') }}</label>
                                 <div class="col-md-6">
-                                    <select class="custom-select" id="type" name="account_type_id" class="form-control">
+                                    <select class="custom-select" id="type" name="account_type_id" class="form-control{{ $errors->has('type') ? ' is-invalid' : '' }}">
                                         <option disabled selected> -- Select an option -- </option>
                                         @foreach ($accountType as $type)
                                         <option value="{{ $type->id }}">{{ $type->name }}</option>
@@ -85,7 +84,11 @@
                                     </button>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
 @endsection
