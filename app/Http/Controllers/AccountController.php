@@ -147,6 +147,10 @@ class AccountController extends Controller
     {
         $account = $request->validated();
 
+        if(!$request->filled('date')){
+            $request->date = new Carbon();
+        }
+
         $codes=DB::table('accounts')
         ->select('code')
         ->get();
@@ -166,7 +170,7 @@ class AccountController extends Controller
         DB::table('accounts')->insert([
             ['owner_id' => Auth::user()->id,
                 'account_type_id' => $request->input('account_type_id'),
-                'date' => $request->input('date'),
+                'date' => $request->date,
                 'code' => $request->input('code'),
                 'description' => $request->input('description'),
                 'start_balance' => $request->input('start_balance'),
