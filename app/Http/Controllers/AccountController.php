@@ -164,10 +164,6 @@ class AccountController extends Controller
             }
         }
 
-        if($request->input('start_balance') === "0"){
-            return back()->withErrors(['start_balance', 'Bigger than 0']);
-        }
-
         DB::table('accounts')->insert([
             ['owner_id' => Auth::user()->id,
                 'account_type_id' => $request->input('account_type_id'),
