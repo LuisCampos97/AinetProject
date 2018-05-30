@@ -10,6 +10,7 @@ use App\User;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Routing\Redirector;
 
 class AccountController extends Controller
 {
@@ -144,7 +145,23 @@ class AccountController extends Controller
 
     public function storeAccount(AccountRequest $request)
     {
-        $request->validated();
+        $account = $request->validated();
+
+        $codes=DB::table('accounts')
+        ->select('code')
+        ->get();
+
+        $users=User::all();
+        
+        foreach($codes as $code){
+            if($code===$request->input('code')){
+                return Redirect::back()->withErrors(['code', 'Code already exists']);
+            }
+        }
+
+        if($request->input('start_balance') === "0"){
+            return back()->withErrors(['start_balance', 'Bigger than 0']);
+        }
 
         DB::table('accounts')->insert([
             ['owner_id' => Auth::user()->id,

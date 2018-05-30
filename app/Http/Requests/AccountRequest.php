@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+
 
 class AccountRequest extends FormRequest
 {
@@ -24,11 +26,12 @@ class AccountRequest extends FormRequest
     public function rules()
     {
         return [
-            'account_type_id' => 'required|min:1|max:5',
-            'code' => 'required|string|unique:accounts',
-            'date' => 'required',
-            'start_balance' => 'required',
-            'description' => 'nullable',
+            'account_type_id' => 'required',
+            'code' => 'required|string|unique:accounts,code,'.Auth::user()->id,
+            //Rule::unique('accounts')->ignore(Auth::user()->id),
+            'date' => 'required|date', //|date_format:"d-m-Y H:i:s"
+            'start_balance' => 'required|numeric',
+            'description' => 'nullable|string',
         ];
     }
 }

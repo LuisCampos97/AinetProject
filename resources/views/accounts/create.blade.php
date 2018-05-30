@@ -16,6 +16,11 @@
                                         <option disabled selected> -- Select an option -- </option>
                                         @foreach ($accountType as $type)
                                         <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                            @if ($errors->has('type'))
+                                             <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('type') }}</strong>
+                                            </span>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -64,7 +69,12 @@
                                 <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="description" type="text" class="form-control" name="description" optional>
+                                    <input id="description" type="text" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" name="description" optional>
+                                    @if ($errors->has('description'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('description') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
 
