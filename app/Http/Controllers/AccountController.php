@@ -37,6 +37,7 @@ class AccountController extends Controller
             return view('accounts.list', compact('accounts', 'pagetitle', 'id'));
         }
         return view('errors.user');
+        
     }
 
     public function openedAccounts($id)
@@ -160,9 +161,18 @@ class AccountController extends Controller
         
         foreach($codes as $code){
             if($code===$request->input('code')){
-                return Redirect::back()->withErrors(['code', 'Code already exists']);
+                return Redirect::back()->withErrors(['errors', 'Code already exists']);
             }
         }
+
+        $accountTypes = DB::table('account_types')
+                                ->get();
+
+        $numberOfAccountTypes = count($accountTypes);
+
+        if(intval($request->input('account_type_id')) > $numberOfAccountTypes){
+            return Redirect::back()->withErrors(['errors', 'Error']);
+       }
 
         DB::table('accounts')->insert([
             ['owner_id' => Auth::user()->id,
