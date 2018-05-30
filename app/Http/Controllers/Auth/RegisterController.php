@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
 use App\Http\Controllers\Controller;
+use App\User;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Storage;
 
 class RegisterController extends Controller
 {
@@ -19,7 +20,7 @@ class RegisterController extends Controller
     | validation and creation. By default this controller uses a trait to
     | provide this functionality without requiring any additional code.
     |
-    */
+     */
 
     use RegistersUsers;
 
@@ -28,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/me/dashboard';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -53,7 +54,7 @@ class RegisterController extends Controller
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:3|confirmed',
             'phone' => 'nullable|regex:/^(\+?)([0-9] ?){9,20}$/',
-            'profile_photo' => 'nullable|mimes:jpeg,png,jpg|max:1024'
+            'profile_photo' => 'nullable|mimes:jpeg,png,jpg|max:1024',
         ]);
     }
 
@@ -65,18 +66,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        if (request()->file('profile_photo')->isValid()) {
+            $name = request()->file('profile_photo')->hashname();
+            Storage::disk('public')->putFileAs('profiles', request()->file('profile_photo'), $name);
+        }
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'phone'=> $data['phone'],
-            //'profile_photo'=> $data['profile_photo']
+            'phone' => $data['phone']
         ]);
-
-        if ($request->file('profile_photo')->isValid()) {
-            $path= Storage::putFile('public/profiles',
-            $request->file('profile_photo'));
-            // Save $path on DB
-            }
     }
 }

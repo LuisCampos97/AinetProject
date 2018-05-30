@@ -17,7 +17,7 @@
                         {{ session('status') }}
                     </div>
                     @endif
-                    <img src="{{ asset('/storage/profiles/' . Auth::user()->profile_photo) }}" class="rounded float-left" alt="Imagem" style="padding-right: 10px">
+                    <img src="{{ asset('/storage/profiles/' . Auth::user()->profile_photo) }}" class="rounded float-left" alt="Imagem" style="border-radius: 3px; width: 200px; padding-right: 10px">
                     <div style="font-size: 20px">
                         <strong>User Name: </strong>{{ Auth::user()->name }}
                         <br>
