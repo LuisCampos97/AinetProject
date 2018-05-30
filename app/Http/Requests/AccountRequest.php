@@ -25,7 +25,7 @@ class AccountRequest extends FormRequest
     public function rules()
     {
         return [
-            'account_type_id' => 'required|integer|min:1',
+            'account_type_id' => 'required|numeric|min:1|max:5',
             'code' => 'required|string|unique:accounts',
             'date' => 'nullable|date', 
             'start_balance' => 'required|numeric',

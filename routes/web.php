@@ -70,6 +70,7 @@ Route::get('/movements/{account}/create', 'MovementController@viewCreateMovement
     ->middleware('can:change-movement,account');
 Route::post('/movements/{account}/create', 'MovementController@storeMovement')->name('storeMovement')
     ->middleware('can:change-movement,account');
-Route::delete('/account/{account}/{movement}', 'MovementController@deleteMovement')->name('deleteMovement');
+Route::delete('/account/{account}/{movement}', 'MovementController@deleteMovement')->name('deleteMovement')
+    ->middleware('can:change-movement,account');
 Route::get('/account/{account}/{movement}', 'MovementController@renderViewUpdateMovement')->name('viewUpdateMovement');
 Route::put('/account/{account}/{movement}', 'MovementController@updateMovement')->name('updateMovement');
