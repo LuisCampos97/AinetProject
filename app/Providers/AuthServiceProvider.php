@@ -44,7 +44,9 @@ class AuthServiceProvider extends ServiceProvider
 
             //If the parameter is a Account id
             if (is_numeric($account_id)) {
-                $account = Account::findOrFail($account_id);
+                $account = Account::withTrashed()
+                    ->where('id', '=', $account_id)
+                    ->first();
 
                 return $user->id == $account->owner_id;
             }
@@ -93,12 +95,6 @@ class AuthServiceProvider extends ServiceProvider
                 ->where('associate_members.associated_user_id', $user->id)
                 ->orWhere('users.id', '=', $user->id)
                 ->get();
-
-            /*foreach(Account::all() as $a) {
-                if($users->where('id', $a->owner_id)->isNotEmpty()) {
-                    print($a->id .', ');
-                }
-            }*/
 
             return $users->where('id', $account->owner_id)->isNotEmpty();   
 

@@ -84,6 +84,12 @@ class ProfileController extends Controller
     {
         $user = User::findOrFail($id);
 
+        $associates = Auth::user()->my_associates()->toArray();
+
+        if(!in_array($id, array_column($associates, 'id'))){
+            return response('User not found', 404);
+        }
+
         DB::table('associate_members')
             ->where('main_user_id', '=', Auth::user()->id)
             ->where('associated_user_id', '=', $id)
