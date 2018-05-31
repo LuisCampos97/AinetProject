@@ -154,19 +154,11 @@ class AccountController extends Controller
             ->select('code')
             ->get();
 
-<<<<<<< HEAD
         $users=User::all();
         
         foreach($codes as $code){
             if($code===$request->input('code')){
                 return Redirect::back()->withErrors(['errors', 'Code already exists']);
-=======
-        $users = User::all();
-
-        foreach ($codes as $code) {
-            if ($code === $request->input('code')) {
-                return Redirect::back()->withErrors(['code', 'Code already exists']);
->>>>>>> 0dfcff9b60d500d1dba94dcb686c9bbeb47fa928
             }
         }
 
