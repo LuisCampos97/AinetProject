@@ -33,8 +33,8 @@
 		<tr>
 			<th>Name</th>
 			<th>Email</th>
-			<th>Type</th>
-			<th>Status</th>
+			<th>User is Admin?</th>
+			<th>User is Blocked?</th>
 			<th>Actions</th>
 		</tr>
 	</thead>

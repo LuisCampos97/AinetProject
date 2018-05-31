@@ -74,3 +74,7 @@ Route::delete('/account/{account}/{movement}', 'MovementController@deleteMovemen
     ->middleware('can:change-movement,account');
 Route::get('/account/{account}/{movement}', 'MovementController@renderViewUpdateMovement')->name('viewUpdateMovement');
 Route::put('/account/{account}/{movement}', 'MovementController@updateMovement')->name('updateMovement');
+
+//Documents
+Route::post('/documents/{movement}', 'DocumentController@uploadDocument')->name('uploadDocument');
+Route::get('/documents/{movement}', 'DocumentController@uploadDocumentView')->name('uploadDocumentView');
