@@ -76,5 +76,7 @@ Route::get('/account/{account}/{movement}', 'MovementController@renderViewUpdate
 Route::put('/account/{account}/{movement}', 'MovementController@updateMovement')->name('updateMovement');
 
 //Documents
-Route::post('/documents/{movement}', 'DocumentController@uploadDocument')->name('uploadDocument');
-Route::get('/documents/{movement}', 'DocumentController@uploadDocumentView')->name('uploadDocumentView');
+Route::post('/documents/{movement}', 'DocumentController@uploadDocument')->name('uploadDocument')
+->middleware('can:add-document,movement');;
+Route::get('/documents/{movement}', 'DocumentController@uploadDocumentView')->name('uploadDocumentView')
+->middleware('can:add-document,movement');;

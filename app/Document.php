@@ -4,11 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Movement extends Model
+class Document extends Model
 {
     protected $fillable = [
-        'type', 'movement_category_id', 'date', 'value', 'start_balance', 'end_balance'
+        'original_name', 'description',
     ];
 
     const UPDATED_AT = null;
+
+    protected $table = 'documents';
 }

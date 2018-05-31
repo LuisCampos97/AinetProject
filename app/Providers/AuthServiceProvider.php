@@ -107,5 +107,12 @@ class AuthServiceProvider extends ServiceProvider
             User::findOrFail($user2);
             return $user1->id == $user2;
         });
+
+        Gate::define('add-document', function($user, $movement_id) {
+            $movement = Movement::findOrFail($movement_id);
+            $account = Account::findOrFail($movement->account_id);
+
+            return $user->id == $account->owner_id;
+        });
     }
 }

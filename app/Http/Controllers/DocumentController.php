@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Document;
+use App\Http\Requests\DocumentRequest;
 use App\Movement;
 
 class DocumentController extends Controller
@@ -12,25 +13,43 @@ class DocumentController extends Controller
         $this->middleware('auth');
     }
 
-    public function uploadDocumentView($id) {
+    public function uploadDocumentView($id)
+    {
+        $pagetitle = "Upload Document";
+        $document = new Document;
 
         $movement = Movement::findOrFail($id);
 
-        $pagetitle = "Upload Document";
+        if ($movement->document_id != null) {
+            $document = Document::findOrFail($movement->document_id);
+        }
 
-        return view('documents.upload', compact('pagetitle', 'movement'));
+        return view('documents.upload', compact('pagetitle', 'movement', 'document'));
     }
 
-    public function uploadDocument(Request $request, $id)
+    public function uploadDocument(DocumentRequest $request, $id)
     {
-        Movement::findOrFail($id);
+        $movement = Movement::findOrFail($id);
 
-        /*$movement = $request->validate([
-            'document_file' => 'required',
-            'document_description' => 'nullable'
-        ]);*/
+        $request->validated();
 
-        dd($request);
-        
+        if ($movement->document_id == null) {
+            $document = Document::create([
+                'original_name' => $request->file('document_file')->getClientOriginalName(),
+                'description' => $request->input('document_description'),
+            ]);
+
+            $movement->document_id = $document->id;
+            $movement->save();
+
+        } else {
+            $document = Document::findOrFail($movement->document_id);
+
+            $document->original_name = $request->file('document_file')->getClientOriginalName();
+            $document->description = $request->input('document_description');
+            $document->save();
+        }
+
+        return redirect()->action('AccountController@showMovementsForAccount', $movement->account_id);
     }
 }
