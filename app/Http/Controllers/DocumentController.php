@@ -52,4 +52,19 @@ class DocumentController extends Controller
 
         return redirect()->action('AccountController@showMovementsForAccount', $movement->account_id);
     }
+
+    public function removeDocument($id)
+    {
+        $document = Document::findOrFail($id);
+        $movement = Movement::where('document_id', '=', $document->id)->first();
+        $movement->document_id = null;
+        $movement->save();
+        $document->delete();
+
+        return redirect()->action('AccountController@showMovementsForAccount', $movement->account_id);
+    }
+
+    public function viewDocument($id) {
+        
+    }
 }
