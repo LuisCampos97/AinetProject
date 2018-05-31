@@ -80,9 +80,9 @@
 
                             <div class="col-md-6">
                                 <input id="profile_photo" type="file" class="form-control{{ $errors->has('profile_photo') ? ' is-invalid' : '' }}" name="profile_photo" accept="image/*" optional>
-                                @if ($errors->has('phone'))
+                                @if ($errors->has('profile_photo'))
                                     <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('phone') }}</strong>
+                                        <strong>{{ $errors->first('profile_photo') }}</strong>
                                     </span>
                                 @endif
                             </div>
