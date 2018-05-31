@@ -25,10 +25,9 @@ class AccountRequest extends FormRequest
     public function rules()
     {
         return [
-            'account_type_id' => 'required',
-            'code' => 'required|string|unique:accounts,code',
-            //Rule::unique('accounts')->ignore(Auth::user()->id),
-            'date' => 'nullable|date', //|date_format:"d-m-Y H:i:s"
+            'account_type_id' => 'required|numeric|min:1|max:5',
+            'code' => 'required|string|unique:accounts',
+            'date' => 'nullable|date', 
             'start_balance' => 'required|numeric',
             'description' => 'nullable|string',
         ];

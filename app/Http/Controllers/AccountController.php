@@ -5,13 +5,11 @@ namespace App\Http\Controllers;
 use App\Account;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
-use App\Movement;
 use App\User;
-use Auth;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Routing\Redirector;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AccountController extends Controller
 {
@@ -60,7 +58,6 @@ class AccountController extends Controller
 
     public function closedAccounts($id)
     {
-
         $accounts = DB::table('accounts')
             ->join('users', 'accounts.owner_id', '=', 'users.id')
             ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
@@ -149,19 +146,27 @@ class AccountController extends Controller
     {
         $account = $request->validated();
 
-        if(!$request->filled('date')){
+        if (!$request->filled('date')) {
             $request->date = new Carbon();
         }
 
-        $codes=DB::table('accounts')
-        ->select('code')
-        ->get();
+        $codes = DB::table('accounts')
+            ->select('code')
+            ->get();
 
+<<<<<<< HEAD
         $users=User::all();
         
         foreach($codes as $code){
             if($code===$request->input('code')){
                 return Redirect::back()->withErrors(['errors', 'Code already exists']);
+=======
+        $users = User::all();
+
+        foreach ($codes as $code) {
+            if ($code === $request->input('code')) {
+                return Redirect::back()->withErrors(['code', 'Code already exists']);
+>>>>>>> 0dfcff9b60d500d1dba94dcb686c9bbeb47fa928
             }
         }
 
@@ -188,26 +193,23 @@ class AccountController extends Controller
             ->with('msgglobal', 'Account created successfully');
     }
 
-    public function updateAccountView(Account $account)
+    public function updateAccountView($id)
     {
+        $account = Account::findOrFail($id);
 
         $accountType = DB::table('account_types')
             ->get();
 
         return view('accounts.update', compact('account', 'accountType'));
     }
-
     public function updateAccount(Request $request, $id)
     {
-        if ($request->has('cancel')) {
-            return redirect()->action('HomeController@home', Auth::user());
-        }
-
         $account = $request->validate([
             'account_type_id' => 'required|min:1|max:5',
+            'date' => 'required|date',
             'code' => 'required|string|unique:accounts',
-            'start_balance' => 'required',
-            'description' => 'nullable',
+            'description' => 'nullable|string',
+            'start_balance' => 'required|numeric',
         ]);
 
         $accountModel = Account::FindOrFail($id);
@@ -230,17 +232,16 @@ class AccountController extends Controller
 
         foreach ($movements as $movement) {
             $mov = Movement::findOrFail($movement->id);
-
             $start = DB::table('movements')->
                 where('movements.account_id', '=', $id)->
                 update(['start_balance' => $diferenceValueStartBalance + $mov->start_balance,
                 'end_balance' => $mov->end_balance + $diferenceValueStartBalance]);
         }
-        dd($mov->end_balance + $diferenceValueStartBalance);
 
         $accountModel->fill($account);
         $accountModel->save();
 
+        
         return redirect()->route('usersAccount', Auth::user()->id)
             ->with('msgglobal', 'Account edited successfully');
     }

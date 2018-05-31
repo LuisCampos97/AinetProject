@@ -48,6 +48,10 @@ class AuthServiceProvider extends ServiceProvider
                     ->where('id', '=', $account_id)
                     ->first();
 
+                if(is_null($account)) {
+                    return response('User not found', 404);
+                }
+
                 return $user->id == $account->owner_id;
             }
 
@@ -76,10 +80,9 @@ class AuthServiceProvider extends ServiceProvider
         /**
          * Gate to define that only the account owner can change the movement.
          */
-        Gate::define('change-movement', function ($user, $movement_id) {
-            $movement = Movement::findOrFail($movement_id);
-            $account = Account::findOrFail($movement->account_id);
-
+        Gate::define('change-movement', function ($user, $account_id) {
+            $account = Account::findOrFail($account_id);
+            
             return $user->id == $account->owner_id;
         });
 

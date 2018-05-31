@@ -15,8 +15,10 @@ class MovementController extends Controller
         $this->middleware('auth');
     }
 
-    public function viewCreateMovement(Account $account)
+    public function viewCreateMovement($id)
     {
+        $account = Account::findOrFail($id);
+        
         $movementType = DB::table('movements')
             ->select('movements.type')
             ->distinct()

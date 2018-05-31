@@ -16,7 +16,7 @@ class ProfileController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function profiles()
     {
         $query = request('name');
@@ -86,7 +86,7 @@ class ProfileController extends Controller
 
         $associates = Auth::user()->my_associates()->toArray();
 
-        if(!in_array($id, array_column($associates, 'id'))){
+        if (!in_array($id, array_column($associates, 'id'))) {
             return response('User not found', 404);
         }
 
@@ -102,10 +102,7 @@ class ProfileController extends Controller
     {
         $users = User::all();
 
-        $associates = DB::table('users')
-            ->join('associate_members', 'associated_user_id', '=', 'users.id')
-            ->where('associate_members.main_user_id', Auth::user()->id)
-            ->get();
+        $associates = Auth::user()->my_associates();
 
         return view('associate.add', compact('users', 'associates'));
     }
@@ -113,8 +110,10 @@ class ProfileController extends Controller
     public function storeAssociate(Request $request)
     {
         $request->validate([
-            'associated_user_id' => 'required',
+            'associated_user_id' => 'required|numeric|min:1',
         ]);
+
+        $user = User::findOrFail($request->input('associated_user_id'));
 
         DB::table('associate_members')->insert([
             ['main_user_id' => Auth::user()->id,
