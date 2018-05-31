@@ -31,7 +31,7 @@ Route::get('/me/associate-of', 'ProfileController@associateOf')->name('associate
 Route::get('/me/associates', 'ProfileController@associates')->name('associates');
 Route::delete('/me/associates/{user}', 'ProfileController@deleteAssociate')->name('associate.delete');
 Route::post('/me/associates', 'ProfileController@storeAssociate')->name('associate.store');
-Route::get('/ola', 'ProfileController@addAssociate')->name('associate.add'); //Modificar nome
+Route::get('/addAssociate', 'ProfileController@addAssociate')->name('associate.add'); //Modificar nome
  
 //Accounts
 Route::get('/accounts/{user}', 'AccountController@accountsForUser')->name('usersAccount')

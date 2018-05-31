@@ -1,4 +1,3 @@
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 @extends('layouts.app') @section('content')
 <script type="text/javascript">
         $(document).ready(function(){

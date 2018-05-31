@@ -1,3 +1,4 @@
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
     crossorigin="anonymous">
 @extends('layouts.app') @section('content') 
@@ -47,30 +48,34 @@
 				<td>
 				@if ($user->id != Auth::user()->id)
 				@if ($user->blocked == 0)
-				<div class="form-group">
+				<div class="form-group row">
 				<form action="{{ route('users.block', $user->id) }}" method="post" class="inline">
 					@csrf
 					@method('patch')
-					<button type="submit" class="btn btn-xs btn-danger"><i class="fas fa-lock"></i> Block</button>
+					<button type="submit" class="btn btn-danger btn-lg" data-toggle="tooltip" title="Block"><i class="fas fa-lock"></i></button>
+					</br>
 				</form>
 				@else
 				<form action="{{ route('users.unblock', $user->id) }}" method="post" class="inline">
 					@csrf
 					@method('patch')
-					<button type="submit" class="btn btn-xs btn-success"></i><i class="fas fa-unlock"></i> Unblock</button>
+					<button type="submit" class="btn btn-success btn-lg" data-toggle="tooltip" title="Unblock"><i class="fas fa-unlock"></i></button>
+					</br>
 				</form>
 				@endif
 				@if ($user->admin == 0)
 				<form action="{{ route('users.promote', $user->id) }}" method="post" class="inline">
 					@csrf
 					@method('patch')
-					<button type="submit" class="btn btn-xs btn-success"><i class="fas fa-user-tie"></i> Promote</button>
+					<button type="submit" class="btn btn-success btn-lg" data-toggle="tooltip" title="Promote"><i class="fas fa-user-tie"></i></button>
+					</br>
 				</form>
 				@else
 				<form action="{{ route('users.demote', $user->id) }}" method="post" class="inline">
 					@csrf
 					@method('patch')
-					<button type="submit" class="btn btn-xs btn-danger"><i class="fas fa-user-minus"></i> Demote</button>
+					<button type="submit" class="btn btn-danger btn-lg" data-toggle="tooltip" title="Demote"><i class="fas fa-user-minus"></i></button>
+					</br>
 				</form>
 				</div>
 				@endif

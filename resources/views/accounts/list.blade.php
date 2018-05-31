@@ -1,3 +1,4 @@
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
     crossorigin="anonymous"> @extends('layouts.app') @section('content')
 <div class="container">
@@ -21,11 +22,11 @@
 
 			<p>
 				<strong style="font-size: 20px">Filter: </strong>
-				<a class="btn btn-xs btn-info" href="{{ action('AccountController@accountsForUser', $id) }}"><i class="fas fa-book"></i>  All Accounts</a>
+				<a class="btn btn-xs btn-info" href="{{ action('AccountController@accountsForUser', $id) }}" data-toggle="tooltip" title="All Accounts"><i class="fas fa-book"></i></a>
 				<strong style="font-size: 20px">|</strong>
-				<a class="btn btn-xs btn-success" href="{{ action('AccountController@openedAccounts', $id) }}"><i class="fas fa-lock-open"></i>  Opened Accounts</a>
+				<a class="btn btn-xs btn-success" href="{{ action('AccountController@openedAccounts', $id) }}" data-toggle="tooltip" title="Opened Accounts"><i class="fas fa-lock-open"></i></a>
 				<strong style="font-size: 20px">|</strong>
-				<a class="btn btn-xs btn-danger" href="{{ action('AccountController@closedAccounts', $id) }}"><i class="fas fa-lock"></i>  Closed Accounts</a>
+				<a class="btn btn-xs btn-danger" href="{{ action('AccountController@closedAccounts', $id) }}" data-toggle="tooltip" title="Closed Accounts"><i class="fas fa-lock"></i></a>
 
 			</p>
 
@@ -40,34 +41,32 @@
 				<td>{{ $account->last_movement_date }}</td>
 				<td>{{ $account->deleted_at }}</td>
 
-
 				<td>
+				<div class="form-group row">
 					@can('change-account', $account) 
 
 					@if(is_null($account->deleted_at))
 
 						@if(is_null($account->last_movement_date))
+						
 						<form action="{{ action('AccountController@destroy', $account->id) }}" method="post" class="inline">
 							@csrf @method('delete')
-							<button type="submit" class="btn btn-xs btn-danger">
-								<i class="fas fa-trash"></i> Delete</button>
+							<button type="submit" class="btn btn-danger btn-lg" data-toggle="tooltip" title="Delete"><i class="fas fa-trash"></i></button>
 						</form>
 						@endif
 
 						<form action="{{ action('AccountController@updateAccountView', $account->id) }}" method="get" class="inline">
-							<button type="submit" class="btn btn-xs btn-primary">
-								<i class="fas fa-edit"></i> Update Account</button>
+							<button type="submit" class="btn btn-primary btn-lg" data-toggle="tooltip" title="Update Account"><i class="fas fa-edit"></i></button>
 						</form>
 
 						<form action="{{ action('AccountController@closeAccount', $account->id) }}" method="post" class="inline">
 							@csrf 
 							@method('patch')
-							<button type="submit" class="btn btn-xs btn-warning">
-								<i class="fas fa-lock"></i> Close Account</button>
+							<button type="submit" class="btn btn-warning btn-lg" data-toggle="tooltip" title="Close Account"><i class="fas fa-lock"></i></button>
 						</form>
 
 						<form action="{{ action('AccountController@showMovementsForAccount', $account->id) }}" method="get" class="inline">
-							<button type="submit" class="btn btn-xs btn-success"><i class="fas fa-money-bill-alt"></i>  View Account Movements</button>
+							<button type="submit" class="btn btn-success btn-lg" data-toggle="tooltip" title="View Account Movements"><i class="fas fa-money-bill-alt"></i></button>
 						</form>
 
 					@else
@@ -76,10 +75,10 @@
 							<button type="submit" class="btn btn-xs btn-info">
 								<i class="fas fa-lock-open"></i> Open Account</button>
 						</form>
+						
 					@endif
 					@endcan
-
-					
+					</div>
 				</td>
 			</tr>
 			@endforeach
