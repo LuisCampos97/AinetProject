@@ -16,7 +16,7 @@
                                 <select class="custom-select" id="movement_category_id" name="movement_category_id" class="form-control">
                                         <option disabled selected> -- Select an option -- </option>
                                         @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{  $category->name }}</option>
+                                        <option value="{{ $category->id }}">{{  $category->name.' ---- ('. $category->type.')'}} </option>
                                         @endforeach
                                          @if ($errors->has('movement_category_id'))
                                             <span class="invalid-feedback">

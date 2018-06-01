@@ -30,6 +30,8 @@ class MovementController extends Controller
         $categories = DB::table('movement_categories')
             ->get();
 
+        //dd($categories);
+
         return view('movements.create', compact('account', 'movementType', 'categories'));
     }
 
@@ -67,8 +69,6 @@ class MovementController extends Controller
             'start_balance' => $account->current_balance,
             'end_balance' => $account->current_balance + intval($signal . $request->input('value')),
         ]);
-
-        
 
         DB::table('accounts')
             ->where('accounts.id', '=', $id)
