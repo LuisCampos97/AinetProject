@@ -27,6 +27,9 @@ class PasswordRequest extends FormRequest
             'old_password' => 'required|min:3|regex:/^[\pL\s]+$/u',
             'password' => 'required|min:3|confirmed|regex:/^[\pL\s]+$/u',
             'password_confirmation' => 'required|min:3|regex:/^[\pL\s]+$/u',
+            [
+            'old_password.required' => 'Please set your old password'
+            ]
         ];
     }
 }

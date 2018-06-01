@@ -28,7 +28,7 @@ class UserRequest extends FormRequest
             'name' => 'required|string|max:255|regex:/^[\pL\s]+$/u',
             'email' => 'required|email|max:255|unique:users,email,'. Auth::user()->id,
             'phone' => 'nullable|regex:/^(\+?)([0-9] ?){9,20}$/',
-            'profile_photo' => 'nullable|mimes:jpeg,png,jpg|max:1024',
+            'profile_photo' => 'nullable|file|mimes:jpeg,png,jpg|max:3000',
             [ // Custom Messages
             'name.regex' => 'Name must only contain letters and spaces.',
             'phone.regex' => 'Format: (+351) xxx xxx xxx',

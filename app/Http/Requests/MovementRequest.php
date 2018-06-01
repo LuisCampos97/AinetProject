@@ -24,7 +24,7 @@ class MovementRequest extends FormRequest
     public function rules()
     {
         return [
-            'movement_category_id' => 'required|numeric|min:1',
+            'movement_category_id' => 'required|numeric|min:1|max:14',
             'type' =>'required|min:1',
             'date' => 'required|date',
             'value' => 'required|numeric',

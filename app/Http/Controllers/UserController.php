@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Storage;
 
 
 class UserController extends Controller
@@ -92,6 +93,8 @@ class UserController extends Controller
             return response('Unauthorized action.', 403);
         }
 
+
+
         if (Gate::allows('admin', auth()->user())) {
             $user->where('users.id', '=', $id)
                 ->update(['blocked' => 0]);
@@ -156,13 +159,22 @@ class UserController extends Controller
                 return redirect()->action('UserController@index');
             }
 
-            $user = $request->validated();
+        $name = $request->profile_photo;
 
-            $userModel = User::findOrFail(Auth::user()->id);
-            $userModel->fill($user);
-            $userModel->save();
-    
-            return redirect()->action('HomeController@index', Auth::user()->id)->with(['msgglobal' => 'User Edited!']);
+        if ($name != null) {
+            if ($name->isValid()) {
+                $name = $name->hashname();
+                Storage::disk('public')->putFileAs('profiles', request()->file('profile_photo'), $name);
+            }
+        }
+
+        $user = $request->validated();
+
+        $userModel = User::findOrFail(Auth::user()->id);
+        $userModel->fill($user);
+        $userModel->save();
+
+        return redirect()->action('HomeController@index', Auth::user()->id)->with(['msgglobal' => 'User Edited!']);
         }
         return response('Unauthorized action.', 403);
     }
@@ -183,13 +195,12 @@ class UserController extends Controller
         }
 
         $userModel = User::findOrFail(Auth::user()->id);
-        $oldPassword = $userModel->password;
         $oldPasswordForm = Hash::make($request->old_password);
 
-        if(Hash::check($oldPassword, $oldPasswordForm)){
-            $request->validated()->addMessage("Old password doesnt match the one in form");
+        if(Hash::check(Auth::user()->password, $oldPasswordForm)){
+            Session::flash('old_password', 'The specified password does not match.');
             return redirect()->action('UserController@updatePassword');
-        }
+        }   
             $user = $request->validated();
             $user['password'] = Hash::make($request->password); 
     

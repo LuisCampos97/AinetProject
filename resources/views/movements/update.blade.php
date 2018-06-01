@@ -10,6 +10,27 @@
                     <div class="card-header">{{ __('Update') }}</div>
                     <div class="card-body">
 
+                        <div class="form-group row">
+                                <label for="code" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
+
+                                <div class="col-md-6">
+                                <select class="custom-select" id="category" name="category" class="form-control">
+                                        <option disabled selected> -- Select an option -- </option>
+                                        @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{  $category->name }}</option>
+                                        @endforeach
+
+                                        @if ($errors->has('category'))
+                                            <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('category') }}</strong>
+                                            </span>
+                                        @endif
+                        
+                                    </select>
+                                </div>
+                            </div>
+
+
                     <div class="form-group row">
                                 <label for="type" class="col-md-4 col-form-label text-md-right">{{ __('Type') }}</label>
                                 <div class="col-md-6">
@@ -18,19 +39,13 @@
                                         @foreach ($movementType as $type)
                                         <option value="{{ $type->type }}">{{$type->type }}</option>
                                         @endforeach
-                                    </select>
-                                </div>
-                            </div>
 
-                            <div class="form-group row">
-                                <label for="code" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
+                                        @if ($errors->has('type'))
+                                            <span class="invalid-feedback">
+                                                <strong>{{ $errors->first('type') }}</strong>
+                                            </span>
+                                        @endif
 
-                                <div class="col-md-6">
-                                <select class="custom-select" id="category" name="category" class="form-control">
-                                        <option disabled selected> -- Select an option -- </option>
-                                        @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}" {{ old('category', strval($movement->movement_category_id)) == $category->id ? "selected" : "" }}>{{ $category->name }}</option>
-                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -65,7 +80,12 @@
                                 <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Description') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="description" value="{{ $movement->description }}" type="text" class="form-control" name="description" optional>
+                                    <input id="description" value="{{ $movement->description }}" type="text" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" name="description" optional>
+                                    @if ($errors->has('description'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('description') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
 

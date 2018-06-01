@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Account;
+use App\Movement;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MovementRequest;
-use App\Movement;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class MovementController extends Controller
 {
@@ -91,23 +92,42 @@ class MovementController extends Controller
 
     public function updateMovement(MovementRequest $request, $movement_id, $account_id)
     {
-        if ($request->has('cancel')) {
-            return redirect()->action('HomeController@home', Auth::user());
-        }
+        $account=Account::findOrFail($account_id);
+        $movementModel = Movement::FindOrFail($movement_id);
+        $movement = $request->validated();
 
-        $movement = $request->validated([
-            'type' => 'required|min:1',
-            'category' => 'required|min:1',
-            'date' => 'required|date',
-            'value' => 'required',
-            'description' => 'nullable',
+        $valueMovementInDB = DB::table('movements')
+        ->where('id', '=', $movement_id)
+        ->select('value')
+        ->get();
+
+        $oldStartBalance = DB::table('movements')
+        ->where('id', '=', $movement_id)
+        ->select('start_balance')
+        ->get();
+
+        $test = DB::table('movements')
+        ->where('account_id', '=', $account_id)
+        ->update([
+            'movement_category_id' => $request->input('category'),
+            'value' => intval($signal . $request->input('value')),
+            'type' => $request->input('type'),
+            'description' => $request->input('description'),
+            'end_balance' => $oldStartBalance + $diference
         ]);
 
-        $movementModel = Movement::FindOrFail($movement_id);
-        //dd($movementModel);
-        $movementModel->fill($movement);
-        $movementModel->save();
+        $diference= $valueMovementInDB -$request->value;
 
+        $valueCurrentBalanceAccountInDB = DB::table('accounts')
+                            ->where('id', '=', $account_id)
+                            ->select('current_balance');
+
+        DB::table('accounts')
+        ->where('id', '=', $account_id)
+        ->update([
+        'current_balance' => $valueCurrentBalanceAccountInDB + $diference
+        ]);
+        
         return redirect()->route('usersAccount', Auth::user()->id)
             ->with('msgglobal', 'Account edited successfully');
     }
