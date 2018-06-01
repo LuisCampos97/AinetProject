@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Document;
 use App\Http\Requests\DocumentRequest;
 use App\Movement;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
 {
@@ -33,20 +34,29 @@ class DocumentController extends Controller
 
         $request->validated();
 
+        $file = $request->file('document_file');
+
         if ($movement->document_id == null) {
             $document = Document::create([
-                'original_name' => $request->file('document_file')->getClientOriginalName(),
+                'original_name' => $file->getClientOriginalName(),
                 'description' => $request->input('document_description'),
+                //'type' => $file->getClientOriginalExtension()
             ]);
 
             $movement->document_id = $document->id;
             $movement->save();
 
+            if ($file->isValid()) {
+                $name = $document->id.'.'.$file->getClientOriginalExtension();
+                Storage::disk('local')->putFileAs('documents/' . $movement->id, $file, $name);
+            }
+
         } else {
             $document = Document::findOrFail($movement->document_id);
 
-            $document->original_name = $request->file('document_file')->getClientOriginalName();
+            $document->original_name = $file->getClientOriginalName();
             $document->description = $request->input('document_description');
+            //$document->type = $file->getClientOriginalExtension();
             $document->save();
         }
 
@@ -59,12 +69,21 @@ class DocumentController extends Controller
         $movement = Movement::where('document_id', '=', $document->id)->first();
         $movement->document_id = null;
         $movement->save();
+
+        Storage::disk('local')->delete('documents/'.$movement->id.'/'.$document->id.'.'.$document->type);
+        
         $document->delete();
 
         return redirect()->action('AccountController@showMovementsForAccount', $movement->account_id);
     }
 
-    public function viewDocument($id) {
-        
+    public function viewDocument($id)
+    {
+        $document = Document::findOrFail($id);
+        $movement = Movement::where('document_id', '=', $document->id)->first();
+
+        $path = Storage::disk('local')->get('documents/'.$movement->id.'/'.$document->id.'.'.$document->type);
+
+        return Storage::url($path);
     }
 }

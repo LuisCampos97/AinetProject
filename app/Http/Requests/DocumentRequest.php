@@ -24,7 +24,7 @@ class DocumentRequest extends FormRequest
     public function rules()
     {
         return [
-            'document_file' => 'required|file|mimes:pdf,jpg,jpeg',
+            'document_file' => 'required|file|mimes:pdf,png,jpeg',
             'document_description' => 'nullable|string'
         ];
     }
