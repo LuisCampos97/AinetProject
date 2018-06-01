@@ -121,7 +121,6 @@ class AccountController extends Controller
             ->leftJoin('documents', 'documents.id', '=', 'movements.document_id')
             ->where('movements.account_id', '=', $id)
             ->select('movements.*', 'movement_categories.name', 'documents.original_name')
-            ->orderBy('movements.date', 'desc')
             ->orderBy('movements.id', 'desc')
             ->get();
 

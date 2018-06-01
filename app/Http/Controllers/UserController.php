@@ -197,10 +197,11 @@ class UserController extends Controller
         $userModel = User::findOrFail(Auth::user()->id);
         $oldPasswordForm = Hash::make($request->old_password);
 
-        if(Hash::check(Auth::user()->password, $oldPasswordForm)){
+        if(Hash::check($oldPasswordForm, Auth::user()->password)){
             Session::flash('old_password', 'The specified password does not match.');
             return redirect()->action('UserController@updatePassword');
-        }   
+        }
+           
             $user = $request->validated();
             $user['password'] = Hash::make($request->password); 
     

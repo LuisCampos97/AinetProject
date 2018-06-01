@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MovementRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class MovementController extends Controller
 {
@@ -24,6 +25,7 @@ class MovementController extends Controller
             ->select('movements.type')
             ->distinct()
             ->get();
+        
 
         $categories = DB::table('movement_categories')
             ->get();
@@ -33,7 +35,8 @@ class MovementController extends Controller
 
     public function storeMovement(MovementRequest $request, $id)
     {
-        $account = Account::FindOrFail($id);
+        //dd($request);
+        $account = Account::findOrFail($id);
 
         if ($request->input('type') == 'expense') {
             $signal = '-';
@@ -41,24 +44,37 @@ class MovementController extends Controller
             $signal = '+';
         }
 
-        $request->validated();
+        $movement = $request->validated();
 
-        $movement = DB::table('movements')->insert([
+        $type=DB::table('movement_categories')
+        ->where('movement_categories.id', '=', $request->movement_category_id)
+        ->select('movement_categories.type')
+        ->first();
+
+        if ($type->type == 'expense') {
+            $signal = '-';
+        } else {
+            $signal = '+';
+        }
+        
+        DB::table('movements')->insert([
             'account_id' => $id,
-            'movement_category_id' => $request->input('category'),
+            'movement_category_id' => $request->input('movement_category_id'),
             'date' => $request->input('date'),
             'value' => intval($signal . $request->input('value')),
-            'type' => $request->input('type'),
+            'type' => $type->type,
             'description' => $request->input('description'),
             'start_balance' => $account->current_balance,
             'end_balance' => $account->current_balance + intval($signal . $request->input('value')),
         ]);
 
+        
+
         DB::table('accounts')
             ->where('accounts.id', '=', $id)
             ->update(['current_balance' => $account->current_balance + intval($signal . $request->input('value')),
                 'last_movement_date' => date('Y-m-d- G:i:s'),
-            ]);
+        ]);
 
         return redirect()->route('movementsForAccount', $id);
     }

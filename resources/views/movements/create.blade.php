@@ -1,64 +1,29 @@
 @extends('layouts.app') @section('content')
-<script type="text/javascript">
-        $(document).ready(function(){
-            $("select").change(function(){
-                var str=$(this).val();
-                if(str=='revenue')
-                {
-                    var start_balance="+";
-                }
-                else if(str=='expense')
-                {
-                    var start_balance="-";
-                }
-                $(".signal").html(start_balance);
-            });
-        });
-    </script>
     
 <form action="{{ route('storeMovement', $account->id) }}" method="post" class="form-group">
-{{ csrf_field() }}
+@csrf
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">{{ __('Create Movement') }}</div>
                     <div class="card-body">
-                       
-                            <div class="form-group row">
-                                <label for="type" class="col-md-4 col-form-label text-md-right">{{ __('Type') }}</label>
-                                <div class="col-md-6">
-                                    <select class="custom-select" id="type" name="type" class="form-control">
-                                        <option disabled selected> -- Select an option -- </option>
-                                        @foreach ($movementType as $type)
-                                        <option value="{{ $type->type }}">{{ $type->type }}</option>
-                                        @endforeach
-                                    </select>
-                                    @if ($errors->has('type'))
-                                            <span class="invalid-feedback">
-                                                <strong>{{ $errors->first('type') }}</strong>
-                                            </span>
-                                        @endif
-                                </div>
-                            </div>
 
                             <div class="form-group row">
                                 <label for="code" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
 
                                 <div class="col-md-6">
-                                <select class="custom-select" id="category" name="category" class="form-control">
+                                <select class="custom-select" id="movement_category_id" name="movement_category_id" class="form-control">
                                         <option disabled selected> -- Select an option -- </option>
                                         @foreach ($categories as $category)
                                         <option value="{{ $category->id }}">{{  $category->name }}</option>
                                         @endforeach
-
-                                         @if ($errors->has('category'))
+                                         @if ($errors->has('movement_category_id'))
                                             <span class="invalid-feedback">
-                                                <strong>{{ $errors->first('category') }}</strong>
+                                                <strong>{{ $errors->first('movement_category_id') }}</strong>
                                             </span>
                                         @endif
-
-                                    </select>
+                                          </select>
                                 </div>
                             </div>
 
@@ -72,7 +37,6 @@
                                         <strong>{{ $errors->first('date') }}</strong>
                                     </span>
                                     @endif
-
                                     
                                 </div>
                             </div>
