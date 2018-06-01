@@ -53,11 +53,17 @@
 				<td>
 					@if(is_null($movement->original_name))
 					<a class="btn btn-xs btn-success" href="{{ action('DocumentController@uploadDocumentView', $movement->id) }}">
-					<i class="fas fa-plus"></i> Add Document</a>
-					@else {{ $movement->original_name }}
-					<form class="inline">
-						<button type="submit" class="btn btn-xs btn-danger">
-							<i class="fas fa-trash"></i> Delete Document</button>
+						<i class="fas fa-plus"></i> Add Document</a>
+					@else 
+					<form action="{{ action('DocumentController@viewDocument', $movement->document_id) }}" method="get" class="inline">
+						<button type="submit" class="btn btn-xs btn-info">
+							<i class="fas fa-file-alt"></i> {{ $movement->original_name }}</button>
+					</form>
+					<form action="{{ action('DocumentController@removeDocument', $movement->document_id) }}" method="post" class="inline">
+						@csrf @method('delete')
+						<button type="submit" class="btn btn-danger btn-lg" data-toggle="tooltip" title="Remove Document">
+							<i class="fas fa-trash"></i>
+						</button>
 					</form>
 					@endif
 				</td>

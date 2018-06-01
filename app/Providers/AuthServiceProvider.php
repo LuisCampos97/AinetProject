@@ -9,6 +9,7 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use App\Document;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -106,6 +107,35 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('owner', function($user1, $user2) {
             User::findOrFail($user2);
             return $user1->id == $user2;
+        });
+
+        Gate::define('add-document', function($user, $movement_id) {
+            $movement = Movement::findOrFail($movement_id);
+            $account = Account::findOrFail($movement->account_id);
+
+            return $user->id == $account->owner_id;
+        });
+
+        Gate::define('delete-document', function($user, $document_id) {
+            $document = Document::findOrFail($document_id);
+            $movement = Movement::where('document_id', '=', $document_id)->first();
+            $account = Account::findOrFail($movement->account_id);
+
+            return $user->id == $account->owner_id;
+        });
+
+        Gate::define('view-document', function($user, $document_id) {
+            $document = Document::findOrFail($document_id);
+            $movement = Movement::where('document_id', '=', $document_id)->first();
+            $account = Account::findOrFail($movement->account_id);
+
+            $users = DB::table('users')
+                ->leftJoin('associate_members', 'users.id', '=', 'main_user_id')
+                ->where('associate_members.associated_user_id', $user->id)
+                ->orWhere('users.id', '=', $user->id)
+                ->get();
+
+            return $users->where('id', $account->owner_id)->isNotEmpty();  
         });
     }
 }
