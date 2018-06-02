@@ -1,3 +1,4 @@
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
     crossorigin="anonymous"> @extends('layouts.app') @section('content') @if(count($movements))
 
@@ -54,27 +55,31 @@
 					@if(is_null($movement->original_name))
 					<a class="btn btn-xs btn-success" href="{{ action('DocumentController@uploadDocumentView', $movement->id) }}">
 						<i class="fas fa-plus"></i> Add Document</a>
-					@else 
+					@else
 					<form action="{{ action('DocumentController@viewDocument', $movement->document_id) }}" method="get" class="inline">
-						<button type="submit" class="btn btn-xs btn-info">
+						<button type="submit" class="btn btn-xs btn-info" data-toggle="tooltip" title="View Document">
 							<i class="fas fa-file-alt"></i> {{ $movement->original_name }}</button>
 					</form>
-					<form action="{{ action('DocumentController@removeDocument', $movement->document_id) }}" method="post" class="inline">
-						@csrf @method('delete')
-						<button type="submit" class="btn btn-danger btn-lg" data-toggle="tooltip" title="Remove Document">
-							<i class="fas fa-trash"></i>
-						</button>
-					</form>
+					<div class="container form-group row">
+						<a class="btn btn-success" href="{{ action('DocumentController@uploadDocumentView', $movement->id) }}" data-toggle="tooltip"
+						    title="Change Document"><i class="fas fa-exchange-alt"></i></a>
+						<form action="{{ action('DocumentController@removeDocument', $movement->document_id) }}" method="post" class="inline">
+							@csrf @method('delete')
+							<button type="submit" class="btn btn-danger" data-toggle="tooltip" title="Remove Document">
+								<i class="fas fa-trash"></i>
+							</button>
+						</form>
+					</div>
 					@endif
 				</td>
 				<td>
-					<form action="{{ action('MovementController@deleteMovement', [$account->id, $movement->id]) }}" method="post" class="inline">
+					<form action="{{ action('MovementController@deleteMovement', $movement->id) }}" method="post" class="inline">
 						@csrf @method('delete')
 						<button type="submit" class="btn btn-xs btn-danger">
 							<i class="fas fa-trash"></i> Delete</button>
 					</form>
 
-					<form action="{{ action('MovementController@renderViewUpdateMovement', [$account->id, $movement->id]) }}" method="get" class="inline">
+					<form action="{{ action('MovementController@renderViewUpdateMovement', $movement->id) }}" method="get" class="inline">
 						<button type="submit" class="btn btn-xs btn-info">
 							<i class="fas fa-list"></i> Update Movement</button>
 					</form>
