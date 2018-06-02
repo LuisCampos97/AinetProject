@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Account;
+use App\Movement;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
 use App\User;
@@ -197,7 +198,7 @@ class AccountController extends Controller
     {
         $account = $request->validate([
             'account_type_id' => 'required|min:1|max:5',
-            'date' => 'required|date',
+            'date' => 'nullable|date',
             'code' => 'required|string|unique:accounts',
             'description' => 'nullable|string',
             'start_balance' => 'required|numeric',

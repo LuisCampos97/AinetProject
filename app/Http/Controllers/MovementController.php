@@ -86,9 +86,22 @@ class MovementController extends Controller
             ->select(DB::raw('sum(movements.value) as somatorioMovimentos'))
             ->get();
 
-        $movements = DB::table('movements')->where('movements.id', '=', $movement_id)->delete();
+        $movementToDelete = DB::table('movements')->where('movements.id', '=', $movement_id)->delete();
 
         DB::table('accounts')->where('accounts.id', '=', $account_id)->update(['accounts.current_balance' => $somatorio[0]->somatorioMovimentos + intval('accounts.start_balance')]);
+
+        $movementsInAccount = DB::table('movements')
+        ->join('accounts', 'movements.account_id', '=', 'accounts.id')
+        ->where('accounts.id', '=', $account_id)
+        ->get();
+
+        if(count($movementsInAccount) == 0){
+            DB::table('accounts')
+            ->where('accounts.id', '=', $account_id)
+            ->update([
+                'last_movement_date' => NULL
+            ]);
+        }
 
         return redirect()->action('AccountController@showMovementsForAccount', $account_id);
     }
