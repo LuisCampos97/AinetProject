@@ -7,6 +7,7 @@ use App\Http\Requests\DocumentRequest;
 use App\Movement;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\File;
 
 class DocumentController extends Controller
 {
@@ -97,6 +98,9 @@ class DocumentController extends Controller
         $movement = Movement::where('document_id', '=', $document->id)->first();
 
         $unique_id = $movement->id . '.' . $document->type;
+
+        $file = new File(storage_path('app/' . 'documents/' . $movement->account_id . '/' . $unique_id));
+        dd($file);
 
         return response()->download(
             storage_path('app/' . 'documents/' . $movement->account_id . '/' . $unique_id),

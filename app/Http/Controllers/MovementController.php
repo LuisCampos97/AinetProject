@@ -91,12 +91,12 @@ class MovementController extends Controller
 
             $movementsInAccount = DB::table('movements')
             ->join('accounts', 'movements.account_id', '=', 'accounts.id')
-            ->where('accounts.id', '=', $account_id)
+            ->where('accounts.id', '=', $account->id)
             ->get();
     
             if(count($movementsInAccount) == 0){
                 DB::table('accounts')
-                ->where('accounts.id', '=', $account_id)
+                ->where('accounts.id', '=', $account->id)
                 ->update([
                     'last_movement_date' => NULL
                 ]);

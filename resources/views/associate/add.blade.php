@@ -12,14 +12,14 @@
                         <div class="form-group row">
                             <label for="type" class="col-md-4 col-form-label text-md-right">{{ __('User to add') }}</label>
                             <div class="col-md-6">
-                                <select class="form-control{{ $errors->has('associated_user_id') ? ' is-invalid' : '' }}" id="associate" name="associated_user_id"
+                                <select class="form-control{{ $errors->has('associated_user') ? ' is-invalid' : '' }}" id="associated_user" name="associated_user"
                                     class="form-control">
                                     <option disabled selected> -- Select an user -- </option>
                                     @foreach ($users as $user) @if ($user->id != Auth::user()->id && $associates->where('id', $user->id)->isEmpty())
                                     <option value="{{ $user->id }}">{{ $user->id }} - {{$user->name }}</option>
-                                    @endif @endforeach @if ($errors->has('code'))
+                                    @endif @endforeach @if ($errors->has('associated_user'))
                                     <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('code') }}</strong>
+                                        <strong>{{ $errors->first('associated_user') }}</strong>
                                     </span>
                                     @endif
                                 </select>

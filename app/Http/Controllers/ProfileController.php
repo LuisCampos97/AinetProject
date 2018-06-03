@@ -110,17 +110,20 @@ class ProfileController extends Controller
     public function storeAssociate(Request $request)
     {
         $request->validate([
-            'associated_user_id' => 'required|numeric|min:1',
+            'associated_user' => 'required|numeric|different:'.Auth::user()->id,
         ]);
 
-        $user = User::findOrFail($request->input('associated_user_id'));
+        $associated_user = $request->input('associated_user');
+
+        $user = User::findOrFail($associated_user);
 
         DB::table('associate_members')->insert([
             ['main_user_id' => Auth::user()->id,
-                'associated_user_id' => $request->input('associated_user_id')],
+                'associated_user_id' => $associated_user],
         ]);
 
         return redirect()->route('associates')
             ->with('success', 'Associate added successfully');
     }
+
 }
