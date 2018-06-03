@@ -53,7 +53,7 @@
                             <label for="profile_photo" class="col-md-4 col-form-label text-md-right">{{ __('Profile Photo') }}</label>
 
                             <div class="col-md-6">
-                                <input id="profile_photo" type="file" class="form-control{{ $errors->has('profile_photo') ? ' is-invalid' : '' }}" name="profile_photo" accept="image/*" optional>
+                                <input id="profile_photo" type="file" class="form-control{{ $errors->has('profile_photo') ? ' is-invalid' : '' }}" name="profile_photo" accept="image/*" value ="{{ Auth::user()->profile_photo }}" optional>
                                 @if ($errors->has('profile_photo'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('profile_photo') }}</strong>

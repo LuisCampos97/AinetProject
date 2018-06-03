@@ -3,17 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PasswordRequest;
 use App\Http\Requests\UserRequest;
 use App\User;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\PasswordRequest;
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Storage;
-
 
 class UserController extends Controller
 {
@@ -93,8 +90,6 @@ class UserController extends Controller
             return response('Unauthorized action.', 403);
         }
 
-
-
         if (Gate::allows('admin', auth()->user())) {
             $user->where('users.id', '=', $id)
                 ->update(['blocked' => 0]);
@@ -108,7 +103,7 @@ class UserController extends Controller
     {
         //If fails, return a 404 HTTP Response
         $user = User::findOrFail($id);
-        
+
         if (Auth::user()->id == $id) {
             return response('Unauthorized action.', 403);
         }
@@ -151,14 +146,8 @@ class UserController extends Controller
 
     }
 
-    public function update(UserRequest $request) //,$id
-
+    public function update(UserRequest $request)
     {
-        if (Auth::check()) {
-            if ($request->has('cancel')) {
-                return redirect()->action('UserController@index');
-            }
-
         $name = $request->profile_photo;
 
         if ($name != null) {
@@ -172,11 +161,15 @@ class UserController extends Controller
 
         $userModel = User::findOrFail(Auth::user()->id);
         $userModel->fill($user);
+
+        if ($name != null) {
+            $userModel->profile_photo = $name;
+        }
+
+        $userModel->phone = $request->input('phone');
         $userModel->save();
 
         return redirect()->action('HomeController@index', Auth::user()->id)->with(['msgglobal' => 'User Edited!']);
-        }
-        return response('Unauthorized action.', 403);
     }
 
     public function editPassword()
@@ -197,17 +190,17 @@ class UserController extends Controller
         $userModel = User::findOrFail(Auth::user()->id);
         $oldPasswordForm = Hash::make($request->old_password);
 
-        if(Hash::check($oldPasswordForm, Auth::user()->password)){
+        if (Hash::check($oldPasswordForm, Auth::user()->password)) {
             Session::flash('old_password', 'The specified password does not match.');
             return redirect()->action('UserController@updatePassword');
         }
-           
-            $user = $request->validated();
-            $user['password'] = Hash::make($request->password); 
-    
-            $userModel->fill($user);
-            $userModel->save();
-    
-            return redirect()->action('HomeController@index', Auth::user())->with(['msgglobal' => 'Password Edited!']);
+
+        $user = $request->validated();
+        $user['password'] = Hash::make($request->password);
+
+        $userModel->fill($user);
+        $userModel->save();
+
+        return redirect()->action('HomeController@index', Auth::user())->with(['msgglobal' => 'Password Edited!']);
     }
 }
