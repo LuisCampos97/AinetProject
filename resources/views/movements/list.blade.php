@@ -5,8 +5,10 @@
 <div class="container">
 
 	<h1>{{ $pagetitle }}</h1>
+	@can('change-movement', $account->id)
 	<a class="btn btn-xs btn-success" href="{{ action('MovementController@viewCreateMovement',$account->id) }}">
 		<i class="fas fa-plus"></i> Create Movement </a>
+	@endcan
 	<br>
 	<br>
 
@@ -33,7 +35,9 @@
 				<th>Start Balance</th>
 				<th>End Balance</th>
 				<th>Document</th>
+				@can('change-movement', $account->id)
 				<th>Option</th>
+				@endcan
 			</tr>
 			<br>
 
@@ -53,13 +57,16 @@
 				<td>{{ $movement->end_balance }} €</td>
 				<td>
 					@if(is_null($movement->original_name))
+					@can('movement', $movement->id)
 					<a class="btn btn-xs btn-success" href="{{ action('DocumentController@uploadDocumentView', $movement->id) }}">
 						<i class="fas fa-plus"></i> Add Document</a>
+						@endcan
 					@else
 					<form action="{{ action('DocumentController@viewDocument', $movement->document_id) }}" method="get" class="inline">
 						<button type="submit" class="btn btn-xs btn-info" data-toggle="tooltip" title="View Document">
 							<i class="fas fa-file-alt"></i> {{ $movement->original_name }}</button>
 					</form>
+					@can('movement', $movement->id)
 					<div class="container form-group row">
 						<a class="btn btn-success" href="{{ action('DocumentController@uploadDocumentView', $movement->id) }}" data-toggle="tooltip"
 						    title="Change Document"><i class="fas fa-exchange-alt"></i></a>
@@ -70,8 +77,10 @@
 							</button>
 						</form>
 					</div>
+					@endcan
 					@endif
 				</td>
+				@can('change-movement', $account->id)
 				<td>
 					<form action="{{ action('MovementController@deleteMovement', $movement->id) }}" method="post" class="inline">
 						@csrf @method('delete')
@@ -84,13 +93,16 @@
 							<i class="fas fa-list"></i> Update Movement</button>
 					</form>
 				</td>
+				@endcan
 			</tr>
 			@endforeach
 		</tbody>
 		@else
 		<div class="container">
+			@can('change-movement', $account->id)
 			<a class="btn btn-xs btn-success" href="{{ action('MovementController@viewCreateMovement',$account->id) }}">
 				<i class="fas fa-plus"></i> Create Movement </a>
+				@endcan
 			<br>
 			<br>
 			<table class="table table-bordered">

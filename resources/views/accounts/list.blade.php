@@ -43,12 +43,12 @@
 
 				<td>
 				<div class="form-group row">
-					@can('change-account', $account) 
+					@can('change-account', $account)
 
 					@if(is_null($account->deleted_at))
 
 						@if(is_null($account->last_movement_date))
-						
+
 						<form action="{{ action('AccountController@destroy', $account->id) }}" method="post" class="inline">
 							@csrf @method('delete')
 							<button type="submit" class="btn btn-danger btn-lg" data-toggle="tooltip" title="Delete"><i class="fas fa-trash"></i></button>
@@ -60,13 +60,9 @@
 						</form>
 
 						<form action="{{ action('AccountController@closeAccount', $account->id) }}" method="post" class="inline">
-							@csrf 
+							@csrf
 							@method('patch')
 							<button type="submit" class="btn btn-warning btn-lg" data-toggle="tooltip" title="Close Account"><i class="fas fa-lock"></i></button>
-						</form>
-
-						<form action="{{ action('AccountController@showMovementsForAccount', $account->id) }}" method="get" class="inline">
-							<button type="submit" class="btn btn-success btn-lg" data-toggle="tooltip" title="View Account Movements"><i class="fas fa-money-bill-alt"></i></button>
 						</form>
 
 					@else
@@ -75,9 +71,14 @@
 							<button type="submit" class="btn btn-xs btn-info">
 								<i class="fas fa-lock-open"></i> Open Account</button>
 						</form>
-						
+
 					@endif
 					@endcan
+					<div class="container">
+					<form action="{{ action('AccountController@showMovementsForAccount', $account->id) }}" method="get" class="inline">
+							<button type="submit" class="btn btn-success btn-lg" data-toggle="tooltip" title="View Account Movements"><i class="fas fa-money-bill-alt"></i></button>
+					</form>
+					</div>
 					</div>
 				</td>
 			</tr>
