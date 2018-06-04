@@ -29,7 +29,8 @@ class MovementRequest extends FormRequest
             'date' => 'required|date',
             'value' => 'required|numeric',
             'description' => 'nullable|string',
-            'document_file' => 'nullable|mimes:pdf,jpeg,png',
+            'document_file' => 'nullable|file|mimes:pdf,png,jpeg',
+            'document_description' => 'nullable|string'
         ];
     }
 }
