@@ -29,10 +29,8 @@
             </div>
         <br>
             <div class="card">
-                <div class="card-header">Account</div>
+                <div class="card-header">Summary of My Financial Situation</div>
                 <div class="card-body">
-                    <a class="btn btn-xs btn-info" href="{{ action('AccountController@accountsForUser', Auth::user()->id) }}">List of my Accounts</a><br><br>
-                    <a class="btn btn-xs btn-success" href="{{ action('AccountController@createAccount') }}">Add Account</a> <br><br>
                     @if(count($accountsForUser))
                     <strong> TOTAL BALANCE OF ALL ACCOUNTS:</strong> <strong style="font-size: 20px"> {{ number_format($total, 2) }} € </strong><br><br>
                     @else

@@ -19,14 +19,22 @@
 			<h1>{{ $pagetitle }}</h1>
 		</thead>
 		<tbody>
-
+			<a class="btn btn-xs btn-success" href="{{ action('AccountController@storeAccount') }}">
+				<i class="fas fa-plus"></i> Add Account</a>
+			<br><br>	
 			<p>
 				<strong style="font-size: 20px">Filter: </strong>
-				<a class="btn btn-xs btn-info" href="{{ action('AccountController@accountsForUser', $id) }}" data-toggle="tooltip" title="All Accounts"><i class="fas fa-book"></i></a>
+				<a class="btn btn-xs btn-info" href="{{ action('AccountController@accountsForUser', $id) }}" data-toggle="tooltip" title="All Accounts">
+					<i class="fas fa-book"></i>
+				</a>
 				<strong style="font-size: 20px">|</strong>
-				<a class="btn btn-xs btn-success" href="{{ action('AccountController@openedAccounts', $id) }}" data-toggle="tooltip" title="Opened Accounts"><i class="fas fa-lock-open"></i></a>
+				<a class="btn btn-xs btn-success" href="{{ action('AccountController@openedAccounts', $id) }}" data-toggle="tooltip" title="Opened Accounts">
+					<i class="fas fa-lock-open"></i>
+				</a>
 				<strong style="font-size: 20px">|</strong>
-				<a class="btn btn-xs btn-danger" href="{{ action('AccountController@closedAccounts', $id) }}" data-toggle="tooltip" title="Closed Accounts"><i class="fas fa-lock"></i></a>
+				<a class="btn btn-xs btn-danger" href="{{ action('AccountController@closedAccounts', $id) }}" data-toggle="tooltip" title="Closed Accounts">
+					<i class="fas fa-lock"></i>
+				</a>
 
 			</p>
 
@@ -42,43 +50,45 @@
 				<td>{{ $account->deleted_at }}</td>
 
 				<td>
-				<div class="form-group row">
-					@can('change-account', $account)
-
-					@if(is_null($account->deleted_at))
-
-						@if(is_null($account->last_movement_date))
+					<div class="form-group row">
+						@can('change-account', $account) @if(is_null($account->deleted_at)) @if(is_null($account->last_movement_date))
 
 						<form action="{{ action('AccountController@destroy', $account->id) }}" method="post" class="inline">
 							@csrf @method('delete')
-							<button type="submit" class="btn btn-danger btn-lg" data-toggle="tooltip" title="Delete"><i class="fas fa-trash"></i></button>
+							<button type="submit" class="btn btn-danger btn-lg" data-toggle="tooltip" title="Delete">
+								<i class="fas fa-trash"></i>
+							</button>
 						</form>
 						@endif
 
 						<form action="{{ action('AccountController@updateAccountView', $account->id) }}" method="get" class="inline">
-							<button type="submit" class="btn btn-primary btn-lg" data-toggle="tooltip" title="Update Account"><i class="fas fa-edit"></i></button>
+							<button type="submit" class="btn btn-primary btn-lg" data-toggle="tooltip" title="Update Account">
+								<i class="fas fa-edit"></i>
+							</button>
 						</form>
 
 						<form action="{{ action('AccountController@closeAccount', $account->id) }}" method="post" class="inline">
-							@csrf
-							@method('patch')
-							<button type="submit" class="btn btn-warning btn-lg" data-toggle="tooltip" title="Close Account"><i class="fas fa-lock"></i></button>
+							@csrf @method('patch')
+							<button type="submit" class="btn btn-warning btn-lg" data-toggle="tooltip" title="Close Account">
+								<i class="fas fa-lock"></i>
+							</button>
 						</form>
 
-					@else
+						@else
 						<form action="{{ action('AccountController@openAccount', $account->id) }}" method="post" class="inline">
 							@csrf @method('patch')
 							<button type="submit" class="btn btn-xs btn-info">
 								<i class="fas fa-lock-open"></i> Open Account</button>
 						</form>
 
-					@endif
-					@endcan
-					<div class="container">
-					<form action="{{ action('AccountController@showMovementsForAccount', $account->id) }}" method="get" class="inline">
-							<button type="submit" class="btn btn-success btn-lg" data-toggle="tooltip" title="View Account Movements"><i class="fas fa-money-bill-alt"></i></button>
-					</form>
-					</div>
+						@endif @endcan
+						<div class="container">
+							<form action="{{ action('AccountController@showMovementsForAccount', $account->id) }}" method="get" class="inline">
+								<button type="submit" class="btn btn-success btn-lg" data-toggle="tooltip" title="View Account Movements">
+									<i class="fas fa-money-bill-alt"></i>
+								</button>
+							</form>
+						</div>
 					</div>
 				</td>
 			</tr>
