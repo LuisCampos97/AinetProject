@@ -12,7 +12,7 @@ Route::get('/dashboard/{user}', 'HomeController@index')->name('home')
     ->middleware('can:associate,user');
 
 //Edit
-Route::get('/me/profile/edit', 'UserController@edit')->name('edit');
+Route::get('/me/profile', 'UserController@edit')->name('edit');
 Route::put('/me/profile', 'UserController@update')->name('update');
 
 //Edit Password

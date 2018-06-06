@@ -64,11 +64,11 @@
 						</form>
 						@endif
 
-						<form action="{{ action('AccountController@updateAccountView', $account->id) }}" method="get" class="inline">
+						<a href="{{ action('AccountController@updateAccountView', $account->id) }}" class="inline">
 							<button type="submit" class="btn btn-primary btn-lg" data-toggle="tooltip" title="Update Account">
 								<i class="fas fa-edit"></i>
 							</button>
-						</form>
+						</a>
 
 						<form action="{{ action('AccountController@closeAccount', $account->id) }}" method="post" class="inline">
 							@csrf @method('patch')

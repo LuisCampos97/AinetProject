@@ -91,10 +91,10 @@
 							<i class="fas fa-trash"></i> Delete</button>
 					</form>
 
-					<form action="{{ action('MovementController@renderViewUpdateMovement', $movement->id) }}" method="get" class="inline">
+					<a href="{{ action('MovementController@renderViewUpdateMovement', $movement->id) }}" class="inline">
 						<button type="submit" class="btn btn-xs btn-info">
 							<i class="fas fa-list"></i> Update Movement</button>
-					</form>
+					</a>
 				</td>
 				@endcan
 			</tr>
