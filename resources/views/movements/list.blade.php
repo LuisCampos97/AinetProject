@@ -8,20 +8,10 @@
 
 	<h1>{{ $pagetitle }}</h1>
 	@can('change-movement', $account->id)
-<<<<<<< HEAD
 	<a class="btn btn-xs btn-success" href="{{ route('movementsForAccount',$account->id) }}">
 		<i class="fas fa-plus"></i> Create Movement 
 	</a>
-=======
-	<a class="btn btn-xs btn-success" href="{{ action('MovementController@viewCreateMovement',$account->id) }}">
-		<i class="fas fa-plus"></i> Create Movement </a>
-<<<<<<< HEAD
-
-	<a class="btn btn-xs btn-info" href="{{ action('AccountController@accountsForUser', Auth::user()->id) }}">List of my Accounts</a>
-=======
->>>>>>> 56a79f506fb179e50f55986de0f64dd4c0ed69ec
 	@endcan
->>>>>>> 9be846fb84c6857e7e4dbc8c3f3dcd9499a48c5a
 	<br>
 	<br>
 
@@ -110,7 +100,7 @@
 			</tr>
 			@endforeach
 			
-		</tbody>
+			</tbody>
 		</table>
 	</div>
 		@else
@@ -118,11 +108,7 @@
 			@can('change-movement', $account->id)
 			<a class="btn btn-xs btn-success" href="{{ action('MovementController@viewCreateMovement',$account->id) }}">
 				<i class="fas fa-plus"></i> Create Movement </a>
-<<<<<<< HEAD
-				<a class="btn btn-xs btn-info" href="{{ action('AccountController@accountsForUser', Auth::user()->id) }}">List of my Accounts</a>
-=======
 				@endcan
->>>>>>> 9be846fb84c6857e7e4dbc8c3f3dcd9499a48c5a
 			<br>
 			<br>
 			<table class="table table-bordered">
