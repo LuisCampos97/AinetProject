@@ -19,8 +19,10 @@
 			<h1>{{ $pagetitle }}</h1>
 		</thead>
 		<tbody>
+			@can('owner', $id)
 			<a class="btn btn-xs btn-success" href="{{ action('AccountController@storeAccount') }}">
 				<i class="fas fa-plus"></i> Add Account</a>
+			@endcan
 			<br>
 			<br>
 			<p>
