@@ -8,6 +8,9 @@ use Auth;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Rules\ValidAssociate;
+use App\AssociateMember;
+use App\Http\Requests\AssociateRequest;
 
 class ProfileController extends Controller
 {
@@ -107,19 +110,15 @@ class ProfileController extends Controller
         return view('associate.add', compact('users', 'associates'));
     }
 
-    public function storeAssociate(Request $request)
-    {
-        $request->validate([
-            'associated_user' => 'required|numeric|different:'.Auth::user()->id,
-        ]);
+    public function storeAssociate(AssociateRequest $request)
+    {   
+        $request->validated();
 
         $associated_user = $request->input('associated_user');
 
-        $user = User::findOrFail($associated_user);
-
-        DB::table('associate_members')->insert([
-            ['main_user_id' => Auth::user()->id,
-                'associated_user_id' => $associated_user],
+        AssociateMember::create([
+            'main_user_id' => Auth::user()->id,
+            'associated_user_id' => $associated_user
         ]);
 
         return redirect()->route('associates')

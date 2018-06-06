@@ -21,7 +21,8 @@
 		<tbody>
 			<a class="btn btn-xs btn-success" href="{{ action('AccountController@storeAccount') }}">
 				<i class="fas fa-plus"></i> Add Account</a>
-			<br><br>	
+			<br>
+			<br>
 			<p>
 				<strong style="font-size: 20px">Filter: </strong>
 				<a class="btn btn-xs btn-info" href="{{ action('AccountController@accountsForUser', $id) }}" data-toggle="tooltip" title="All Accounts">
@@ -73,15 +74,6 @@
 								<i class="fas fa-lock"></i>
 							</button>
 						</form>
-
-						@else
-						<form action="{{ action('AccountController@openAccount', $account->id) }}" method="post" class="inline">
-							@csrf @method('patch')
-							<button type="submit" class="btn btn-xs btn-info">
-								<i class="fas fa-lock-open"></i> Open Account</button>
-						</form>
-
-						@endif @endcan
 						<div class="container">
 							<form action="{{ action('AccountController@showMovementsForAccount', $account->id) }}" method="get" class="inline">
 								<button type="submit" class="btn btn-success btn-lg" data-toggle="tooltip" title="View Account Movements">
@@ -89,6 +81,14 @@
 								</button>
 							</form>
 						</div>
+						@else
+						<form action="{{ action('AccountController@openAccount', $account->id) }}" method="post" class="inline">
+							@csrf @method('patch')
+							<button type="submit" class="btn btn-xs btn-info">
+								<i class="fas fa-lock-open"></i> Open Account</button>
+						</form> @endif
+						@endcan
+						
 					</div>
 				</td>
 			</tr>

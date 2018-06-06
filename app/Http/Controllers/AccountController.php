@@ -102,6 +102,8 @@ class AccountController extends Controller
 
     public function openAccount($id)
     {
+        User::findOrFail($id);
+        
         DB::table('accounts')
             ->where('accounts.id', $id)
             ->update(['deleted_at' => null]);
