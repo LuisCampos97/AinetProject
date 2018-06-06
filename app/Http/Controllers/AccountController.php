@@ -149,7 +149,7 @@ class AccountController extends Controller
         $account = $request->validated();
 
         if (!$request->filled('date')) {
-            $request->date = Carbon::now('Europe/Portugal')->isToday();
+            $request->date = Carbon::now();
         }
 
         $codes = DB::table('accounts')
@@ -173,14 +173,14 @@ class AccountController extends Controller
             return Redirect::back()->withErrors(['errors', 'Error']);
        }
 
-        DB::table('accounts')->insert([
-            ['owner_id' => Auth::user()->id,
+        Account::create([
+            'owner_id' => Auth::user()->id,
                 'account_type_id' => $request->input('account_type_id'),
                 'date' => $request->date,
                 'code' => $request->input('code'),
                 'description' => $request->input('description'),
                 'start_balance' => $request->input('start_balance'),
-                'current_balance' => $request->input('start_balance')],
+                'current_balance' => $request->input('start_balance')
         ]);
 
         return redirect()->route('usersAccount', Auth::user()->id)

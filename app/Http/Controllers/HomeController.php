@@ -41,14 +41,14 @@ class HomeController extends Controller
 
 
         //US.27
-        $movement_catogories = DB::table('movement_categories')
+        $movement_categories = DB::table('movement_categories')
             ->get()
             ->toArray();
 
         $total_by_category = array();
      
         $i = 0;
-        foreach ($movement_catogories as $category) {
+        foreach ($movement_categories as $category) {
             $movements = DB::table('accounts')
                 ->join('users', 'users.id', '=', 'accounts.owner_id')
                 ->join('movements', 'accounts.id', '=', 'movements.account_id')
@@ -68,6 +68,6 @@ class HomeController extends Controller
             ->select('accounts.*', 'account_types.name')
             ->get();
 
-        return view('home', ['user' => Auth::user()], compact('total', 'accountsForUser', 'summary', 'percentage', 'movement_catogories', 'total_by_category'))->with('msgglobal', 'Welcome');
+        return view('home', ['user' => Auth::user()], compact('total', 'accountsForUser', 'summary', 'percentage', 'movement_categories', 'total_by_category'))->with('msgglobal', 'Welcome');
     }
 }

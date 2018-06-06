@@ -13,6 +13,7 @@ class Account extends Model
         'owner_id', 'code', 'account_type_id', 'date', 'description', 'start_balance', 'created_at, last_movement_date', 'current_balance'
     ];
 
-    public $timestamps = false;
     protected $dates = ['deleted_at'];
+
+    const UPDATED_AT = null;
 }
