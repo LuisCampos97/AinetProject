@@ -66,7 +66,7 @@ Route::put('/account/{account}', 'AccountController@updateAccount')->name('updat
     ->middleware('can:change-account,account');
 
 //Movements
-Route::get('/movements/{account}/create', 'MovementController@viewCreateMovement')->name('viewCreateAccount')
+Route::get('/movements/{account}/create', 'MovementController@viewCreateMovement')->name('viewCreateMovement')
     ->middleware('can:change-movement,account');
 Route::post('/movements/{account}/create', 'MovementController@storeMovement')->name('storeMovement')
     ->middleware('can:change-movement,account');
