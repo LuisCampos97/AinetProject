@@ -15,23 +15,28 @@
             data.addColumn('string', 'Expenses');
             data.addColumn('number', '€');
             data.addRows([
+                @foreach($movement_catogories as $c) {
+                    ['{{ $c->name }}', {{ number_format($total_by_category[$c->id - 1], 2) }}]
+                }
+                @endforeach
+                
                 ['food', 0],
-                ['clothes', 0],
+                ['clothes', 2],
                 ['services', 0],
                 ['electricity', 0],
                 ['phone', 0],
-                ['fuel', 0],
-                ['insurance', 0],
+                ['fuel', 5],
+                ['insurance', 3],
                 ['entertainment', 0],
                 ['culture', 0],
                 ['trips', 0],
                 ['mortgage payment', 0],
-                ['salary', 0],
-                ['bonus', 0],
+                ['salary', 6],
+                ['bonus', 8],
                 ['royalties', 0],
                 ['interests', 0],
                 ['gifts', 0],
-                ['dividends', 0],
+                ['dividends', 9],
                 ['product sales', 0]
             ]);
 
@@ -99,7 +104,7 @@
 
                     
                     @foreach ($movement_catogories as $categories)
-                        <strong> TOTAL REVENUES AND EXPENSES BY {{$categories->name}}:</strong> <strong style="font-size: 20px"> {{ number_format($total_by_category, 2) }} € </strong><br>
+                        <strong> TOTAL REVENUES AND EXPENSES BY {{$categories->name}}:</strong> <strong style="font-size: 20px"> {{ number_format($total_by_category[$categories->id - 1], 2) }} € </strong><br>
                     @endforeach
                     
                     @else

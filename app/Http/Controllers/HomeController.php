@@ -39,11 +39,15 @@ class HomeController extends Controller
             return number_format($account->current_balance * 100 / $total, 2);
         });
 
-        //$categories = [1,2,3,4,5];
+
+        //US.27
         $movement_catogories = DB::table('movement_categories')
             ->get()
             ->toArray();
+
+        $total_by_category = array();
      
+        $i = 0;
         foreach ($movement_catogories as $category) {
             $movements = DB::table('accounts')
                 ->join('users', 'users.id', '=', 'accounts.owner_id')
@@ -51,12 +55,11 @@ class HomeController extends Controller
                 ->where('owner_id', '=', $user->id)
                 ->where('movements.movement_category_id', '=', $category->id)
                 ->get();
-            
-        }
-            
-        $summary_by_category = $movements->pluck('value');
-        $total_by_category = $summary_by_category->sum();
 
+            $summary_by_category = $movements->pluck('value');
+            $total_by_category[$i] = $summary_by_category->sum();
+            $i++;
+        }
 
         $accountsForUser = DB::table('accounts')
             ->join('users', 'accounts.owner_id', '=', 'users.id')
