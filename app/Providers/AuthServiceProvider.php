@@ -106,6 +106,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('owner', function($user1, $user2) {
             User::findOrFail($user2);
+
             return $user1->id == $user2;
         });
 

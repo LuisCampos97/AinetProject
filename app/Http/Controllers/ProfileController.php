@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\AssociateMember;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AssociateRequest;
 use App\User;
 use Auth;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Rules\ValidAssociate;
-use App\AssociateMember;
-use App\Http\Requests\AssociateRequest;
 
 class ProfileController extends Controller
 {
@@ -65,10 +64,7 @@ class ProfileController extends Controller
 
         $pagetitle = 'List of Associated-of profiles';
 
-        if (Auth::check()) {
-            return view('users.associateof', compact('users', 'pagetitle'));
-        }
-        return view('errors.user');
+        return view('users.associateof', compact('users', 'pagetitle'));
     }
 
     public function associates()
@@ -77,10 +73,7 @@ class ProfileController extends Controller
 
         $pagetitle = 'List of associates';
 
-        if (Auth::check()) {
-            return view('users.associates', compact('users', 'pagetitle'));
-        }
-        return view('errors.user');
+        return view('users.associates', compact('users', 'pagetitle'));
     }
 
     public function deleteAssociate($id)
@@ -111,14 +104,14 @@ class ProfileController extends Controller
     }
 
     public function storeAssociate(AssociateRequest $request)
-    {   
+    {
         $request->validated();
 
         $associated_user = $request->input('associated_user');
 
         AssociateMember::create([
             'main_user_id' => Auth::user()->id,
-            'associated_user_id' => $associated_user
+            'associated_user_id' => $associated_user,
         ]);
 
         return redirect()->route('associates')

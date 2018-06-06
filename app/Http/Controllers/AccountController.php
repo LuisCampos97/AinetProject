@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Account;
-use App\Movement;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
+use App\Movement;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -32,11 +32,8 @@ class AccountController extends Controller
 
         $pagetitle = 'List of accounts';
 
-        if (Auth::check()) {
-            return view('accounts.list', compact('accounts', 'pagetitle', 'id'));
-        }
-        return view('errors.user');
-        
+        return view('accounts.list', compact('accounts', 'pagetitle', 'id'));
+
     }
 
     public function openedAccounts($id)
@@ -51,10 +48,7 @@ class AccountController extends Controller
 
         $pagetitle = 'List of accounts';
 
-        if (Auth::check()) {
-            return view('accounts.list', compact('accounts', 'pagetitle', 'id'));
-        }
-        return view('errors.user');
+        return view('accounts.list', compact('accounts', 'pagetitle', 'id'));
     }
 
     public function closedAccounts($id)
@@ -69,10 +63,8 @@ class AccountController extends Controller
 
         $pagetitle = 'List of accounts';
 
-        if (Auth::check()) {
-            return view('accounts.list', compact('accounts', 'pagetitle', 'id'));
-        }
-        return view('errors.user');
+        return view('accounts.list', compact('accounts', 'pagetitle', 'id'));
+
     }
 
     public function destroy($id)
@@ -103,7 +95,7 @@ class AccountController extends Controller
     public function openAccount($id)
     {
         User::findOrFail($id);
-        
+
         DB::table('accounts')
             ->where('accounts.id', $id)
             ->update(['deleted_at' => null]);
@@ -134,14 +126,10 @@ class AccountController extends Controller
 
     public function createAccount()
     {
-        if (Auth::check()) {
+        $accountType = DB::table('account_types')
+            ->get();
 
-            $accountType = DB::table('account_types')
-                ->get();
-
-            return view('accounts.create', compact('accountType'));
-        }
-        return view('errors.user');
+        return view('accounts.create', compact('accountType'));
     }
 
     public function storeAccount(AccountRequest $request)
@@ -156,31 +144,31 @@ class AccountController extends Controller
             ->select('code')
             ->get();
 
-        $users=User::all();
-        
-        foreach($codes as $code){
-            if($code===$request->input('code')){
+        $users = User::all();
+
+        foreach ($codes as $code) {
+            if ($code === $request->input('code')) {
                 return Redirect::back()->withErrors(['errors', 'Code already exists']);
             }
         }
 
         $accountTypes = DB::table('account_types')
-                                ->get();
+            ->get();
 
         $numberOfAccountTypes = count($accountTypes);
 
-        if(intval($request->input('account_type_id')) > $numberOfAccountTypes){
+        if (intval($request->input('account_type_id')) > $numberOfAccountTypes) {
             return Redirect::back()->withErrors(['errors', 'Error']);
-       }
+        }
 
         Account::create([
             'owner_id' => Auth::user()->id,
-                'account_type_id' => $request->input('account_type_id'),
-                'date' => $request->date,
-                'code' => $request->input('code'),
-                'description' => $request->input('description'),
-                'start_balance' => $request->input('start_balance'),
-                'current_balance' => $request->input('start_balance')
+            'account_type_id' => $request->input('account_type_id'),
+            'date' => $request->date,
+            'code' => $request->input('code'),
+            'description' => $request->input('description'),
+            'start_balance' => $request->input('start_balance'),
+            'current_balance' => $request->input('start_balance'),
         ]);
 
         return redirect()->route('usersAccount', Auth::user()->id)
@@ -203,7 +191,7 @@ class AccountController extends Controller
         $account = $request->validate([
             'account_type_id' => 'required|min:1|max:5',
             'date' => 'required|date',
-            'code' => 'required|string|unique:accounts',
+            'code' => 'required|string|unique:accounts,code,'.$id,
             'description' => 'nullable|string',
             'start_balance' => 'required|numeric',
         ]);
@@ -236,7 +224,6 @@ class AccountController extends Controller
         $accountModel->fill($account);
         $accountModel->save();
 
-        
         return redirect()->route('usersAccount', Auth::user()->id)
             ->with('msgglobal', 'Account edited successfully');
     }
