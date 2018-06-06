@@ -87,7 +87,7 @@ $(function () {
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                                 <a class="dropdown-item" href="{{ action('UserController@edit') }}">
-                                    <i class="fa fa-btn fa-cog"></i> {{ __('Settings') }}
+                                    <i class="fa fa-btn fa-cog"></i> {{ __('Update Profile') }}
                                 </a>
 
                                 <a class="dropdown-item" href="{{ action('UserController@editPassword') }}">
