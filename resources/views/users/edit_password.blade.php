@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-@include('flash::message')
 <form action="{{ action('UserController@updatePassword') }}" method="post">
 	@method('patch')
     @csrf
