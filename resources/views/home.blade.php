@@ -18,7 +18,6 @@
                 @foreach($movement_categories as $c)
                     ['{{ $c->name }}', {{ number_format($total_by_category[$c->id - 1], 2) }}],
                 @endforeach
-            
             ]);
 
             // Set chart options
