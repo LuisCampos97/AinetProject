@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ValidAssociate;
 
-class MovementRequest extends FormRequest
+class AssociateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +25,7 @@ class MovementRequest extends FormRequest
     public function rules()
     {
         return [
-            'movement_category_id' => 'required|numeric',
-            //'type' =>'required',
-            'date' => 'required|date',
-            'value' => 'required|numeric',
-            'description' => 'nullable|string',
-            'document_file' => 'nullable|file|mimes:pdf,png,jpeg',
-            'document_description' => 'nullable|string'
+            'associated_user' => ['required', 'numeric', new ValidAssociate],
         ];
     }
 }

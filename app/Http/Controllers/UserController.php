@@ -139,10 +139,7 @@ class UserController extends Controller
     {
         $pagetitle = "Edit user";
 
-        if (Auth::check()) {
-            return view('users.edit', compact('pagetitle, user'));
-        }
-        return response('Unauthorized action.', 403);
+        return view('users.edit', compact('pagetitle, user'));
 
     }
 
@@ -175,25 +172,13 @@ class UserController extends Controller
     public function editPassword()
     {
         $pagetitle = 'Edit Password';
-        if (Auth::check()) {
-            return view('users.edit_password', compact('pagetitle'));
-        }
-        return response('Page not found.', 404);
+
+        return view('users.edit_password', compact('pagetitle'));
     }
 
     public function updatePassword(PasswordRequest $request)
     {
-        if ($request->has('cancel')) {
-            return redirect()->action('UserController@index');
-        }
-
         $userModel = User::findOrFail(Auth::user()->id);
-        $oldPasswordForm = Hash::make($request->old_password);
-
-        if (Hash::check($oldPasswordForm, Auth::user()->password)) {
-            Session::flash('old_password', 'The specified password does not match.');
-            return redirect()->action('UserController@updatePassword');
-        }
 
         $user = $request->validated();
         $user['password'] = Hash::make($request->password);

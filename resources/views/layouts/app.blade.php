@@ -46,6 +46,9 @@ $(function () {
                             <a class="nav-link" href="{{ route('home', Auth::user()->id) }}">{{ __('Home') }}</a>
                         </li>
                         <li>
+                            <a class="nav-link" href="{{ route('usersAccount', Auth::user()->id) }}">Accounts List</a>
+                        </li>
+                        <li>
                             <a class="nav-link" href="{{ route('profiles') }}">{{ __('Profiles List') }}</a>
                         </li>
                         <li>

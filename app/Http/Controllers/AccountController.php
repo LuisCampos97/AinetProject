@@ -102,6 +102,8 @@ class AccountController extends Controller
 
     public function openAccount($id)
     {
+        User::findOrFail($id);
+        
         DB::table('accounts')
             ->where('accounts.id', $id)
             ->update(['deleted_at' => null]);
@@ -147,7 +149,7 @@ class AccountController extends Controller
         $account = $request->validated();
 
         if (!$request->filled('date')) {
-            $request->date = new Carbon();
+            $request->date = Carbon\Carbon::now('Europe/Portugal')->isToday();
         }
 
         $codes = DB::table('accounts')
@@ -196,15 +198,15 @@ class AccountController extends Controller
     }
     public function updateAccount(Request $request, $id)
     {
+        $accountModel = Account::FindOrFail($id);
+
         $account = $request->validate([
             'account_type_id' => 'required|min:1|max:5',
-            'date' => 'nullable|date',
+            'date' => 'required|date',
             'code' => 'required|string|unique:accounts',
             'description' => 'nullable|string',
             'start_balance' => 'required|numeric',
         ]);
-
-        $accountModel = Account::FindOrFail($id);
 
         $somatorio = DB::table('movements')
             ->join('accounts', 'accounts.id', '=', 'movements.account_id')
@@ -230,6 +232,7 @@ class AccountController extends Controller
                 'end_balance' => $mov->end_balance + $diferenceValueStartBalance]);
         }
 
+        $accountModel->code = $request->input('code');
         $accountModel->fill($account);
         $accountModel->save();
 

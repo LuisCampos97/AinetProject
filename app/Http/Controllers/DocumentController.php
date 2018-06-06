@@ -100,7 +100,6 @@ class DocumentController extends Controller
         $unique_id = $movement->id . '.' . $document->type;
 
         $file = new File(storage_path('app/' . 'documents/' . $movement->account_id . '/' . $unique_id));
-        dd($file);
 
         return response()->download(
             storage_path('app/' . 'documents/' . $movement->account_id . '/' . $unique_id),

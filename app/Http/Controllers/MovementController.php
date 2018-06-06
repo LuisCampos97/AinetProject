@@ -27,17 +27,16 @@ class MovementController extends Controller
             ->distinct()
             ->get();
 
+        $document = Movement::where('document_id', '=', $id);
+
         $categories = DB::table('movement_categories')
             ->get();
 
-        //dd($categories);
-
-        return view('movements.create', compact('account', 'movementType', 'categories'));
+        return view('movements.create', compact('account', 'movementType', 'categories', 'document'));
     }
 
     public function storeMovement(MovementRequest $request, $id)
     {
-        //dd($request);
         $account = Account::findOrFail($id);
 
         if ($request->input('type') == 'expense') {
@@ -46,7 +45,9 @@ class MovementController extends Controller
             $signal = '+';
         }
 
-        $movement = $request->validated();
+        $request->validated();
+
+        $file = $request->file('document_file');
 
         $type = DB::table('movement_categories')
             ->where('movement_categories.id', '=', $request->movement_category_id)
@@ -59,12 +60,19 @@ class MovementController extends Controller
             $signal = '+';
         }
 
-        DB::table('movements')->insert([
+        $document = Document::create([
+            'original_name' => $file->getClientOriginalName(),
+            'description' => $request->input('document_description'),
+            'type' => $file->getClientOriginalExtension(),
+        ]);
+
+        $movement = Movement::create([
             'account_id' => $id,
             'movement_category_id' => $request->input('movement_category_id'),
             'date' => $request->input('date'),
             'value' => intval($signal . $request->input('value')),
             'type' => $type->type,
+            'document_id' => $document->id,
             'description' => $request->input('description'),
             'start_balance' => $account->current_balance,
             'end_balance' => $account->current_balance + intval($signal . $request->input('value')),
@@ -75,6 +83,11 @@ class MovementController extends Controller
             ->update(['current_balance' => $account->current_balance + intval($signal . $request->input('value')),
                 'last_movement_date' => date('Y-m-d- G:i:s'),
             ]);
+
+        if ($file->isValid()) {
+            $name = $movement->id . '.' . $file->getClientOriginalExtension();
+            Storage::disk('local')->putFileAs('documents/' . $movement->account_id, $file, $name);
+        }
 
         return redirect()->route('movementsForAccount', $id);
     }
@@ -89,20 +102,19 @@ class MovementController extends Controller
             ->select(DB::raw('sum(movements.value) as somatorioMovimentos'))
             ->get();
 
-            $movementsInAccount = DB::table('movements')
+        $movementsInAccount = DB::table('movements')
             ->join('accounts', 'movements.account_id', '=', 'accounts.id')
             ->where('accounts.id', '=', $account->id)
             ->get();
-    
-            if(count($movementsInAccount) == 0){
-                DB::table('accounts')
+
+        if (count($movementsInAccount) == 0) {
+            DB::table('accounts')
                 ->where('accounts.id', '=', $account->id)
                 ->update([
-                    'last_movement_date' => NULL
+                    'last_movement_date' => null,
                 ]);
-            }
+        }
 
-        
         //If the movement has a document, delete document too
         if ($movement->document_id != null) {
             $document = Document::where('id', '=', $movement->document_id)->first();
@@ -112,11 +124,10 @@ class MovementController extends Controller
 
             $document->delete();
         }
-    
+
         DB::table('accounts')->where('accounts.id', '=', $account->id)->update(['accounts.current_balance' => $somatorio[0]->somatorioMovimentos + intval('accounts.start_balance')]);
 
         DB::table('movements')->where('movements.id', '=', $movement_id)->delete();
-
 
         return redirect()->action('AccountController@showMovementsForAccount', $account->id);
     }

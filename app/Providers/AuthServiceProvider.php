@@ -87,15 +87,6 @@ class AuthServiceProvider extends ServiceProvider
             return $user->id == $account->owner_id;
         });
 
-        Gate::define('update-delete-movement', function ($user, $movement_id) {
-            $movement = Movement::findOrFail($movement_id);
-
-            if($movement->account_id == $account->id) {
-                return $user->id == $account->owner_id;
-            }
-
-        });
-
         /**
          * Gate to define that only me and my associates
          * can have access to my movements just to read.
