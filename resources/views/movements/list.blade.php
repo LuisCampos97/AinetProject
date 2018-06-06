@@ -1,19 +1,17 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
-    crossorigin="anonymous"> @extends('layouts.app') @section('content') @if(count($movements))
+    crossorigin="anonymous">
+
+@extends('layouts.app') @section('content') @if(count($movements))
 
 <div class="container">
 
 	<h1>{{ $pagetitle }}</h1>
 	@can('change-movement', $account->id)
-	<a class="btn btn-xs btn-success" href="{{ action('MovementController@viewCreateMovement',$account->id) }}">
-		<i class="fas fa-plus"></i> Create Movement </a>
-<<<<<<< HEAD
-
-	<a class="btn btn-xs btn-info" href="{{ action('AccountController@accountsForUser', Auth::user()->id) }}">List of my Accounts</a>
-=======
+	<a class="btn btn-xs btn-success" href="{{ route('movementsForAccount',$account->id) }}">
+		<i class="fas fa-plus"></i> Create Movement 
+	</a>
 	@endcan
->>>>>>> 9be846fb84c6857e7e4dbc8c3f3dcd9499a48c5a
 	<br>
 	<br>
 
@@ -101,17 +99,16 @@
 				@endcan
 			</tr>
 			@endforeach
-		</tbody>
+			
+			</tbody>
+		</table>
+	</div>
 		@else
 		<div class="container">
 			@can('change-movement', $account->id)
 			<a class="btn btn-xs btn-success" href="{{ action('MovementController@viewCreateMovement',$account->id) }}">
 				<i class="fas fa-plus"></i> Create Movement </a>
-<<<<<<< HEAD
-				<a class="btn btn-xs btn-info" href="{{ action('AccountController@accountsForUser', Auth::user()->id) }}">List of my Accounts</a>
-=======
 				@endcan
->>>>>>> 9be846fb84c6857e7e4dbc8c3f3dcd9499a48c5a
 			<br>
 			<br>
 			<table class="table table-bordered">
@@ -119,7 +116,6 @@
 					<tr>
 						<th> Account: {{ $account->id }} </th>
 						<th>Current Balance:</th>
-
 						<th>
 							{{$account->current_balance}} €
 						</th>
@@ -127,4 +123,5 @@
 				</thead>
 			</table>
 		</div>
+		
 		@endif @endsection

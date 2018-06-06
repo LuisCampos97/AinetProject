@@ -149,7 +149,7 @@ class AccountController extends Controller
         $account = $request->validated();
 
         if (!$request->filled('date')) {
-            $request->date = Carbon\Carbon::now('Europe/Portugal')->isToday();
+            $request->date = Carbon::now('Europe/Portugal')->isToday();
         }
 
         $codes = DB::table('accounts')

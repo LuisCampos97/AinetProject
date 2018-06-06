@@ -75,11 +75,12 @@
 							</button>
 						</form>
 						<div class="container">
-							<form action="{{ action('AccountController@showMovementsForAccount', $account->id) }}" method="get" class="inline">
+							<a href="{{ action('AccountController@showMovementsForAccount', $account->id) }}" class="inline"> 
 								<button type="submit" class="btn btn-success btn-lg" data-toggle="tooltip" title="View Account Movements">
 									<i class="fas fa-money-bill-alt"></i>
 								</button>
-							</form>
+
+							</a>
 						</div>
 						@else
 						<form action="{{ action('AccountController@openAccount', $account->id) }}" method="post" class="inline">
