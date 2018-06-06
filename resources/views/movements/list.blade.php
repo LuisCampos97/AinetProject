@@ -7,6 +7,8 @@
 	<h1>{{ $pagetitle }}</h1>
 	<a class="btn btn-xs btn-success" href="{{ action('MovementController@viewCreateMovement',$account->id) }}">
 		<i class="fas fa-plus"></i> Create Movement </a>
+
+	<a class="btn btn-xs btn-info" href="{{ action('AccountController@accountsForUser', Auth::user()->id) }}">List of my Accounts</a>
 	<br>
 	<br>
 
@@ -91,6 +93,7 @@
 		<div class="container">
 			<a class="btn btn-xs btn-success" href="{{ action('MovementController@viewCreateMovement',$account->id) }}">
 				<i class="fas fa-plus"></i> Create Movement </a>
+				<a class="btn btn-xs btn-info" href="{{ action('AccountController@accountsForUser', Auth::user()->id) }}">List of my Accounts</a>
 			<br>
 			<br>
 			<table class="table table-bordered">
