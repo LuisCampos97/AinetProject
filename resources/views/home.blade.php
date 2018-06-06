@@ -16,7 +16,7 @@
             data.addColumn('number', '€');
             data.addRows([
                 @foreach($movement_categories as $c)
-                    ['{{ $c->name }}', {{ number_format($total_by_category[$c->id - 1], 2) }}],
+                    ['{{ $c->name }}', {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}],
                 @endforeach
             ]);
 
