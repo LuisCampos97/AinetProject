@@ -27,12 +27,13 @@ class ValidAssociate implements Rule
      */
     public function passes($attribute, $value)
     {
-        $user = User::findOrFail($value);
+        $count = User::count();
 
         $associatesOfUser = Auth::user()->my_associates();
 
-        return $user->id != Auth::user()->id &&
-        !$associatesOfUser->where('id', $user->id)->isNotEmpty();
+        return $value != Auth::user()->id &&
+        !$associatesOfUser->where('id', $value)->isNotEmpty() &&
+        $value <= $count;
     }
 
     /**
