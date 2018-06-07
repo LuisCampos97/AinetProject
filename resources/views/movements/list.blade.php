@@ -105,6 +105,7 @@
 	</div>
 		@else
 		<div class="container">
+		<h1>{{ $pagetitle }}</h1>
 			@can('change-movement', $account->id)
 			<a class="btn btn-xs btn-success" href="{{ action('MovementController@viewCreateMovement',$account->id) }}">
 				<i class="fas fa-plus"></i> Create Movement </a>
