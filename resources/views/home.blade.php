@@ -1,14 +1,14 @@
 @extends('layouts.app') @section('content')
-
+ 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+ 
     @if(count($accountsForUser))
     <script type="text/javascript">
-
+ 
         google.charts.load('current', {'packages':['corechart']});
-
+ 
         google.charts.setOnLoadCallback(drawChart);
-
+ 
         function drawChart() {
             // Create the data table.
             var data = new google.visualization.DataTable();
@@ -16,28 +16,28 @@
             data.addColumn('number', '€');
             data.addRows([
                 @foreach($movement_categories as $c)
-                    ['{{ $c->name }}', {{ number_format($total_by_category[$c->id - 1], 2) }}],
+                    ['{{ $c->name }}', {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}],
                 @endforeach
             ]);
-
+ 
             // Set chart options
             var options = {'title':'2017 Monthly Expenses/Revenues',
                         'width':700,
                         'height':600};
-
+ 
             // Instantiate and draw our chart, passing in some options.
             var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
             chart.draw(data, options);
         }
     </script>
     @endif
-
-
+ 
+ 
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-
+ 
             @if(session('msgglobal'))
     <div class ="alert alert-success">
         {{ session('msgglobal') }}
@@ -81,25 +81,25 @@
                     @endif
                     @endforeach
                     <br>
-                    
+                   
                     @else
-                    
+                   
                     <strong> TOTAL BALANCE OF ALL ACCOUNTS:</strong> <strong style="font-size: 20px"> 0.00 € </strong><br><br>
-
+ 
                     <strong>SUMMARY INFO:</strong> <strong style="font-size: 20px"> 0.00 € </strong> <br><br>
-
+ 
                     <strong>PERCENTAGE OF EACH ACCOUNT IN TOTAL BALANCE:</strong> <strong style="font-size: 20px"> 0% </strong> <br><br>
-
+ 
                     <strong> TOTAL REVENUES AND EXPENSES BY CATEGORY:</strong> <strong style="font-size: 20px"> 0.00 € </strong><br>
-
+ 
                     @endif
-                    
+                   
                 </div>
-
-
+ 
+ 
                 @if(count($accountsForUser))
                 <!-- Charts -->
-                    <label for="date" class="col-md-4 col-form-label text-md-Left">{{ __('Date') }}</label>
+                    <label for="date" class="col-md-4 col-form-label text-md-Left">{{ __('Data Inicio') }}</label>
                     <div class="col-md-6">
                         <input id="date" type="date" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" name="date" optional>
                         @if ($errors->has('date'))
@@ -108,14 +108,24 @@
                             </span>
                         @endif
                     <br>
+
+                    <label for="date" class="col-md-4 col-form-label text-md-Right">{{ __('Data Fim') }}</label>
+                        <input id="date" type="date" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" name="date" optional>
+                        @if ($errors->has('date'))
+                            <span class="invalid-feedback">
+                                <strong>{{ $errors->first('date') }}</strong>
+                            </span>
+                        @endif
+                    <br>
+
                     <button type="submit" class="searchButton">
                         <i class="fa fa-search"></i> Search
                     </button>
-
+ 
                     </div>
-
+ 
                 <div id="chart_div"></div>
-                
+               
                 <!-- end charts -->
                 @endif
                 </div>

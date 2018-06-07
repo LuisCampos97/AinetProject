@@ -24,7 +24,10 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index($id)
-    {   
+    {   //HomeRequest $request
+        // if (!$request->filled('date')) {
+        //    $request->date = Carbon::now();
+        //}
 
         $user = User::findOrFail($id);
         
@@ -54,6 +57,8 @@ class HomeController extends Controller
                 ->join('movements', 'accounts.id', '=', 'movements.account_id')
                 ->where('owner_id', '=', $user->id)
                 ->where('movements.movement_category_id', '=', $category->id)
+                //->where('movements.date', '>=', $dataInicio)
+                //->and('movements.date', '<=', $dataFim)
                 ->get();
 
             $summary_by_category = $movements->pluck('value');
