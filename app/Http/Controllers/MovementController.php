@@ -39,12 +39,6 @@ class MovementController extends Controller
     {
         $account = Account::findOrFail($id);
 
-        if ($request->input('type') == 'expense') {
-            $signal = '-';
-        } else {
-            $signal = '+';
-        }
-
         $request->validated();
 
         $file = $request->file('document_file');
@@ -60,11 +54,15 @@ class MovementController extends Controller
             $signal = '+';
         }
 
-        $document = Document::create([
-            'original_name' => $file->getClientOriginalName(),
-            'description' => $request->input('document_description'),
-            'type' => $file->getClientOriginalExtension(),
-        ]);
+        $document = new Document;
+
+        if ($file != null) {
+            $document = Document::create([
+                'original_name' => $file->getClientOriginalName(),
+                'description' => $request->input('document_description'),
+                'type' => $file->getClientOriginalExtension(),
+            ]);
+        }
 
         $movement = Movement::create([
             'account_id' => $id,
@@ -78,16 +76,18 @@ class MovementController extends Controller
             'end_balance' => $account->current_balance + intval($signal . $request->input('value')),
         ]);
 
+        if ($file != null) {
+            if ($file->isValid()) {
+                $name = $movement->id . '.' . $file->getClientOriginalExtension();
+                Storage::disk('local')->putFileAs('documents/' . $movement->account_id, $file, $name);
+            }
+        }
+
         DB::table('accounts')
             ->where('accounts.id', '=', $id)
             ->update(['current_balance' => $account->current_balance + intval($signal . $request->input('value')),
                 'last_movement_date' => date('Y-m-d- G:i:s'),
             ]);
-
-        if ($file->isValid()) {
-            $name = $movement->id . '.' . $file->getClientOriginalExtension();
-            Storage::disk('local')->putFileAs('documents/' . $movement->account_id, $file, $name);
-        }
 
         return redirect()->route('movementsForAccount', $id);
     }
@@ -150,6 +150,7 @@ class MovementController extends Controller
 
     public function updateMovement(MovementRequest $request, $movement_id)
     {
+        /*
         $account = Account::where('id', '=', $movement->account_id)->first();
         $movementModel = Movement::FindOrFail($movement_id);
         $movement = $request->validated();
@@ -185,6 +186,56 @@ class MovementController extends Controller
             ->update([
                 'current_balance' => $valueCurrentBalanceAccountInDB + $diference,
             ]);
+            */
+            
+        $type = DB::table('movement_categories')
+            ->where('movement_categories.id', '=', $request->movement_category_id)
+            ->select('movement_categories.type')
+            ->first();
+
+        if ($type->type == 'expense') {
+            $signal = '-';
+        } else {
+            $signal = '+';
+        }
+
+        
+        //This Movement
+        $movementModel = Movement::findOrFail($movement_id);
+        $accountForThisMovement=DB::table('movements')->where('id', '=', $movement_id)->select('account_id')->first();
+        $accountForThisMovementID = $accountForThisMovement->account_id;
+        $movement = $request->validated();
+        $movementModel->fill($movement);
+
+
+
+        //Upper Movements
+        $val = DB::table('movements')
+                    ->where('id', '=', $movement_id)
+                    ->select('value')
+                    ->first();
+
+        $valueInDB = $val->value;
+
+        $diferenceOfValues = $request->value-$valueInDB;
+
+        $movementsInThisAccount=DB::table('movements')
+                                ->where('account_id', '=', $accountForThisMovementID)
+                                ->where('id', '>', $movement_id)
+                                ->get();
+        //dd($movementsInThisAccount);
+        foreach($movementsInThisAccount as $m){
+
+            DB::table('movements')
+            ->where('id', '>', $movement_id)
+            ->update([
+                'start_balance' => $m->start_balance + $diferenceOfValues,
+                'end_balance' => $m->end_balance + $diferenceOfValues
+            ]);
+        }
+
+        $movementModel->end_balance = $movementModel->start_balance + $request->input('value');
+        $movementModel->save();
 
         return redirect()->route('usersAccount', Auth::user()->id)
             ->with('msgglobal', 'Account edited successfully');
