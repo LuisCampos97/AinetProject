@@ -187,6 +187,11 @@ class MovementController extends Controller
                 'current_balance' => $valueCurrentBalanceAccountInDB + $diference,
             ]);
             */
+            
+        $type = DB::table('movement_categories')
+            ->where('movement_categories.id', '=', $request->movement_category_id)
+            ->select('movement_categories.type')
+            ->first();
 
         if ($type->type == 'expense') {
             $signal = '-';
@@ -194,16 +199,42 @@ class MovementController extends Controller
             $signal = '+';
         }
 
+        
+        //This Movement
         $movementModel = Movement::findOrFail($movement_id);
         $accountForThisMovement=DB::table('movements')->where('id', '=', $movement_id)->select('account_id')->first();
         $accountForThisMovementID = $accountForThisMovement->account_id;
         $movement = $request->validated();
-        
-
         $movementModel->fill($movement);
-        dd($movementModel);
-        $movementModel->end_balance = $movementModel->start_balance + $request->input('value');
 
+
+
+        //Upper Movements
+        $val = DB::table('movements')
+                    ->where('id', '=', $movement_id)
+                    ->select('value')
+                    ->first();
+
+        $valueInDB = $val->value;
+
+        $diferenceOfValues = $request->value-$valueInDB;
+
+        $movementsInThisAccount=DB::table('movements')
+                                ->where('account_id', '=', $accountForThisMovementID)
+                                ->where('id', '>', $movement_id)
+                                ->get();
+        //dd($movementsInThisAccount);
+        foreach($movementsInThisAccount as $m){
+
+            DB::table('movements')
+            ->where('id', '>', $movement_id)
+            ->update([
+                'start_balance' => $m->start_balance + $diferenceOfValues,
+                'end_balance' => $m->end_balance + $diferenceOfValues
+            ]);
+        }
+
+        $movementModel->end_balance = $movementModel->start_balance + $request->input('value');
         $movementModel->save();
 
         return redirect()->route('usersAccount', Auth::user()->id)
