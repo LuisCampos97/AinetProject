@@ -54,11 +54,15 @@ class MovementController extends Controller
             $signal = '+';
         }
 
-        $document = Document::create([
-            'original_name' => $file->getClientOriginalName(),
-            'description' => $request->input('document_description'),
-            'type' => $file->getClientOriginalExtension(),
-        ]);
+        $document = new Document;
+
+        if ($file != null) {
+            $document = Document::create([
+                'original_name' => $file->getClientOriginalName(),
+                'description' => $request->input('document_description'),
+                'type' => $file->getClientOriginalExtension(),
+            ]);
+        }
 
         $movement = Movement::create([
             'account_id' => $id,
@@ -72,16 +76,18 @@ class MovementController extends Controller
             'end_balance' => $account->current_balance + intval($signal . $request->input('value')),
         ]);
 
+        if ($file != null) {
+            if ($file->isValid()) {
+                $name = $movement->id . '.' . $file->getClientOriginalExtension();
+                Storage::disk('local')->putFileAs('documents/' . $movement->account_id, $file, $name);
+            }
+        }
+
         DB::table('accounts')
             ->where('accounts.id', '=', $id)
             ->update(['current_balance' => $account->current_balance + intval($signal . $request->input('value')),
                 'last_movement_date' => date('Y-m-d- G:i:s'),
             ]);
-
-        if ($file->isValid()) {
-            $name = $movement->id . '.' . $file->getClientOriginalExtension();
-            Storage::disk('local')->putFileAs('documents/' . $movement->account_id, $file, $name);
-        }
 
         return redirect()->route('movementsForAccount', $id);
     }
