@@ -56,16 +56,22 @@ class MovementController extends Controller
 
         $movementCategory = MovementCategory::findOrFail($request->input('movement_category_id'));
 
+        if ($movementCategory->type == 'expense') {
+            $signal = '-';
+        } else {
+            $signal = '+';
+        }
+
         $movement = Movement::create([
             'account_id' => $id,
             'movement_category_id' => $movementCategory->id,
             'date' => $request->input('date'),
-            'value' => intval($signal . $request->input('value')),
+            'value' => $request->input('value'),
             'type' => $movementCategory->type,
             'document_id' => $document->id,
             'description' => $request->input('description'),
             'start_balance' => $account->current_balance,
-            'end_balance' => $account->current_balance + intval($signal . $request->input('value')),
+            'end_balance' => $account->current_balance + floatval($signal . $request->input('value')),
         ]);
 
         if ($file != null) {
