@@ -10,6 +10,7 @@ use App\Movement;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\MovementCategory;
 
 class MovementController extends Controller
 {
@@ -43,17 +44,6 @@ class MovementController extends Controller
 
         $file = $request->file('document_file');
 
-        $type = DB::table('movement_categories')
-            ->where('movement_categories.id', '=', $request->movement_category_id)
-            ->select('movement_categories.type')
-            ->first();
-
-        if ($type->type == 'expense') {
-            $signal = '-';
-        } else {
-            $signal = '+';
-        }
-
         $document = new Document;
 
         if ($file != null) {
@@ -64,12 +54,14 @@ class MovementController extends Controller
             ]);
         }
 
+        $movementCategory = MovementCategory::findOrFail($request->input('movement_category_id'));
+
         $movement = Movement::create([
             'account_id' => $id,
-            'movement_category_id' => $request->input('movement_category_id'),
+            'movement_category_id' => $movementCategory->id,
             'date' => $request->input('date'),
             'value' => intval($signal . $request->input('value')),
-            'type' => $type->type,
+            'type' => $movementCategory->type,
             'document_id' => $document->id,
             'description' => $request->input('description'),
             'start_balance' => $account->current_balance,

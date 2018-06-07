@@ -26,7 +26,7 @@ class AccountRequest extends FormRequest
     public function rules()
     {
         return [
-            'account_type_id' => ['required', 'numeric', new ValidAccountType],
+            'account_type_id' => 'required|numeric|exists:account_types,id',
             'code' => 'required|string|unique:accounts',
             'date' => 'nullable|date', 
             'start_balance' => 'required|numeric',

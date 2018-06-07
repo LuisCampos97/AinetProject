@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ValidValue;
 
 class MovementRequest extends FormRequest
 {
@@ -24,10 +25,9 @@ class MovementRequest extends FormRequest
     public function rules()
     {
         return [
-            'movement_category_id' => 'required|numeric',
-            //'type' =>'required',
+            'movement_category_id' => 'required|numeric|exists:movement_categories,id',
             'date' => 'required|date',
-            'value' => 'required|numeric',
+            'value' => ['required','numeric', new ValidValue],
             'description' => 'nullable|string',
             'document_file' => 'nullable|file|mimes:pdf,png,jpeg',
             'document_description' => 'nullable|string'
