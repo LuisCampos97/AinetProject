@@ -54,8 +54,9 @@
 
 				<td>
 					<div class="container form-group row">
-						@can('change-account', $account) @if(is_null($account->deleted_at)) @if(is_null($account->last_movement_date))
-
+						@if(is_null($account->deleted_at))
+						@can('change-account', $account)  
+						@if(is_null($account->last_movement_date))
 						<form action="{{ action('AccountController@destroy', $account->id) }}" method="post" class="inline">
 							@csrf @method('delete')
 							<button type="submit" class="btn btn-danger btn-lg" data-toggle="tooltip" title="Delete">
@@ -76,18 +77,20 @@
 								<i class="fas fa-lock"></i>
 							</button>
 						</form>
+						@endcan
+						@can('associate', $id)
 							<a href="{{ action('AccountController@showMovementsForAccount', $account->id) }}" class="inline"> 
 								<button type="submit" class="btn btn-success btn-lg" data-toggle="tooltip" title="View Account Movements">
 									<i class="fas fa-money-bill-alt"></i>
 								</button>
 						</div>
+						@endcan
 						@else
 						<form action="{{ action('AccountController@openAccount', $account->id) }}" method="post" class="inline">
 							@csrf @method('patch')
 							<button type="submit" class="btn btn-xs btn-info">
 								<i class="fas fa-lock-open"></i> Open Account</button>
 						</form> @endif
-						@endcan
 						
 					</div>
 				</td>
