@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<form action="{{ action('MovementController@updateMovement', [$account->id, $movement->id]) }}" method="post">
+<form action="{{ action('MovementController@updateMovement', $movement->id) }}" method="post">
 	@method('put')
     @csrf
     <div class="container">
@@ -14,40 +14,17 @@
                                 <label for="code" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
 
                                 <div class="col-md-6">
-                                <select class="custom-select" id="category" name="category" class="form-control">
-                                        <option disabled selected> -- Select an option -- </option>
-                                        @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{  $category->name }}</option>
-                                        @endforeach
-
-                                        @if ($errors->has('category'))
-                                            <span class="invalid-feedback">
-                                                <strong>{{ $errors->first('category') }}</strong>
-                                            </span>
-                                        @endif
-                        
-                                    </select>
-                                </div>
+                                <select class="custom-select" id="movement_category_id" name="movement_category_id" class="form-control">
+                                    <option disabled selected> -- Select an option -- </option>
+                                    @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name.' ---- ('. $category->type.')'}} </option>
+                                    @endforeach @if ($errors->has('movement_category_id'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('movement_category_id') }}</strong>
+                                    </span>
+                                    @endif
+                                </select>
                             </div>
-
-
-                    <div class="form-group row">
-                                <label for="type" class="col-md-4 col-form-label text-md-right">{{ __('Type') }}</label>
-                                <div class="col-md-6">
-                                    <select class="custom-select" id="type" name="type" class="form-control">
-                                        <option disabled selected> -- Select an option -- </option>
-                                        @foreach ($movementType as $type)
-                                        <option value="{{ $type->type }}">{{$type->type }}</option>
-                                        @endforeach
-
-                                        @if ($errors->has('type'))
-                                            <span class="invalid-feedback">
-                                                <strong>{{ $errors->first('type') }}</strong>
-                                            </span>
-                                        @endif
-
-                                    </select>
-                                </div>
                             </div>
 
                             <div class="form-group row">
@@ -67,7 +44,7 @@
                                 <label for="value" class="col-md-4 col-form-label text-md-right">{{ __('Value') }}</label>
                                 <a class="signal" style="font-size:30px"></a>
                                 <div class="col-md-6">
-                                    <input id="value" value="{{ $movement->value }}" type="number" class="form-control{{ $errors->has('value') ? ' is-invalid' : '' }}" name="value">
+                                    <input id="value" value="{{ $movement->value }}" type="text" class="form-control{{ $errors->has('value') ? ' is-invalid' : '' }}" name="value">
                                     @if ($errors->has('value'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('value') }}</strong>

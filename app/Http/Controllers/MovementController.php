@@ -39,12 +39,6 @@ class MovementController extends Controller
     {
         $account = Account::findOrFail($id);
 
-        if ($request->input('type') == 'expense') {
-            $signal = '-';
-        } else {
-            $signal = '+';
-        }
-
         $request->validated();
 
         $file = $request->file('document_file');
@@ -150,6 +144,7 @@ class MovementController extends Controller
 
     public function updateMovement(MovementRequest $request, $movement_id)
     {
+        /*
         $account = Account::where('id', '=', $movement->account_id)->first();
         $movementModel = Movement::FindOrFail($movement_id);
         $movement = $request->validated();
@@ -185,6 +180,25 @@ class MovementController extends Controller
             ->update([
                 'current_balance' => $valueCurrentBalanceAccountInDB + $diference,
             ]);
+            */
+
+        if ($type->type == 'expense') {
+            $signal = '-';
+        } else {
+            $signal = '+';
+        }
+
+        $movementModel = Movement::findOrFail($movement_id);
+        $accountForThisMovement=DB::table('movements')->where('id', '=', $movement_id)->select('account_id')->first();
+        $accountForThisMovementID = $accountForThisMovement->account_id;
+        $movement = $request->validated();
+        
+
+        $movementModel->fill($movement);
+        dd($movementModel);
+        $movementModel->end_balance = $movementModel->start_balance + $request->input('value');
+
+        $movementModel->save();
 
         return redirect()->route('usersAccount', Auth::user()->id)
             ->with('msgglobal', 'Account edited successfully');
