@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\ValidAccountType;
+use App\Rules\ValidDate;
 
 
 class AccountRequest extends FormRequest
@@ -27,8 +28,8 @@ class AccountRequest extends FormRequest
     {
         return [
             'account_type_id' => 'required|numeric|exists:account_types,id',
-            'code' => 'required|string|unique:accounts',
-            'date' => 'nullable|date', 
+            'code' => 'required|string|unique:accounts,code',
+            'date' => ['nullable','date', new ValidDate], 
             'start_balance' => 'required|numeric',
             'description' => 'nullable|string',
         ];

@@ -119,8 +119,6 @@ class AccountController extends Controller
             ->orderBy('movements.id', 'desc')
             ->get();
 
-        //dd($movements);
-
         return view('movements.list', compact('movements', 'pagetitle', 'account'));
     }
 
@@ -140,28 +138,7 @@ class AccountController extends Controller
             $request->date = Carbon::now();
         }
 
-        $codes = DB::table('accounts')
-            ->select('code')
-            ->get();
-
-        $users = User::all();
-
-        foreach ($codes as $code) {
-            if ($code === $request->input('code')) {
-                return Redirect::back()->withErrors(['errors', 'Code already exists']);
-            }
-        }
-
-        $accountTypes = DB::table('account_types')
-            ->get();
-
-        $numberOfAccountTypes = count($accountTypes);
-
-        if (intval($request->input('account_type_id')) > $numberOfAccountTypes) {
-            return Redirect::back()->withErrors(['errors', 'Error']);
-        }
-
-        Account::create([
+        $account = Account::create([
             'owner_id' => Auth::user()->id,
             'account_type_id' => $request->input('account_type_id'),
             'date' => $request->date,

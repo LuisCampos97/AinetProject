@@ -3,9 +3,9 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
-class ValidAccountType implements Rule
+class ValidDate implements Rule
 {
     /**
      * Create a new rule instance.
@@ -26,10 +26,10 @@ class ValidAccountType implements Rule
      */
     public function passes($attribute, $value)
     {
-        $count = DB::table('account_types')->count();
-        
-        return $value <= $count && $value >= 1;
-        
+        $minDate = Carbon::now();
+        $minDate->setTime($minDate->hour, $minDate->minute, $minDate->second);
+
+        return Carbon::createFromFormat('Y-m-d', $value) >= $minDate;
     }
 
     /**
@@ -39,6 +39,6 @@ class ValidAccountType implements Rule
      */
     public function message()
     {
-        return 'The validation error message.';
+        return "Date must be greater than or equal to today's date.";
     }
 }

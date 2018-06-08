@@ -35,6 +35,6 @@ class ValidValue implements Rule
      */
     public function message()
     {
-        return 'The validation error message.';
+        return 'The value is greater than 0';
     }
 }
