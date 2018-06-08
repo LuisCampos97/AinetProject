@@ -86,3 +86,6 @@ Route::delete('/document/{document}', 'DocumentController@removeDocument')->name
     ->middleware('can:delete-document,document');
 Route::get('/document/{document}', 'DocumentController@viewDocument')->name('viewDocument')
     ->middleware('can:view-document,document');
+Route::get('/document/{document}/view', 'DocumentController@verifyDocument')->name('verifyDocument')
+->middleware('can:view-document,document');
+    //->middleware('can:view-document,document');

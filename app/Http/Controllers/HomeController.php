@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+use DateTime;
 
 class HomeController extends Controller
 {
@@ -23,9 +26,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
-    {   
 
+    public function index($id, Request $dates)
+    {
         $user = User::findOrFail($id);
         
         $accounts = DB::table('accounts')
@@ -46,14 +49,21 @@ class HomeController extends Controller
             ->toArray();
 
         $total_by_category = array();
-     
+
+        $date1=new DateTime($dates->input('data1'));
+        $date2=new DateTime($dates->input('data2'));
+        $strip1 = $date1->format('Y-m-d');
+        $strip2 = $date2->format('Y-m-d');
+        
         $i = 0;
         foreach ($movement_categories as $category) {
             $movements = DB::table('accounts')
                 ->join('users', 'users.id', '=', 'accounts.owner_id')
                 ->join('movements', 'accounts.id', '=', 'movements.account_id')
-                ->where('owner_id', '=', $user->id)
+                ->where('owner_id', '=', $id)
                 ->where('movements.movement_category_id', '=', $category->id)
+                ->where('movements.date', '>=', $strip1 )
+                ->where('movements.date', '<=', $strip2 )
                 ->get();
 
             $summary_by_category = $movements->pluck('value');
