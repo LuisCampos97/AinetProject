@@ -22,8 +22,7 @@
 				<th>Current Balance:</th>
 
 				<th>
-					{{ current(end($movements))->end_balance }} €
-
+					{{ $account->current_balance }} €
 				</th>
 			</tr>
 		</thead>

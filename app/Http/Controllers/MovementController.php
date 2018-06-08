@@ -61,6 +61,18 @@ class MovementController extends Controller
             $signal = '+';
         }
 
+        $previousMovement = Movement::where('date', '<=', $request->input('date'))
+            ->where('account_id', $account->id)
+            ->orderBy('date', 'desc')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if ($previousMovement == null) {
+            $end_balance = $account->start_balance;
+        } else {
+            $end_balance = $previousMovement->end_balance;
+        }
+
         $movement = Movement::create([
             'account_id' => $id,
             'movement_category_id' => $movementCategory->id,
@@ -69,9 +81,27 @@ class MovementController extends Controller
             'type' => $movementCategory->type,
             'document_id' => $document->id,
             'description' => $request->input('description'),
-            'start_balance' => $account->current_balance,
-            'end_balance' => $account->current_balance + floatval($signal . $request->input('value')),
+            'start_balance' =>  $end_balance,
+            'end_balance' =>  $end_balance + floatval($signal . $request->input('value')),
         ]);
+
+        $posteriorMovements = Movement::where('date', '>', $movement->date)
+            ->where('account_id', $account->id)
+            ->orderBy('date', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        foreach ($posteriorMovements as $m) {
+            if ($m->type == 'expense') {
+                $s = '-';
+            } else {
+                $s = '+';
+            }
+
+            $m->start_balance += floatval($signal . $request->input('value'));
+            $m->end_balance = $m->start_balance + floatval($s . $m->value);
+            $m->save();
+        }
 
         if ($file != null) {
             if ($file->isValid()) {
@@ -80,11 +110,14 @@ class MovementController extends Controller
             }
         }
 
-        DB::table('accounts')
-            ->where('accounts.id', '=', $id)
-            ->update(['current_balance' => $account->current_balance + intval($signal . $request->input('value')),
-                'last_movement_date' => date('Y-m-d- G:i:s'),
-            ]);
+        $moreRecentMovement = Movement::where('account_id', $account->id)
+            ->orderBy('date', 'desc')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        $account->current_balance = $moreRecentMovement->end_balance;
+        $account->last_movement_date = $moreRecentMovement->date;
+        $account->save();
 
         return redirect()->route('movementsForAccount', $id);
     }
@@ -104,7 +137,7 @@ class MovementController extends Controller
             ->where('accounts.id', '=', $account->id)
             ->get();
 
-        if (count($movementsInAccount) == 0) {
+        if (count($movementsInAccount) == 0 && $movement->document_id != null) {
             DB::table('accounts')
                 ->where('accounts.id', '=', $account->id)
                 ->update([
