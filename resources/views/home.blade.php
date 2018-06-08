@@ -21,12 +21,49 @@
             ]);
  
             // Set chart options
-            var options = {'title':'2017 Monthly Expenses/Revenues',
+            var options = {'title':'Monthly Expenses/Revenues',
                         'width':700,
                         'height':600};
  
             // Instantiate and draw our chart, passing in some options.
             var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+
+    <script type="text/javascript">
+ 
+        google.charts.load('current', {'packages':['corechart']});
+ 
+        google.charts.setOnLoadCallback(drawChart); 
+        function drawChart() {
+            // Create the data table.
+            var data = google.visualization.arrayToDataTable([
+                ['Genre',@foreach($movement_categories as $c) '{{ $c->name }}', @endforeach { role: 'annotation' } ],
+                ['January', @foreach($movement_categories as $c) {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}, @endforeach ''],
+                ['February',@foreach($movement_categories as $c) {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}, @endforeach ''],
+                ['March', @foreach($movement_categories as $c) {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}, @endforeach ''],
+                ['April', @foreach($movement_categories as $c) {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}, @endforeach ''],
+                ['May', @foreach($movement_categories as $c) {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}, @endforeach ''],
+                ['June', @foreach($movement_categories as $c) {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}, @endforeach ''],
+                ['July', @foreach($movement_categories as $c) {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}, @endforeach ''],
+                ['August', @foreach($movement_categories as $c) {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}, @endforeach ''],
+                ['September', @foreach($movement_categories as $c) {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}, @endforeach ''],
+                ['October', @foreach($movement_categories as $c) {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}, @endforeach ''],
+                ['November', @foreach($movement_categories as $c) {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}, @endforeach ''],
+                ['December', @foreach($movement_categories as $c) {{ number_format($total_by_category[$c->id - 1], 2, '.', '') }}, @endforeach ''],
+            ]);
+
+            var options = {
+                width: 600,
+                height: 400,
+                legend: { position: 'top', maxLines: 3 },
+                bar: { groupWidth: '75%' },
+                isStacked: true,
+            };
+ 
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div2'));
             chart.draw(data, options);
         }
     </script>
@@ -99,32 +136,30 @@
  
                 @if(count($accountsForUser))
                 <!-- Charts -->
-                    <label for="date" class="col-md-4 col-form-label text-md-Left">{{ __('Data Inicio') }}</label>
+                    <label for="date1" class="col-md-4 col-form-label text-md-Left">{{ __('Data Inicio') }}</label>
                     <div class="col-md-6">
-                        <input id="date" type="date" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" name="date" optional>
-                        @if ($errors->has('date'))
+                        <input id="date1" type="date" class="form-control{{ $errors->has('date1') ? ' is-invalid' : '' }}" name="date1" optional>
+                        @if ($errors->has('date1'))
                             <span class="invalid-feedback">
-                                <strong>{{ $errors->first('date') }}</strong>
+                                <strong>{{ $errors->first('date1') }}</strong>
                             </span>
                         @endif
                     <br>
 
-                    <label for="date" class="col-md-4 col-form-label text-md-Right">{{ __('Data Fim') }}</label>
-                        <input id="date" type="date" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" name="date" optional>
-                        @if ($errors->has('date'))
+                    <label for="date2" class="col-md-4 col-form-label text-md-Right">{{ __('Data Fim') }}</label>
+                        <input id="date2" type="date" class="form-control{{ $errors->has('date2') ? ' is-invalid' : '' }}" name="date2" optional>
+                        @if ($errors->has('date2'))
                             <span class="invalid-feedback">
-                                <strong>{{ $errors->first('date') }}</strong>
+                                <strong>{{ $errors->first('date2') }}</strong>
                             </span>
                         @endif
                     <br>
 
-                    <button type="submit" class="searchButton">
-                        <i class="fa fa-search"></i> Search
-                    </button>
+                    <a class="btn btn-xs btn-success" href="{{ action('HomeController@index', Auth::user()->id ) }}"> Search</a>
  
-                    </div>
  
                 <div id="chart_div"></div>
+                <div id="chart_div2"></div>
                
                 <!-- end charts -->
                 @endif
