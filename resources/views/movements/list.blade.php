@@ -69,6 +69,10 @@
 						<button type="submit" class="btn btn-xs btn-info" data-toggle="tooltip" title="View Document">
 							<i class="fas fa-file-alt"></i> {{ $movement->original_name }}</button>
 					</form>
+					<form action="{{ action('DocumentController@verifyDocument', $movement->document_id) }}" method="get" class="inline">
+						<button type="submit" class="btn btn-xs btn-info" data-toggle="tooltip" title="View Online Document">
+							<i class="fas fa-file-alt"></i> View Online</button>
+					</form>
 					@can('movement', $movement->id)
 					<div class="container form-group row">
 						<a class="btn btn-success" href="{{ action('DocumentController@uploadDocumentView', $movement->id) }}" data-toggle="tooltip"

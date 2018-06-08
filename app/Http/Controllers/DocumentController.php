@@ -105,4 +105,17 @@ class DocumentController extends Controller
             storage_path('app/' . 'documents/' . $movement->account_id . '/' . $unique_id),
             $document->original_name);
     }
+
+    public function verifyDocument($id)
+    {
+        $document = Document::findOrFail($id);
+        $movement = Movement::where('document_id', '=', $document->id)->first();
+
+        $unique_id = $movement->id . '.' . $document->type;
+
+        //$file = new File(storage_path('app/' . 'documents/' . $movement->account_id . '/' . $unique_id));
+
+        return response()->file(
+            storage_path('app/documents/' . $movement->account_id . '/' . $unique_id));
+    }
 }
