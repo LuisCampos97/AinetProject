@@ -10,10 +10,9 @@
                     <div class="card-body">
 
                         <div class="form-group row">
-                            <label for="code" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
-
+                            <label for="movement_category_id" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
                             <div class="col-md-6">
-                                <select class="custom-select" id="movement_category_id" name="movement_category_id" class="form-control">
+                                <select class="custom-select {{ $errors->has('movement_category_id') ? ' is-invalid' : '' }}" id="movement_category_id" name="movement_category_id" class="form-control">
                                     <option disabled selected> -- Select an option -- </option>
                                     @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name.' ---- ('. $category->type.')'}} </option>

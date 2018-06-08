@@ -7,10 +7,9 @@ use App\Document;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MovementRequest;
 use App\Movement;
-use Illuminate\Support\Facades\Auth;
+use App\MovementCategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use App\MovementCategory;
 
 class MovementController extends Controller
 {
@@ -148,95 +147,62 @@ class MovementController extends Controller
 
     public function updateMovement(MovementRequest $request, $movement_id)
     {
-        /*
+        $movement = Movement::findOrFail($movement_id);
         $account = Account::where('id', '=', $movement->account_id)->first();
-        $movementModel = Movement::FindOrFail($movement_id);
-        $movement = $request->validated();
+        $movementInput = $request->validated();
 
-        $valueMovementInDB = DB::table('movements')
-            ->where('id', '=', $movement_id)
-            ->select('value')
-            ->get();
+        $file = $request->file('document_file');
 
-        $oldStartBalance = DB::table('movements')
-            ->where('id', '=', $movement_id)
-            ->select('start_balance')
-            ->get();
-
-        $test = DB::table('movements')
-            ->where('account_id', '=', $account_id)
-            ->update([
-                'movement_category_id' => $request->input('category'),
-                'value' => intval($signal . $request->input('value')),
-                'type' => $request->input('type'),
-                'description' => $request->input('description'),
-                'end_balance' => $oldStartBalance + $diference,
+        //If the movement dont has a document
+        if ($file != null && $movement->document_id == null) {
+            $document = Document::create([
+                'original_name' => $file->getClientOriginalName(),
+                'description' => $request->input('document_description'),
+                'type' => $file->getClientOriginalExtension(),
             ]);
 
-        $diference = $valueMovementInDB - $request->value;
+            $movement->document_id = $document->id;
 
-        $valueCurrentBalanceAccountInDB = DB::table('accounts')
-            ->where('id', '=', $account_id)
-            ->select('current_balance');
+            if ($file->isValid()) {
+                $name = $movement->id . '.' . $file->getClientOriginalExtension();
+                Storage::disk('local')->putFileAs('documents/' . $movement->account_id, $file, $name);
+            }
 
-        DB::table('accounts')
-            ->where('id', '=', $account_id)
-            ->update([
-                'current_balance' => $valueCurrentBalanceAccountInDB + $diference,
-            ]);
-            */
-            
-        $type = DB::table('movement_categories')
-            ->where('movement_categories.id', '=', $request->movement_category_id)
-            ->select('movement_categories.type')
-            ->first();
+        } else {
+            //If the movement has a document and the user wants to change it.
+            if ($file != null) {
+                $document = Document::findOrFail($movement->document_id);
 
-        if ($type->type == 'expense') {
+                $unique_id = $movement->id . '.' . $document->type;
+                Storage::disk('local')->delete('documents/' . $movement->account_id . '/' . $unique_id);
+
+                $document->original_name = $file->getClientOriginalName();
+                $document->description = $request->input('document_description');
+                $document->type = $file->getClientOriginalExtension();
+                $document->save();
+
+                if ($file->isValid()) {
+                    $name = $movement->id . '.' . $file->getClientOriginalExtension();
+                    Storage::disk('local')->putFileAs('documents/' . $movement->account_id, $file, $name);
+                }
+            }
+        }
+
+        $movementCategory = MovementCategory::findOrFail($request->input('movement_category_id'));
+
+        if ($movementCategory->type == 'expense') {
             $signal = '-';
         } else {
             $signal = '+';
         }
 
-        
-        //This Movement
-        $movementModel = Movement::findOrFail($movement_id);
-        $accountForThisMovement=DB::table('movements')->where('id', '=', $movement_id)->select('account_id')->first();
-        $accountForThisMovementID = $accountForThisMovement->account_id;
-        $movement = $request->validated();
-        $movementModel->fill($movement);
+        $movement->fill($movementInput);
+        $movement->movement_category_id = $movementCategory->id;
+        $movement->type = $movementCategory->type;
+        $movement->end_balance = $movement->start_balance + floatval($signal . $request->input('value'));
+        $movement->save();
 
-
-
-        //Upper Movements
-        $val = DB::table('movements')
-                    ->where('id', '=', $movement_id)
-                    ->select('value')
-                    ->first();
-
-        $valueInDB = $val->value;
-
-        $diferenceOfValues = $request->value-$valueInDB;
-
-        $movementsInThisAccount=DB::table('movements')
-                                ->where('account_id', '=', $accountForThisMovementID)
-                                ->where('id', '>', $movement_id)
-                                ->get();
-        //dd($movementsInThisAccount);
-        foreach($movementsInThisAccount as $m){
-
-            DB::table('movements')
-            ->where('id', '>', $movement_id)
-            ->update([
-                'start_balance' => $m->start_balance + $diferenceOfValues,
-                'end_balance' => $m->end_balance + $diferenceOfValues
-            ]);
-        }
-
-        $movementModel->end_balance = $movementModel->start_balance + $request->input('value');
-        $movementModel->save();
-
-        return redirect()->route('usersAccount', Auth::user()->id)
-            ->with('msgglobal', 'Account edited successfully');
+        return redirect()->route('movementsForAccount', $movement->account_id);
     }
 
 }
