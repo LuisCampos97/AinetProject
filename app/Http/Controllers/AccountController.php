@@ -94,11 +94,10 @@ class AccountController extends Controller
 
     public function openAccount($id)
     {
-        User::findOrFail($id);
+        $account = Account::withTrashed()->findOrFail($id);
 
-        DB::table('accounts')
-            ->where('accounts.id', $id)
-            ->update(['deleted_at' => null]);
+        $account->deleted_at = null;
+        $account->save();
 
         return redirect()->route('usersAccount', Auth::user()->id);
     }

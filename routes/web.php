@@ -88,4 +88,3 @@ Route::get('/document/{document}', 'DocumentController@viewDocument')->name('vie
     ->middleware('can:view-document,document');
 Route::get('/document/{document}/view', 'DocumentController@verifyDocument')->name('verifyDocument')
 ->middleware('can:view-document,document');
-    //->middleware('can:view-document,document');
