@@ -68,9 +68,9 @@ class MovementController extends Controller
             ->first();
 
         if ($previousMovement == null) {
-            $end_balance = $account->start_balance;
+            $start_balance = $account->start_balance;
         } else {
-            $end_balance = $previousMovement->end_balance;
+            $start_balance = $previousMovement->end_balance;
         }
 
         $movement = Movement::create([
@@ -81,8 +81,8 @@ class MovementController extends Controller
             'type' => $movementCategory->type,
             'document_id' => $document->id,
             'description' => $request->input('description'),
-            'start_balance' =>  $end_balance,
-            'end_balance' =>  $end_balance + floatval($signal . $request->input('value')),
+            'start_balance' => $start_balance,
+            'end_balance' => $start_balance + floatval($signal . $request->input('value')),
         ]);
 
         $posteriorMovements = Movement::where('date', '>', $movement->date)
@@ -229,11 +229,56 @@ class MovementController extends Controller
             $signal = '+';
         }
 
+        $diferenceValue = $request->input('value') - $movement->value;
+
+        //Update MOVEMENT
         $movement->fill($movementInput);
         $movement->movement_category_id = $movementCategory->id;
         $movement->type = $movementCategory->type;
-        $movement->end_balance = $movement->start_balance + floatval($signal . $request->input('value'));
+
+        if ($request->input('date' != $movement->date)) {
+            $previousMovement = Movement::where('date', '<=', $request->input('date'))
+                ->where('account_id', $account->id)
+                ->where('id', '!=', $movement->id)
+                ->orderBy('date', 'desc')
+                ->orderBy('id', 'desc')
+                ->first();
+
+            $movement->start_balance = $previousMovement->end_balance;
+            $movement->end_balance = $movement->start_balance + floatval($signal . $request->input('value'));
+        } else {
+            $movement->end_balance = $movement->start_balance + floatval($signal . $request->input('value'));
+        }
+
+        $posteriorMovements = Movement::where('date', '>=', $movement->date)
+            ->where('account_id', $account->id)
+            ->where('id', '!=', $movement->id)
+            ->orderBy('date', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        foreach ($posteriorMovements as $m) {
+            if ($m->type == 'expense') {
+                $s = '-';
+            } else {
+                $s = '+';
+            }
+
+            $m->start_balance += floatval($signal . $diferenceValue);
+            $m->end_balance = $m->start_balance + floatval($s . $m->value);
+            $m->save();
+        }
+
         $movement->save();
+
+        $moreRecentMovement = Movement::where('account_id', $account->id)
+            ->orderBy('date', 'desc')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        $account->current_balance = $moreRecentMovement->end_balance;
+        $account->last_movement_date = $moreRecentMovement->date;
+        $account->save();
 
         return redirect()->route('movementsForAccount', $movement->account_id);
     }
