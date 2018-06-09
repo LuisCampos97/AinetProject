@@ -29,7 +29,7 @@ class AccountRequest extends FormRequest
         return [
             'account_type_id' => 'required|numeric|exists:account_types,id',
             'code' => 'required|string|unique:accounts,code',
-            'date' => ['nullable','date', new ValidDate], 
+            'date' => 'nullable|date', 
             'start_balance' => 'required|numeric',
             'description' => 'nullable|string',
         ];
