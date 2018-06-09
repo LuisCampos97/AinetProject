@@ -162,7 +162,7 @@ class AccountController extends Controller
     }
     public function updateAccount(Request $request, $id)
     {
-        $accountModel = Account::FindOrFail($id);
+        $accountModel = Account::findOrFail($id);
 
         $account = $request->validate([
             'account_type_id' => 'required|min:1|max:5',
@@ -172,34 +172,27 @@ class AccountController extends Controller
             'start_balance' => 'required|numeric',
         ]);
 
-        $somatorio = DB::table('movements')
-            ->join('accounts', 'accounts.id', '=', 'movements.account_id')
-            ->where('movements.account_id', '=', $id)
-            ->select(DB::raw('sum(movements.value) as somatorioMovimentos'))
-            ->get();
+        $diferenceOfValues = $request->start_balance - $accountModel->start_balance;
 
-        $diferenceValueStartBalance = $request->start_balance - $accountModel->start_balance;
+        //dd($movementsInThisAccount);
 
-        $accountModel->current_balance = $request->start_balance + $somatorio[0]->somatorioMovimentos;
+        $accountModel->start_balance += $diferenceOfValues;
+        $accountModel->current_balance += $diferenceOfValues;
+        $accountModel->code = $request->input('code');
 
-        $movements = DB::table('movements')->
-            where('movements.account_id', '=', $id)->
-            select('movements.*')->
-            orderBy('movements.date', 'asc')->
-            get();
+        $movementsInThisAccount=Movement::where('movements.account_id', '=',  $id)->get();
 
-        foreach ($movements as $movement) {
-            $mov = Movement::findOrFail($movement->id);
-            $start = DB::table('movements')->
-                where('movements.account_id', '=', $id)->
-                update(['start_balance' => $diferenceValueStartBalance + $mov->start_balance,
-                'end_balance' => $mov->end_balance + $diferenceValueStartBalance]);
+        if(count($movementsInThisAccount) > 0){
+            foreach($movementsInThisAccount as $movement){
+                $movement->start_balance+=$diferenceOfValues;
+                $movement->end_balance += $diferenceOfValues;
+                $movement->save();
+            }
         }
 
-        $accountModel->code = $request->input('code');
         $accountModel->fill($account);
         $accountModel->save();
-
+    
         return redirect()->route('usersAccount', Auth::user()->id)
             ->with('msgglobal', 'Account edited successfully');
     }
