@@ -182,7 +182,7 @@ class AccountController extends Controller
 
         $movementsInThisAccount=Movement::where('movements.account_id', '=',  $id)->get();
 
-        if(count($movementsInThisAccount) > 0){
+        if(count($movementsInThisAccount) > 0) {
             foreach($movementsInThisAccount as $movement){
                 $movement->start_balance+=$diferenceOfValues;
                 $movement->end_balance += $diferenceOfValues;
