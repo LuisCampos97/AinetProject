@@ -85,6 +85,11 @@ class MovementController extends Controller
             'end_balance' => $start_balance + floatval($signal . $request->input('value')),
         ]);
 
+        if($movementCategory->type == 'expense') {
+            $movement->value =  $request->input('value') * 2;
+            $movement->save();
+        }
+
         $posteriorMovements = Movement::where('date', '>', $movement->date)
             ->where('account_id', $account->id)
             ->orderBy('date', 'desc')

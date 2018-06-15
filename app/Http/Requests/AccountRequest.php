@@ -32,6 +32,7 @@ class AccountRequest extends FormRequest
             'date' => 'nullable|date', 
             'start_balance' => 'required|numeric',
             'description' => 'nullable|string',
+            'email' => 'required|email|max:255|unique:accounts'
         ];
     }
 }

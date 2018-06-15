@@ -145,6 +145,7 @@ class AccountController extends Controller
             'description' => $request->input('description'),
             'start_balance' => $request->input('start_balance'),
             'current_balance' => $request->input('start_balance'),
+            'email' => $request->input('email')
         ]);
 
         return redirect()->route('usersAccount', Auth::user()->id)
